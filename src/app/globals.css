@@ -34,3 +34,23 @@ body {
     font-family: var(--font-excali), var(--default-font-family) !important;
   }
 }
+
+/* Global link styles with yellow theme */
+/* Exclude links that are styled as buttons or navigation elements */
+a:not([class*="rounded"]):not([class*="bg-"]):not([class*="flex"]):not(
+    header a
+  ) {
+  color: #ca8a04; /* yellow-600 */
+  transition: color 0.2s ease;
+}
+
+a:not([class*="rounded"]):not([class*="bg-"]):not([class*="flex"]):not(
+    header a
+  ):hover {
+  color: #a16207; /* yellow-700 */
+}
+
+/* Links within blog content */
+article a:not([class*="rounded"]):not([class*="bg-"]) {
+  font-weight: 500;
+}

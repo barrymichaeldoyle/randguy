@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { excali } from "./fonts";
+import { excali } from "@/fonts";
+import { Button } from "@/components/Button";
 
 export default function Home() {
   return (
@@ -15,12 +16,7 @@ export default function Home() {
       <p className="text-lg text-gray-700 mb-6">
         A random South African guy talking about personal finance.
       </p>
-      <a
-        href="#blog"
-        className={`${excali.className} rounded bg-yellow-400 text-black px-6 py-3 font-medium hover:bg-yellow-500 transition`}
-      >
-        Blog Coming Soon
-      </a>
+      <Button href="/blog">Read the Blog</Button>
     </main>
   );
 }

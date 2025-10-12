@@ -3,7 +3,8 @@ import Link from "next/link";
 import { PropsWithChildren } from "react";
 
 import "./globals.css";
-import { assistant, excali } from "./fonts";
+import { assistant, excali } from "../fonts";
+import { Button } from "@/components/Button";
 
 export const metadata: Metadata = {
   title: "Rand Guy",
@@ -31,8 +32,17 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
               alt="Rand Guy logo"
               className="h-10 w-auto"
             />
-            <h1 className={`${excali.className} text-2xl`}>Rand Guy</h1>
+            <h1
+              className={`${excali.className} text-2xl text-gray-900 hover:text-yellow-600 transition-colors`}
+            >
+              Rand Guy
+            </h1>
           </Link>
+          <nav>
+            <Button href="/blog" size="sm">
+              Blog
+            </Button>
+          </nav>
         </header>
         {children}
       </body>
