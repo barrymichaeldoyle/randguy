@@ -1,32 +1,31 @@
 import Link from "next/link";
+import { Metadata } from "next";
+
+import { getAllPosts } from "@/lib/posts";
+
 import { excali } from "../../fonts";
-import { Button } from "@/components/Button";
 
-interface BlogPost {
-  slug: string;
-  title: string;
-  date: string;
-  description: string;
-}
-
-const posts: BlogPost[] = [
-  {
-    slug: "getting-started-with-investing",
-    title: "Getting Started with Investing in South Africa",
-    date: "2025-10-12",
+export const metadata: Metadata = {
+  title: "Blog | Rand Guy",
+  description:
+    "Read about personal finance, investing, TFSAs, and building wealth in South Africa. Practical advice for everyday South Africans.",
+  openGraph: {
+    title: "Blog | Rand Guy",
     description:
-      "A beginner's guide to investing in South Africa. Learn about ETFs, unit trusts, and tax-free savings accounts.",
+      "Read about personal finance, investing, TFSAs, and building wealth in South Africa. Practical advice for everyday South Africans.",
+    type: "website",
   },
-  {
-    slug: "understanding-tax-free-savings",
-    title: "Understanding Tax-Free Savings Accounts",
-    date: "2025-10-10",
+  twitter: {
+    card: "summary",
+    title: "Blog | Rand Guy",
     description:
-      "Everything you need to know about TFSAs in South Africa, including contribution limits and best practices.",
+      "Read about personal finance, investing, TFSAs, and building wealth in South Africa. Practical advice for everyday South Africans.",
   },
-];
+};
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const posts = await getAllPosts();
+
   return (
     <main className="flex flex-col items-center p-8 flex-1">
       <div className="max-w-3xl w-full">
