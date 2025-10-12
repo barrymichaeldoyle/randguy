@@ -65,7 +65,10 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
               Rand Guy
             </h1>
           </Link>
-          <nav>
+          <nav className="flex items-center gap-2">
+            <Button href="/calculators" size="sm">
+              Calculators
+            </Button>
             <Button href="/blog" size="sm">
               Blog
             </Button>
