@@ -5,14 +5,27 @@ import Image from "next/image";
 import { excali } from "@/fonts";
 
 export const metadata: Metadata = {
-  title: "Financial Calculators",
+  title: "Free Financial Calculators for South Africans",
   description:
-    "Free financial calculators for South Africans. Calculate income tax, investment returns, and more.",
+    "Free online financial calculators for South Africans. Calculate income tax, SARS deductions, UIF, and more. Simple tools to help you make informed financial decisions.",
+  keywords: [
+    "financial calculators",
+    "South Africa",
+    "income tax calculator",
+    "SARS calculator",
+    "tax calculator",
+    "personal finance tools",
+    "free calculators",
+  ],
+  alternates: {
+    canonical: "/calculators",
+  },
   openGraph: {
-    title: "Financial Calculators | Rand Guy",
+    title: "Free Financial Calculators for South Africans",
     description:
-      "Free financial calculators for South Africans. Calculate income tax, investment returns, and more.",
+      "Free online financial calculators for South Africans. Calculate income tax, SARS deductions, UIF, and more.",
     type: "website",
+    url: "/calculators",
   },
 };
 
@@ -20,7 +33,7 @@ const calculators = [
   {
     title: "Income Tax Calculator",
     description:
-      "Calculate your South African income tax based on the latest tax brackets and rebates for the 2024/2025 tax year.",
+      "Calculate your South African income tax based on the latest tax brackets and rebates for the 2025/2026 tax year. Includes UIF and year-over-year comparisons.",
     href: "/calculators/income-tax",
     icon: "💰",
   },
@@ -28,9 +41,82 @@ const calculators = [
 ];
 
 export default function CalculatorsPage() {
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Financial Calculators",
+    description:
+      "Free online financial calculators for South Africans. Calculate income tax, SARS deductions, UIF, and more.",
+    url: `${baseUrl}/calculators`,
+    inLanguage: "en-ZA",
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: calculators.map((calc, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+          "@type": "WebApplication",
+          name: calc.title,
+          description: calc.description,
+          url: `${baseUrl}${calc.href}`,
+          applicationCategory: "FinanceApplication",
+          offers: {
+            "@type": "Offer",
+            price: "0",
+            priceCurrency: "ZAR",
+          },
+        },
+      })),
+    },
+  };
+
+  const breadcrumbData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: baseUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Calculators",
+        item: `${baseUrl}/calculators`,
+      },
+    ],
+  };
+
   return (
     <main className="flex flex-col items-center pt-12 p-8 flex-1">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
+      />
       <div className="max-w-4xl w-full">
+        {/* Breadcrumb Navigation */}
+        <nav className="mb-6 text-sm" aria-label="Breadcrumb">
+          <ol className="flex items-center space-x-2 text-gray-600">
+            <li>
+              <Link href="/" className="hover:text-yellow-600 transition">
+                Home
+              </Link>
+            </li>
+            <li>/</li>
+            <li className="text-gray-900 font-medium" aria-current="page">
+              Calculators
+            </li>
+          </ol>
+        </nav>
+
         <div className="text-center mb-12">
           <Image
             src="/RandGuyLogo.png"
@@ -40,14 +126,14 @@ export default function CalculatorsPage() {
             className="mx-auto mb-4"
           />
           <h1 className={`${excali.className} text-4xl mb-4`}>
-            Financial Calculators
+            South African Financial Calculators
           </h1>
           <p className="text-lg text-gray-700">
-            Free tools to help you make informed financial decisions
+            Free online tools to help you make informed financial decisions
           </p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2">
+        <section className="grid gap-6 md:grid-cols-2">
           {calculators.map((calculator) => (
             <Link
               key={calculator.href}
@@ -55,12 +141,16 @@ export default function CalculatorsPage() {
               className="group"
             >
               <article className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all cursor-pointer hover:border-yellow-400 h-full">
-                <div className="text-4xl mb-4">{calculator.icon}</div>
-                <h2
-                  className={`${excali.className} text-2xl font-bold mb-3 text-gray-900 group-hover:text-yellow-600 transition-colors`}
-                >
-                  {calculator.title}
-                </h2>
+                <div className="flex items-center gap-3">
+                  <div className="text-4xl mb-4" aria-hidden="true">
+                    {calculator.icon}
+                  </div>
+                  <h2
+                    className={`${excali.className} text-2xl font-bold mb-3 text-gray-900 group-hover:text-yellow-600 transition-colors`}
+                  >
+                    {calculator.title}
+                  </h2>
+                </div>
                 <p className="text-gray-700 mb-4">{calculator.description}</p>
                 <span
                   className={`${excali.className} text-gray-900 group-hover:text-yellow-600 font-medium transition-colors`}
@@ -70,12 +160,41 @@ export default function CalculatorsPage() {
               </article>
             </Link>
           ))}
-        </div>
+        </section>
 
-        <div className="mt-12 text-center">
-          <p className="text-gray-600 mb-6">
-            More calculators coming soon! Have a suggestion?
-          </p>
+        <section className="mt-12 bg-gray-50 border border-gray-200 rounded-lg p-8">
+          <h2 className={`${excali.className} text-2xl mb-4 text-center`}>
+            Why Use These Calculators?
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6 text-center">
+            <div>
+              <div className="text-3xl mb-2">🇿🇦</div>
+              <h3 className="font-semibold mb-2">Built for South Africans</h3>
+              <p className="text-sm text-gray-700">
+                All calculators use <strong>official SARS data</strong> and SA
+                tax regulations
+              </p>
+            </div>
+            <div>
+              <div className="text-3xl mb-2">💯</div>
+              <h3 className="font-semibold mb-2">Always Free</h3>
+              <p className="text-sm text-gray-700">
+                No hidden fees, no sign-ups required. Just simple, free tools
+              </p>
+            </div>
+            <div>
+              <div className="text-3xl mb-2">🔒</div>
+              <h3 className="font-semibold mb-2">Privacy First</h3>
+              <p className="text-sm text-gray-700">
+                Your data stays on your device. I don't track or store your
+                information
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <div className="mt-8 text-center">
+          <p className="text-gray-600">More calculators coming soon!</p>
         </div>
       </div>
     </main>
