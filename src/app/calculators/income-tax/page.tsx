@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { excali } from "@/fonts";
 import { Button } from "@/components/Button";
 import { formatCurrency, formatPercentage } from "@/lib/calculator-utils";
+import { useIncomeTaxStore } from "@/stores/income-tax-store";
 
 // South African Tax Data by Year
 type TaxYear =
@@ -254,18 +255,24 @@ type AgeGroup = "under65" | "65to74" | "75plus";
 type PayFrequency = "monthly" | "annual" | "biweekly" | "weekly";
 
 export default function IncomeTaxCalculator() {
-  const [income, setIncome] = useState("");
-  const [payFrequency, setPayFrequency] = useState<PayFrequency>("monthly");
-  const [ageGroup, setAgeGroup] = useState<AgeGroup>("under65");
-  const [taxYear, setTaxYear] = useState<TaxYear>("2025/2026");
-  const [isSalary, setIsSalary] = useState(true);
-  const [results, setResults] = useState<
-    | (ReturnType<typeof calculateIncomeTax> & {
-        previousYear: (TaxYear | "2020/2021") | null;
-        previousYearResults: ReturnType<typeof calculateIncomeTax> | null;
-      })
-    | null
-  >(null);
+  // Use Zustand store for persistent state
+  const {
+    income,
+    payFrequency,
+    ageGroup,
+    taxYear,
+    isSalary,
+    isAdvancedMode,
+    results,
+    setIncome,
+    setPayFrequency,
+    setAgeGroup,
+    setTaxYear,
+    setIsSalary,
+    setIsAdvancedMode,
+    setResults,
+    clearForm,
+  } = useIncomeTaxStore();
 
   const previousFrequency = useRef<PayFrequency>("monthly");
   const incomeByFrequency = useRef<Record<PayFrequency, string>>({
@@ -386,6 +393,28 @@ export default function IncomeTaxCalculator() {
     }
   };
 
+  const toggleMode = () => {
+    if (isAdvancedMode) {
+      // Switching to basic mode - reset to defaults
+      setTaxYear("2025/2026");
+      setAgeGroup("under65");
+      setIsSalary(true);
+    }
+    setIsAdvancedMode(!isAdvancedMode);
+  };
+
+  const handleClearForm = () => {
+    clearForm();
+    // Reset refs
+    previousFrequency.current = "monthly";
+    incomeByFrequency.current = {
+      monthly: "",
+      annual: "",
+      biweekly: "",
+      weekly: "",
+    };
+  };
+
   return (
     <main className="flex flex-col items-center pt-12 p-8 flex-1">
       <div className="max-w-7xl w-full">
@@ -401,31 +430,52 @@ export default function IncomeTaxCalculator() {
         <div className="grid lg:grid-cols-[400px_1fr] gap-8 items-start">
           {/* Input Form - Left Side */}
           <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm lg:sticky lg:top-8">
-            <h2 className={`${excali.className} text-2xl mb-6`}>
-              Your Information
-            </h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className={`${excali.className} text-2xl`}>
+                Your Information
+              </h2>
+              <button
+                type="button"
+                onClick={toggleMode}
+                className="text-sm text-yellow-600 hover:text-yellow-700 font-medium transition"
+              >
+                {isAdvancedMode ? "Switch to Basic" : "Advanced Options"}
+              </button>
+            </div>
 
             <div className="space-y-6">
-              <div>
-                <label
-                  htmlFor="taxYear"
-                  className="block text-sm font-medium text-gray-700 mb-2"
-                >
-                  Tax Year
-                </label>
-                <select
-                  id="taxYear"
-                  value={taxYear}
-                  onChange={(e) => setTaxYear(e.target.value as TaxYear)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none transition bg-white"
-                >
-                  <option value="2025/2026">2026 (Mar 2025 - Feb 2026)</option>
-                  <option value="2024/2025">2025 (Mar 2024 - Feb 2025)</option>
-                  <option value="2023/2024">2024 (Mar 2023 - Feb 2024)</option>
-                  <option value="2022/2023">2023 (Mar 2022 - Feb 2023)</option>
-                  <option value="2021/2022">2022 (Mar 2021 - Feb 2022)</option>
-                </select>
-              </div>
+              {isAdvancedMode && (
+                <div>
+                  <label
+                    htmlFor="taxYear"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
+                    Tax Year
+                  </label>
+                  <select
+                    id="taxYear"
+                    value={taxYear}
+                    onChange={(e) => setTaxYear(e.target.value as TaxYear)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none transition bg-white"
+                  >
+                    <option value="2025/2026">
+                      2026 (Mar 2025 - Feb 2026)
+                    </option>
+                    <option value="2024/2025">
+                      2025 (Mar 2024 - Feb 2025)
+                    </option>
+                    <option value="2023/2024">
+                      2024 (Mar 2023 - Feb 2024)
+                    </option>
+                    <option value="2022/2023">
+                      2023 (Mar 2022 - Feb 2023)
+                    </option>
+                    <option value="2021/2022">
+                      2022 (Mar 2021 - Feb 2022)
+                    </option>
+                  </select>
+                </div>
+              )}
 
               <div>
                 <label
@@ -463,85 +513,110 @@ export default function IncomeTaxCalculator() {
                 </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Age Group
-                </label>
-                <div className="flex gap-4">
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      name="ageGroup"
-                      value="under65"
-                      checked={ageGroup === "under65"}
-                      onChange={(e) => setAgeGroup(e.target.value as AgeGroup)}
-                      className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
-                    />
-                    <span className="ml-2 text-sm text-gray-900">Under 65</span>
-                  </label>
+              {isAdvancedMode && (
+                <>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Age Group
+                    </label>
+                    <div className="flex gap-4">
+                      <label className="flex items-center cursor-pointer">
+                        <input
+                          type="radio"
+                          name="ageGroup"
+                          value="under65"
+                          checked={ageGroup === "under65"}
+                          onChange={(e) =>
+                            setAgeGroup(e.target.value as AgeGroup)
+                          }
+                          className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
+                        />
+                        <span className="ml-2 text-sm text-gray-900">
+                          Under 65
+                        </span>
+                      </label>
 
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      name="ageGroup"
-                      value="65to74"
-                      checked={ageGroup === "65to74"}
-                      onChange={(e) => setAgeGroup(e.target.value as AgeGroup)}
-                      className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
-                    />
-                    <span className="ml-2 text-sm text-gray-900">65-74</span>
-                  </label>
+                      <label className="flex items-center cursor-pointer">
+                        <input
+                          type="radio"
+                          name="ageGroup"
+                          value="65to74"
+                          checked={ageGroup === "65to74"}
+                          onChange={(e) =>
+                            setAgeGroup(e.target.value as AgeGroup)
+                          }
+                          className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
+                        />
+                        <span className="ml-2 text-sm text-gray-900">
+                          65-74
+                        </span>
+                      </label>
 
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      name="ageGroup"
-                      value="75plus"
-                      checked={ageGroup === "75plus"}
-                      onChange={(e) => setAgeGroup(e.target.value as AgeGroup)}
-                      className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
-                    />
-                    <span className="ml-2 text-sm text-gray-900">75+</span>
-                  </label>
-                </div>
+                      <label className="flex items-center cursor-pointer">
+                        <input
+                          type="radio"
+                          name="ageGroup"
+                          value="75plus"
+                          checked={ageGroup === "75plus"}
+                          onChange={(e) =>
+                            setAgeGroup(e.target.value as AgeGroup)
+                          }
+                          className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
+                        />
+                        <span className="ml-2 text-sm text-gray-900">75+</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Income Type
+                    </label>
+                    <div className="flex gap-4">
+                      <label className="flex items-center cursor-pointer">
+                        <input
+                          type="radio"
+                          name="incomeType"
+                          value="salary"
+                          checked={isSalary}
+                          onChange={() => setIsSalary(true)}
+                          className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
+                        />
+                        <span className="ml-2 text-sm text-gray-900">
+                          Salary (includes UIF)
+                        </span>
+                      </label>
+
+                      <label className="flex items-center cursor-pointer">
+                        <input
+                          type="radio"
+                          name="incomeType"
+                          value="other"
+                          checked={!isSalary}
+                          onChange={() => setIsSalary(false)}
+                          className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
+                        />
+                        <span className="ml-2 text-sm text-gray-900">
+                          Other
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              <div className="space-y-3">
+                <Button onClick={handleCalculate} className="w-full" size="lg">
+                  Calculate Tax
+                </Button>
+                <button
+                  type="button"
+                  onClick={handleClearForm}
+                  className="w-full px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
+                >
+                  Clear Form
+                </button>
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Income Type
-                </label>
-                <div className="flex gap-4">
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      name="incomeType"
-                      value="salary"
-                      checked={isSalary}
-                      onChange={() => setIsSalary(true)}
-                      className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
-                    />
-                    <span className="ml-2 text-sm text-gray-900">
-                      Salary (includes UIF)
-                    </span>
-                  </label>
-
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      name="incomeType"
-                      value="other"
-                      checked={!isSalary}
-                      onChange={() => setIsSalary(false)}
-                      className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
-                    />
-                    <span className="ml-2 text-sm text-gray-900">Other</span>
-                  </label>
-                </div>
-              </div>
-
-              <Button onClick={handleCalculate} className="w-full" size="lg">
-                Calculate Tax
-              </Button>
             </div>
           </div>
 
