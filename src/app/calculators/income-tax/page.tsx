@@ -3,9 +3,15 @@
 import { useState } from "react";
 import { excali } from "@/fonts";
 import { Button } from "@/components/Button";
+import { formatCurrency, formatPercentage } from "@/lib/calculator-utils";
 
 // South African Tax Data by Year
-type TaxYear = "2024/2025" | "2025/2026";
+type TaxYear =
+  | "2021/2022"
+  | "2022/2023"
+  | "2023/2024"
+  | "2024/2025"
+  | "2025/2026";
 
 interface TaxYearData {
   brackets: Array<{
@@ -26,7 +32,91 @@ interface TaxYearData {
   };
 }
 
-const TAX_DATA: Record<TaxYear, TaxYearData> = {
+const TAX_DATA: Record<TaxYear | "2020/2021", TaxYearData> = {
+  "2020/2021": {
+    brackets: [
+      { min: 0, max: 205900, rate: 0.18, base: 0 },
+      { min: 205901, max: 321600, rate: 0.26, base: 37062 },
+      { min: 321601, max: 445100, rate: 0.31, base: 67144 },
+      { min: 445101, max: 584200, rate: 0.36, base: 105429 },
+      { min: 584201, max: 744800, rate: 0.39, base: 155505 },
+      { min: 744801, max: 1577300, rate: 0.41, base: 218139 },
+      { min: 1577301, max: Infinity, rate: 0.45, base: 559464 },
+    ],
+    rebates: {
+      primary: 14958,
+      secondary: 8199,
+      tertiary: 2736,
+    },
+    thresholds: {
+      under65: 83100,
+      age65to74: 128650,
+      age75plus: 143850,
+    },
+  },
+  "2021/2022": {
+    brackets: [
+      { min: 0, max: 216200, rate: 0.18, base: 0 },
+      { min: 216201, max: 337800, rate: 0.26, base: 38916 },
+      { min: 337801, max: 467500, rate: 0.31, base: 70532 },
+      { min: 467501, max: 613600, rate: 0.36, base: 110739 },
+      { min: 613601, max: 782200, rate: 0.39, base: 163335 },
+      { min: 782201, max: 1656600, rate: 0.41, base: 229089 },
+      { min: 1656601, max: Infinity, rate: 0.45, base: 587593 },
+    ],
+    rebates: {
+      primary: 15714,
+      secondary: 8613,
+      tertiary: 2871,
+    },
+    thresholds: {
+      under65: 87300,
+      age65to74: 135150,
+      age75plus: 151100,
+    },
+  },
+  "2022/2023": {
+    brackets: [
+      { min: 0, max: 226000, rate: 0.18, base: 0 },
+      { min: 226001, max: 353100, rate: 0.26, base: 40680 },
+      { min: 353101, max: 488700, rate: 0.31, base: 73726 },
+      { min: 488701, max: 641400, rate: 0.36, base: 115762 },
+      { min: 641401, max: 817600, rate: 0.39, base: 170734 },
+      { min: 817601, max: 1731600, rate: 0.41, base: 239452 },
+      { min: 1731601, max: Infinity, rate: 0.45, base: 614192 },
+    ],
+    rebates: {
+      primary: 16425,
+      secondary: 9000,
+      tertiary: 2997,
+    },
+    thresholds: {
+      under65: 91250,
+      age65to74: 141250,
+      age75plus: 157900,
+    },
+  },
+  "2023/2024": {
+    brackets: [
+      { min: 0, max: 237100, rate: 0.18, base: 0 },
+      { min: 237101, max: 370500, rate: 0.26, base: 42678 },
+      { min: 370501, max: 512800, rate: 0.31, base: 77362 },
+      { min: 512801, max: 673000, rate: 0.36, base: 121475 },
+      { min: 673001, max: 857900, rate: 0.39, base: 179147 },
+      { min: 857901, max: 1817000, rate: 0.41, base: 251258 },
+      { min: 1817001, max: Infinity, rate: 0.45, base: 644489 },
+    ],
+    rebates: {
+      primary: 17235,
+      secondary: 9444,
+      tertiary: 3145,
+    },
+    thresholds: {
+      under65: 95750,
+      age65to74: 148217,
+      age75plus: 165689,
+    },
+  },
   "2024/2025": {
     brackets: [
       { min: 0, max: 237100, rate: 0.18, base: 0 },
@@ -71,10 +161,24 @@ const TAX_DATA: Record<TaxYear, TaxYearData> = {
   },
 };
 
+// Helper to get previous tax year
+const PREVIOUS_YEAR: Record<TaxYear, (TaxYear | "2020/2021") | null> = {
+  "2021/2022": "2020/2021",
+  "2022/2023": "2021/2022",
+  "2023/2024": "2022/2023",
+  "2024/2025": "2023/2024",
+  "2025/2026": "2024/2025",
+};
+
+// UIF (Unemployment Insurance Fund) constants
+const UIF_RATE = 0.01; // 1% employee contribution
+const UIF_MAX_MONTHLY_INCOME = 17712; // Maximum monthly income for UIF
+
 function calculateIncomeTax(
   annualIncome: number,
   age: number,
-  taxYear: TaxYear,
+  taxYear: TaxYear | "2020/2021",
+  isSalary: boolean = false,
 ): {
   taxableIncome: number;
   taxBeforeRebates: number;
@@ -83,6 +187,8 @@ function calculateIncomeTax(
   effectiveRate: number;
   marginalRate: number;
   monthlyTax: number;
+  uifMonthly: number;
+  uifAnnual: number;
   takeHomePay: number;
   monthlyTakeHome: number;
 } {
@@ -122,6 +228,13 @@ function calculateIncomeTax(
   // Calculate effective rate
   const effectiveRate = annualIncome > 0 ? taxPayable / annualIncome : 0;
 
+  // Calculate UIF if this is salary income
+  const monthlyIncome = annualIncome / 12;
+  const uifMonthly = isSalary
+    ? Math.min(monthlyIncome, UIF_MAX_MONTHLY_INCOME) * UIF_RATE
+    : 0;
+  const uifAnnual = uifMonthly * 12;
+
   return {
     taxableIncome: annualIncome,
     taxBeforeRebates,
@@ -130,8 +243,10 @@ function calculateIncomeTax(
     effectiveRate,
     marginalRate,
     monthlyTax: taxPayable / 12,
-    takeHomePay: annualIncome - taxPayable,
-    monthlyTakeHome: (annualIncome - taxPayable) / 12,
+    uifMonthly,
+    uifAnnual,
+    takeHomePay: annualIncome - taxPayable - uifAnnual,
+    monthlyTakeHome: (annualIncome - taxPayable - uifAnnual) / 12,
   };
 }
 
@@ -141,9 +256,14 @@ export default function IncomeTaxCalculator() {
   const [monthlyIncome, setMonthlyIncome] = useState("");
   const [ageGroup, setAgeGroup] = useState<AgeGroup>("under65");
   const [taxYear, setTaxYear] = useState<TaxYear>("2025/2026");
-  const [results, setResults] = useState<ReturnType<
-    typeof calculateIncomeTax
-  > | null>(null);
+  const [isSalary, setIsSalary] = useState(true);
+  const [results, setResults] = useState<
+    | (ReturnType<typeof calculateIncomeTax> & {
+        previousYear: (TaxYear | "2020/2021") | null;
+        previousYearResults: ReturnType<typeof calculateIncomeTax> | null;
+      })
+    | null
+  >(null);
 
   const handleCalculate = () => {
     const income = parseFloat(monthlyIncome.replace(/,/g, ""));
@@ -166,21 +286,20 @@ export default function IncomeTaxCalculator() {
       annualIncome,
       ageMap[ageGroup],
       taxYear,
+      isSalary,
     );
-    setResults(calculatedResults);
-  };
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("en-ZA", {
-      style: "currency",
-      currency: "ZAR",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(amount);
-  };
+    // Calculate previous year for comparison if available
+    const prevYear = PREVIOUS_YEAR[taxYear];
+    const prevYearResults = prevYear
+      ? calculateIncomeTax(annualIncome, ageMap[ageGroup], prevYear, isSalary)
+      : null;
 
-  const formatPercentage = (rate: number) => {
-    return `${(rate * 100).toFixed(2)}%`;
+    setResults({
+      ...calculatedResults,
+      previousYear: prevYear,
+      previousYearResults: prevYearResults,
+    });
   };
 
   const handleIncomeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -215,38 +334,24 @@ export default function IncomeTaxCalculator() {
 
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="taxYear"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Tax Year
                 </label>
-                <div className="flex gap-4">
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      name="taxYear"
-                      value="2025/2026"
-                      checked={taxYear === "2025/2026"}
-                      onChange={(e) => setTaxYear(e.target.value as TaxYear)}
-                      className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
-                    />
-                    <span className="ml-2 text-sm text-gray-900">
-                      2025/2026
-                    </span>
-                  </label>
-
-                  <label className="flex items-center cursor-pointer">
-                    <input
-                      type="radio"
-                      name="taxYear"
-                      value="2024/2025"
-                      checked={taxYear === "2024/2025"}
-                      onChange={(e) => setTaxYear(e.target.value as TaxYear)}
-                      className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
-                    />
-                    <span className="ml-2 text-sm text-gray-900">
-                      2024/2025
-                    </span>
-                  </label>
-                </div>
+                <select
+                  id="taxYear"
+                  value={taxYear}
+                  onChange={(e) => setTaxYear(e.target.value as TaxYear)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none transition bg-white"
+                >
+                  <option value="2025/2026">2026 (Mar 2025 - Feb 2026)</option>
+                  <option value="2024/2025">2025 (Mar 2024 - Feb 2025)</option>
+                  <option value="2023/2024">2024 (Mar 2023 - Feb 2024)</option>
+                  <option value="2022/2023">2023 (Mar 2022 - Feb 2023)</option>
+                  <option value="2021/2022">2022 (Mar 2021 - Feb 2022)</option>
+                </select>
               </div>
 
               <div>
@@ -314,6 +419,39 @@ export default function IncomeTaxCalculator() {
                 </div>
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Income Type
+                </label>
+                <div className="flex gap-4">
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      name="incomeType"
+                      value="salary"
+                      checked={isSalary}
+                      onChange={() => setIsSalary(true)}
+                      className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
+                    />
+                    <span className="ml-2 text-sm text-gray-900">
+                      Salary (includes UIF)
+                    </span>
+                  </label>
+
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      name="incomeType"
+                      value="other"
+                      checked={!isSalary}
+                      onChange={() => setIsSalary(false)}
+                      className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
+                    />
+                    <span className="ml-2 text-sm text-gray-900">Other</span>
+                  </label>
+                </div>
+              </div>
+
               <Button onClick={handleCalculate} className="w-full" size="lg">
                 Calculate Tax
               </Button>
@@ -359,6 +497,19 @@ export default function IncomeTaxCalculator() {
                           {formatCurrency(results.monthlyTax)}
                         </span>
                       </div>
+
+                      {results.uifMonthly > 0 && (
+                        <div className="bg-blue-50 rounded-lg p-5 border border-blue-200">
+                          <span className="text-sm text-gray-600 block mb-1">
+                            UIF Contribution
+                          </span>
+                          <span
+                            className={`${excali.className} text-3xl text-gray-900 block`}
+                          >
+                            {formatCurrency(results.uifMonthly)}
+                          </span>
+                        </div>
+                      )}
 
                       <div className="bg-gray-50 rounded-lg p-5 border border-gray-200">
                         <span className="text-sm text-gray-600 block mb-1">
@@ -428,6 +579,17 @@ export default function IncomeTaxCalculator() {
                         </span>
                       </div>
 
+                      {results.uifAnnual > 0 && (
+                        <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                          <span className="text-gray-600">
+                            UIF Contribution
+                          </span>
+                          <span className="text-gray-700">
+                            {formatCurrency(results.uifAnnual)}
+                          </span>
+                        </div>
+                      )}
+
                       <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200 mt-4">
                         <div className="flex justify-between items-center">
                           <span className="font-semibold text-gray-700">
@@ -456,6 +618,66 @@ export default function IncomeTaxCalculator() {
                     </div>
                   </div>
                 </div>
+
+                {/* Year-over-Year Comparison */}
+                {results.previousYear && results.previousYearResults && (
+                  <div className="mt-8 pt-6 border-t-2 border-gray-300">
+                    <h3
+                      className={`${excali.className} text-xl text-gray-700 mb-4`}
+                    >
+                      Comparison vs {results.previousYear}
+                    </h3>
+
+                    {(() => {
+                      const annualTaxDiff =
+                        results.taxPayable -
+                        results.previousYearResults.taxPayable;
+                      const monthlyTakeHomeDiff =
+                        results.monthlyTakeHome -
+                        results.previousYearResults.monthlyTakeHome;
+
+                      return (
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div className="bg-gray-50 rounded-lg p-4">
+                            <p className="text-xs text-gray-600 mb-1">
+                              Annual Tax Change
+                            </p>
+                            <p
+                              className={`${excali.className} text-2xl font-semibold ${
+                                annualTaxDiff > 0
+                                  ? "text-red-600"
+                                  : annualTaxDiff < 0
+                                    ? "text-green-600"
+                                    : "text-gray-600"
+                              }`}
+                            >
+                              {annualTaxDiff > 0 ? "+" : ""}
+                              {formatCurrency(annualTaxDiff)}
+                            </p>
+                          </div>
+
+                          <div className="bg-gray-50 rounded-lg p-4">
+                            <p className="text-xs text-gray-600 mb-1">
+                              Monthly Take-Home Change
+                            </p>
+                            <p
+                              className={`${excali.className} text-2xl font-semibold ${
+                                monthlyTakeHomeDiff > 0
+                                  ? "text-green-600"
+                                  : monthlyTakeHomeDiff < 0
+                                    ? "text-red-600"
+                                    : "text-gray-600"
+                              }`}
+                            >
+                              {monthlyTakeHomeDiff > 0 ? "+" : ""}
+                              {formatCurrency(monthlyTakeHomeDiff)}
+                            </p>
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                )}
               </div>
             )}
 
@@ -478,6 +700,10 @@ export default function IncomeTaxCalculator() {
             <li>
               • Based on official SARS tax brackets and rebates for the selected
               tax year
+            </li>
+            <li>
+              • UIF (Unemployment Insurance Fund) is calculated at 1% for salary
+              income, capped at R177.12/month (R17,712 monthly income ceiling)
             </li>
             <li>
               • Note: Tax brackets remained unchanged from 2024/2025 to
