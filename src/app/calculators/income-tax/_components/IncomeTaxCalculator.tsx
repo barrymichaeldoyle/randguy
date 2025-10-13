@@ -746,8 +746,9 @@ export default function IncomeTaxCalculator() {
                 </h3>
 
                 {(() => {
-                  const annualTaxDiff =
-                    results.taxPayable - results.previousYearResults.taxPayable;
+                  const annualTakeHomeDiff =
+                    results.takeHomePay -
+                    results.previousYearResults.takeHomePay;
                   const monthlyTakeHomeDiff =
                     results.monthlyTakeHome -
                     results.previousYearResults.monthlyTakeHome;
@@ -756,19 +757,19 @@ export default function IncomeTaxCalculator() {
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="bg-gray-50 rounded-lg p-4">
                         <p className="text-xs text-gray-600 mb-1">
-                          Annual Tax Change
+                          Annual Take-Home Change
                         </p>
                         <p
                           className={`${excali.className} text-2xl font-semibold ${
-                            annualTaxDiff > 0
-                              ? "text-red-600"
-                              : annualTaxDiff < 0
-                                ? "text-green-600"
+                            annualTakeHomeDiff > 0
+                              ? "text-green-600"
+                              : annualTakeHomeDiff < 0
+                                ? "text-red-600"
                                 : "text-gray-600"
                           }`}
                         >
-                          {annualTaxDiff > 0 ? "+" : ""}
-                          {formatCurrency(annualTaxDiff)}
+                          {annualTakeHomeDiff > 0 ? "+" : ""}
+                          {formatCurrency(annualTakeHomeDiff)}
                         </p>
                       </div>
 
