@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { excali } from "@/fonts";
 import { Button } from "@/components/Button";
 import { formatCurrency, formatPercentage } from "@/lib/calculator-utils";
@@ -251,9 +251,11 @@ function calculateIncomeTax(
 }
 
 type AgeGroup = "under65" | "65to74" | "75plus";
+type PayFrequency = "monthly" | "annual" | "biweekly" | "weekly";
 
 export default function IncomeTaxCalculator() {
-  const [monthlyIncome, setMonthlyIncome] = useState("");
+  const [income, setIncome] = useState("");
+  const [payFrequency, setPayFrequency] = useState<PayFrequency>("monthly");
   const [ageGroup, setAgeGroup] = useState<AgeGroup>("under65");
   const [taxYear, setTaxYear] = useState<TaxYear>("2025/2026");
   const [isSalary, setIsSalary] = useState(true);
@@ -265,11 +267,53 @@ export default function IncomeTaxCalculator() {
     | null
   >(null);
 
-  const handleCalculate = () => {
-    const income = parseFloat(monthlyIncome.replace(/,/g, ""));
+  const previousFrequency = useRef<PayFrequency>("monthly");
+  const incomeByFrequency = useRef<Record<PayFrequency, string>>({
+    monthly: "",
+    annual: "",
+    biweekly: "",
+    weekly: "",
+  });
 
-    if (isNaN(income) || income < 0) {
-      alert("Please enter a valid monthly income");
+  // Convert income when pay frequency changes
+  useEffect(() => {
+    if (previousFrequency.current !== payFrequency) {
+      // Check if we have a saved value for this frequency
+      if (incomeByFrequency.current[payFrequency]) {
+        setIncome(incomeByFrequency.current[payFrequency]);
+      } else if (income) {
+        // Convert from previous frequency
+        const incomeValue = parseFloat(income.replace(/,/g, ""));
+
+        if (!isNaN(incomeValue) && incomeValue > 0) {
+          const frequencyMultiplier: Record<PayFrequency, number> = {
+            monthly: 12,
+            annual: 1,
+            biweekly: 26,
+            weekly: 52,
+          };
+
+          // Convert to annual first
+          const annualAmount =
+            incomeValue * frequencyMultiplier[previousFrequency.current];
+          // Then convert to new frequency
+          const newAmount = annualAmount / frequencyMultiplier[payFrequency];
+
+          const convertedValue = Math.round(newAmount).toString();
+          setIncome(convertedValue);
+          incomeByFrequency.current[payFrequency] = convertedValue;
+        }
+      }
+
+      previousFrequency.current = payFrequency;
+    }
+  }, [payFrequency, income]);
+
+  const handleCalculate = () => {
+    const incomeValue = parseFloat(income.replace(/,/g, ""));
+
+    if (isNaN(incomeValue) || incomeValue < 0) {
+      alert("Please enter a valid income amount");
       return;
     }
 
@@ -280,8 +324,15 @@ export default function IncomeTaxCalculator() {
       "75plus": 80,
     };
 
-    // Convert monthly to annual for tax calculation
-    const annualIncome = income * 12;
+    // Convert to annual income based on pay frequency
+    const frequencyMultiplier: Record<PayFrequency, number> = {
+      monthly: 12,
+      annual: 1,
+      biweekly: 26,
+      weekly: 52,
+    };
+
+    const annualIncome = incomeValue * frequencyMultiplier[payFrequency];
     const calculatedResults = calculateIncomeTax(
       annualIncome,
       ageMap[ageGroup],
@@ -305,13 +356,35 @@ export default function IncomeTaxCalculator() {
   const handleIncomeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/,/g, "");
     if (value === "" || !isNaN(parseFloat(value))) {
-      setMonthlyIncome(value);
+      setIncome(value);
+      // Clear all saved values except the current frequency
+      // This ensures conversions are based on the latest edited value
+      incomeByFrequency.current = {
+        monthly: "",
+        annual: "",
+        biweekly: "",
+        weekly: "",
+      };
+      incomeByFrequency.current[payFrequency] = value;
     }
   };
 
-  const displayIncome = monthlyIncome
-    ? parseFloat(monthlyIncome).toLocaleString("en-ZA")
+  const displayIncome = income
+    ? parseFloat(income).toLocaleString("en-ZA")
     : "";
+
+  const getIncomeLabel = () => {
+    switch (payFrequency) {
+      case "monthly":
+        return "Monthly Gross Income (before tax)";
+      case "annual":
+        return "Annual Gross Income (before tax)";
+      case "biweekly":
+        return "Bi-weekly Gross Income (before tax)";
+      case "weekly":
+        return "Weekly Gross Income (before tax)";
+    }
+  };
 
   return (
     <main className="flex flex-col items-center pt-12 p-8 flex-1">
@@ -359,20 +432,34 @@ export default function IncomeTaxCalculator() {
                   htmlFor="income"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Monthly Gross Income (before tax)
+                  {getIncomeLabel()}
                 </label>
-                <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                    R
-                  </span>
-                  <input
-                    type="text"
-                    id="income"
-                    value={displayIncome}
-                    onChange={handleIncomeChange}
-                    placeholder="0"
-                    className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none transition"
-                  />
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+                      R
+                    </span>
+                    <input
+                      type="text"
+                      id="income"
+                      value={displayIncome}
+                      onChange={handleIncomeChange}
+                      placeholder="0"
+                      className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none transition"
+                    />
+                  </div>
+                  <select
+                    value={payFrequency}
+                    onChange={(e) =>
+                      setPayFrequency(e.target.value as PayFrequency)
+                    }
+                    className="px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none transition bg-white"
+                  >
+                    <option value="monthly">Monthly</option>
+                    <option value="annual">Annual</option>
+                    <option value="biweekly">Bi-weekly</option>
+                    <option value="weekly">Weekly</option>
+                  </select>
                 </div>
               </div>
 
@@ -707,8 +794,8 @@ export default function IncomeTaxCalculator() {
             </li>
             <li>
               • Note: Tax brackets remained unchanged from 2024/2025 to
-              2025/2026, which may result in "bracket creep" as inflation pushes
-              salaries into higher brackets
+              2025/2026, which may result in &quot;bracket creep&quot; as
+              inflation pushes salaries into higher brackets
             </li>
             <li>• Includes age-based rebates (65+ and 75+)</li>
             <li>
