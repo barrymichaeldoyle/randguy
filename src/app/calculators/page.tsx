@@ -186,7 +186,7 @@ export default function CalculatorsPage() {
               <div className="text-3xl mb-2">🔒</div>
               <h3 className="font-semibold mb-2">Privacy First</h3>
               <p className="text-sm text-gray-700">
-                Your data stays on your device. I don't track or store your
+                Your data stays on your device. I don&apos;t track or store your
                 information
               </p>
             </div>
