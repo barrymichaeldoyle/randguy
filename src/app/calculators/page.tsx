@@ -44,6 +44,13 @@ const calculators = [
     href: "/calculators/home-loan",
     icon: "🏠",
   },
+  {
+    title: "Loan-to-Value (LTV) Calculator",
+    description:
+      "Calculate your LTV ratio to understand your equity position and loan terms. Essential tool for property buyers to assess their financing situation.",
+    href: "/calculators/ltv",
+    icon: "📊",
+  },
   // Add more calculators here in the future
 ];
 

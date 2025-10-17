@@ -133,6 +133,13 @@ export default async function Home() {
         description:
           "Calculate your home loan repayments and total interest for property purchases",
       },
+      {
+        "@type": "WebPage",
+        name: "Loan-to-Value Calculator",
+        url: `${baseUrl}/calculators/ltv`,
+        description:
+          "Calculate your LTV ratio and understand your equity position for property financing",
+      },
     ],
   };
 
