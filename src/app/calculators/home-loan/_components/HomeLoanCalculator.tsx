@@ -2,6 +2,7 @@
 
 import { excali } from "@/fonts";
 import { Button } from "@/components/Button";
+import { NumericInput } from "@/components/NumericInput";
 import { formatCurrency } from "@/lib/calculator-utils";
 
 import { useHomeLoanStore } from "./home-loan-store";
@@ -95,43 +96,6 @@ export default function HomeLoanCalculator() {
     setResults(calculatedResults);
   };
 
-  const handlePropertyPriceChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const value = e.target.value.replace(/,/g, "");
-    if (value === "" || !isNaN(parseFloat(value))) {
-      setPropertyPrice(value);
-    }
-  };
-
-  const handleDepositChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/,/g, "");
-    if (value === "" || !isNaN(parseFloat(value))) {
-      setDeposit(value);
-    }
-  };
-
-  const handleInterestRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value === "" || !isNaN(parseFloat(value))) {
-      setInterestRate(value);
-    }
-  };
-
-  const handleLoanTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (value === "" || !isNaN(parseFloat(value))) {
-      setLoanTerm(value);
-    }
-  };
-
-  const displayPropertyPrice = propertyPrice
-    ? parseFloat(propertyPrice).toLocaleString("en-ZA")
-    : "";
-  const displayDeposit = deposit
-    ? parseFloat(deposit).toLocaleString("en-ZA")
-    : "";
-
   const depositPercentage =
     propertyPrice && deposit
       ? (
@@ -155,19 +119,13 @@ export default function HomeLoanCalculator() {
             >
               Property Price
             </label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                R
-              </span>
-              <input
-                type="text"
-                id="propertyPrice"
-                value={displayPropertyPrice}
-                onChange={handlePropertyPriceChange}
-                placeholder="0"
-                className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none transition"
-              />
-            </div>
+            <NumericInput
+              id="propertyPrice"
+              value={propertyPrice}
+              onChange={setPropertyPrice}
+              placeholder="0"
+              prefix="R"
+            />
           </div>
 
           <div>
@@ -182,19 +140,13 @@ export default function HomeLoanCalculator() {
                 </span>
               )}
             </label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                R
-              </span>
-              <input
-                type="text"
-                id="deposit"
-                value={displayDeposit}
-                onChange={handleDepositChange}
-                placeholder="0"
-                className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none transition"
-              />
-            </div>
+            <NumericInput
+              id="deposit"
+              value={deposit}
+              onChange={setDeposit}
+              placeholder="0"
+              prefix="R"
+            />
             <p className="text-xs text-gray-500 mt-1">
               Banks may offer 100% loans for first-time buyers (0% deposit)
             </p>
@@ -207,19 +159,13 @@ export default function HomeLoanCalculator() {
             >
               Interest Rate (% per year)
             </label>
-            <div className="relative">
-              <input
-                type="text"
-                id="interestRate"
-                value={interestRate}
-                onChange={handleInterestRateChange}
-                placeholder="10.5"
-                className="w-full pr-8 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none transition"
-              />
-              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
-                %
-              </span>
-            </div>
+            <NumericInput
+              id="interestRate"
+              value={interestRate}
+              onChange={setInterestRate}
+              placeholder="10.5"
+              suffix="%"
+            />
             <p className="text-xs text-gray-500 mt-1">
               SA prime rate: 10.5% (Oct 2025). Shop around and negotiate!
             </p>
@@ -232,13 +178,11 @@ export default function HomeLoanCalculator() {
             >
               Loan Term (years)
             </label>
-            <input
-              type="text"
+            <NumericInput
               id="loanTerm"
               value={loanTerm}
-              onChange={handleLoanTermChange}
+              onChange={setLoanTerm}
               placeholder="20"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none transition"
             />
             <p className="text-xs text-gray-500 mt-1">Typical: 20-30 years</p>
           </div>

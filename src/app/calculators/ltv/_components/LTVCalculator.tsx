@@ -2,6 +2,7 @@
 
 import { excali } from "@/fonts";
 import { Button } from "@/components/Button";
+import { NumericInput } from "@/components/NumericInput";
 import { formatCurrency } from "@/lib/calculator-utils";
 
 import { useLTVStore } from "./ltv-store";
@@ -116,39 +117,6 @@ export default function LTVCalculator() {
     setResults(calculatedResults);
   };
 
-  const handlePropertyValueChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const value = e.target.value.replace(/,/g, "");
-    if (value === "" || !isNaN(parseFloat(value))) {
-      setPropertyValue(value);
-    }
-  };
-
-  const handleLoanAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/,/g, "");
-    if (value === "" || !isNaN(parseFloat(value))) {
-      setLoanAmount(value);
-    }
-  };
-
-  const handleDepositChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/,/g, "");
-    if (value === "" || !isNaN(parseFloat(value))) {
-      setDeposit(value);
-    }
-  };
-
-  const displayPropertyValue = propertyValue
-    ? parseFloat(propertyValue).toLocaleString("en-ZA")
-    : "";
-  const displayLoanAmount = loanAmount
-    ? parseFloat(loanAmount).toLocaleString("en-ZA")
-    : "";
-  const displayDeposit = deposit
-    ? parseFloat(deposit).toLocaleString("en-ZA")
-    : "";
-
   return (
     <div className="grid lg:grid-cols-[400px_1fr] gap-8 items-start">
       {/* Input Form - Left Side */}
@@ -165,19 +133,13 @@ export default function LTVCalculator() {
             >
               Property Value
             </label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                R
-              </span>
-              <input
-                type="text"
-                id="propertyValue"
-                value={displayPropertyValue}
-                onChange={handlePropertyValueChange}
-                placeholder="0"
-                className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none transition"
-              />
-            </div>
+            <NumericInput
+              id="propertyValue"
+              value={propertyValue}
+              onChange={setPropertyValue}
+              placeholder="0"
+              prefix="R"
+            />
           </div>
 
           <div>
@@ -219,19 +181,13 @@ export default function LTVCalculator() {
               >
                 Deposit Amount
               </label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                  R
-                </span>
-                <input
-                  type="text"
-                  id="deposit"
-                  value={displayDeposit}
-                  onChange={handleDepositChange}
-                  placeholder="0"
-                  className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none transition"
-                />
-              </div>
+              <NumericInput
+                id="deposit"
+                value={deposit}
+                onChange={setDeposit}
+                placeholder="0"
+                prefix="R"
+              />
               <p className="text-xs text-gray-500 mt-1">
                 Enter R0 for a 100% loan
               </p>
@@ -244,19 +200,13 @@ export default function LTVCalculator() {
               >
                 Loan Amount
               </label>
-              <div className="relative">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                  R
-                </span>
-                <input
-                  type="text"
-                  id="loanAmount"
-                  value={displayLoanAmount}
-                  onChange={handleLoanAmountChange}
-                  placeholder="0"
-                  className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none transition"
-                />
-              </div>
+              <NumericInput
+                id="loanAmount"
+                value={loanAmount}
+                onChange={setLoanAmount}
+                placeholder="0"
+                prefix="R"
+              />
             </div>
           )}
 

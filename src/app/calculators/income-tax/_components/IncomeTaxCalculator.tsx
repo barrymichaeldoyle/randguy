@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 
 import { excali } from "@/fonts";
 import { Button } from "@/components/Button";
+import { NumericInput } from "@/components/NumericInput";
 import { formatCurrency, formatPercentage } from "@/lib/calculator-utils";
 
 import { useIncomeTaxStore } from "./income-tax-store";
@@ -361,25 +362,18 @@ export default function IncomeTaxCalculator() {
     });
   };
 
-  const handleIncomeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.replace(/,/g, "");
-    if (value === "" || !isNaN(parseFloat(value))) {
-      setIncome(value);
-      // Clear all saved values except the current frequency
-      // This ensures conversions are based on the latest edited value
-      incomeByFrequency.current = {
-        monthly: "",
-        annual: "",
-        biweekly: "",
-        weekly: "",
-      };
-      incomeByFrequency.current[payFrequency] = value;
-    }
+  const handleIncomeChange = (value: string) => {
+    setIncome(value);
+    // Clear all saved values except the current frequency
+    // This ensures conversions are based on the latest edited value
+    incomeByFrequency.current = {
+      monthly: "",
+      annual: "",
+      biweekly: "",
+      weekly: "",
+    };
+    incomeByFrequency.current[payFrequency] = value;
   };
-
-  const displayIncome = income
-    ? parseFloat(income).toLocaleString("en-ZA")
-    : "";
 
   const getIncomeLabel = () => {
     switch (payFrequency) {
@@ -463,17 +457,13 @@ export default function IncomeTaxCalculator() {
               {getIncomeLabel()}
             </label>
             <div className="flex gap-2">
-              <div className="relative flex-1">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                  R
-                </span>
-                <input
-                  type="text"
+              <div className="flex-1">
+                <NumericInput
                   id="income"
-                  value={displayIncome}
+                  value={income}
                   onChange={handleIncomeChange}
                   placeholder="0"
-                  className="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none transition"
+                  prefix="R"
                 />
               </div>
               <select
