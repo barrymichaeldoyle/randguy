@@ -92,6 +92,50 @@ export default async function Home() {
     })),
   };
 
+  const siteNavigationSchema = {
+    "@context": "https://schema.org",
+    "@type": "SiteNavigationElement",
+    name: "Main Navigation",
+    url: baseUrl,
+    hasPart: [
+      {
+        "@type": "WebPage",
+        name: "Home",
+        url: baseUrl,
+        description:
+          "South African personal finance and investment advice, calculators, and guides",
+      },
+      {
+        "@type": "WebPage",
+        name: "Calculators",
+        url: `${baseUrl}/calculators`,
+        description:
+          "Free financial calculators for South Africans - income tax, UIF, and more",
+      },
+      {
+        "@type": "WebPage",
+        name: "Blog",
+        url: `${baseUrl}/blog`,
+        description:
+          "Personal finance articles and investment guides for South Africans",
+      },
+      {
+        "@type": "WebPage",
+        name: "Income Tax Calculator",
+        url: `${baseUrl}/calculators/income-tax`,
+        description:
+          "Calculate your South African income tax with UIF and age-based rebates",
+      },
+      {
+        "@type": "WebPage",
+        name: "Home Loan Calculator",
+        url: `${baseUrl}/calculators/home-loan`,
+        description:
+          "Calculate your home loan repayments and total interest for property purchases",
+      },
+    ],
+  };
+
   return (
     <main className="flex flex-col items-center pt-16 p-8 flex-1">
       <script
@@ -105,6 +149,12 @@ export default async function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostsSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(siteNavigationSchema),
+        }}
       />
       <div className="text-center mb-12">
         <Image

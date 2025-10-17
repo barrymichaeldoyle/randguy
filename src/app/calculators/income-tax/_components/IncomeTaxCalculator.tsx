@@ -257,7 +257,6 @@ type AgeGroup = "under65" | "65to74" | "75plus";
 type PayFrequency = "monthly" | "annual" | "biweekly" | "weekly";
 
 export default function IncomeTaxCalculator() {
-  // Use Zustand store for persistent state
   const {
     income,
     payFrequency,
