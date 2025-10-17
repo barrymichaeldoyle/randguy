@@ -3,6 +3,7 @@
 import { excali } from "@/fonts";
 import { Button } from "@/components/Button";
 import { NumericInput } from "@/components/NumericInput";
+import { FormField } from "@/components/FormField";
 import { formatCurrency } from "@/lib/calculator-utils";
 
 import { useLTVStore } from "./ltv-store";
@@ -126,13 +127,7 @@ export default function LTVCalculator() {
         </h2>
 
         <div className="space-y-6">
-          <div>
-            <label
-              htmlFor="propertyValue"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Property Value
-            </label>
+          <FormField label="Property Value" htmlFor="propertyValue">
             <NumericInput
               id="propertyValue"
               value={propertyValue}
@@ -140,7 +135,7 @@ export default function LTVCalculator() {
               placeholder="0"
               prefix="R"
             />
-          </div>
+          </FormField>
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-3">
@@ -174,13 +169,11 @@ export default function LTVCalculator() {
           </div>
 
           {inputMode === "deposit" ? (
-            <div>
-              <label
-                htmlFor="deposit"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Deposit Amount
-              </label>
+            <FormField
+              label="Deposit Amount"
+              htmlFor="deposit"
+              helperText="Enter R0 for a 100% loan"
+            >
               <NumericInput
                 id="deposit"
                 value={deposit}
@@ -188,18 +181,9 @@ export default function LTVCalculator() {
                 placeholder="0"
                 prefix="R"
               />
-              <p className="text-xs text-gray-500 mt-1">
-                Enter R0 for a 100% loan
-              </p>
-            </div>
+            </FormField>
           ) : (
-            <div>
-              <label
-                htmlFor="loanAmount"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Loan Amount
-              </label>
+            <FormField label="Loan Amount" htmlFor="loanAmount">
               <NumericInput
                 id="loanAmount"
                 value={loanAmount}
@@ -207,7 +191,7 @@ export default function LTVCalculator() {
                 placeholder="0"
                 prefix="R"
               />
-            </div>
+            </FormField>
           )}
 
           <div className="space-y-3">

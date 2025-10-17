@@ -40,7 +40,7 @@ const calculators = [
   {
     title: "Home Loan Calculator",
     description:
-      "Calculate your monthly bond repayments with our home loan calculator. See total interest, repayment breakdown, and plan your property purchase.",
+      "Calculate your monthly bond repayments and see total interest, repayment breakdown, and plan your property purchase.",
     href: "/calculators/home-loan",
     icon: "🏠",
   },

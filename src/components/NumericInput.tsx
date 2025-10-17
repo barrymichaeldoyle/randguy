@@ -8,6 +8,7 @@ interface NumericInputProps {
   className?: string;
   prefix?: string;
   suffix?: string;
+  allowDecimals?: boolean; // Enable decimal point input (default: false)
 }
 
 export function NumericInput({
@@ -18,12 +19,30 @@ export function NumericInput({
   className = "",
   prefix,
   suffix,
+  allowDecimals = false,
 }: NumericInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const cursorPositionRef = useRef<number | null>(null);
   const previousValueRef = useRef<string>("");
 
-  // Format the value for display
+  // Handler for decimal inputs (no formatting, allows decimals)
+  const handleDecimalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // First, replace commas with periods (for SA keyboard layouts)
+    let rawValue = e.target.value.replace(/,/g, ".");
+
+    // Then remove all non-numeric characters except periods
+    rawValue = rawValue.replace(/[^0-9.]/g, "");
+
+    // Handle multiple decimal points (keep only the first one)
+    const parts = rawValue.split(".");
+    if (parts.length > 2) {
+      rawValue = parts[0] + "." + parts.slice(1).join("");
+    }
+
+    onChange(rawValue);
+  };
+
+  // Format the value for display (only for whole numbers)
   const formatValue = (val: string): string => {
     if (!val) return "";
     const num = parseFloat(val);
@@ -53,28 +72,10 @@ export function NumericInput({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target;
     const cursorPos = input.selectionStart || 0;
-    const oldFormattedValue = previousValueRef.current;
     const newFormattedValue = input.value;
 
-    // Remove all non-numeric characters except the first decimal point
-    let rawValue = newFormattedValue.replace(/[^0-9.]/g, "");
-
-    // Handle multiple decimal points (keep only the first one)
-    const parts = rawValue.split(".");
-    if (parts.length > 2) {
-      rawValue = parts[0] + "." + parts.slice(1).join("");
-    }
-
-    // Don't allow values that start with decimal point (add 0)
-    if (rawValue.startsWith(".")) {
-      rawValue = "0" + rawValue;
-    }
-
-    // Calculate new cursor position
-    // Count how many characters (including separators) should be before the cursor
-    const oldValue = value || "";
-    const oldDigits = oldValue.replace(/[^0-9]/g, "");
-    const newDigits = rawValue.replace(/[^0-9]/g, "");
+    // Remove all non-numeric characters (decimals not allowed for whole numbers)
+    let rawValue = newFormattedValue.replace(/[^0-9]/g, "");
 
     // Count digits before cursor in the current input
     const digitsBeforeCursor = newFormattedValue
@@ -104,7 +105,8 @@ export function NumericInput({
     onChange(rawValue);
   };
 
-  const displayValue = formatValue(value);
+  // Use raw value for decimals, formatted value for whole numbers
+  const displayValue = allowDecimals ? value : formatValue(value);
   previousValueRef.current = displayValue;
 
   return (
@@ -120,7 +122,7 @@ export function NumericInput({
         inputMode="decimal"
         id={id}
         value={displayValue}
-        onChange={handleChange}
+        onChange={allowDecimals ? handleDecimalChange : handleChange}
         placeholder={placeholder}
         className={
           className ||

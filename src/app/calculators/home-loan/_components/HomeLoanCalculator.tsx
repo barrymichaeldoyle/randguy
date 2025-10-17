@@ -3,6 +3,7 @@
 import { excali } from "@/fonts";
 import { Button } from "@/components/Button";
 import { NumericInput } from "@/components/NumericInput";
+import { FormField } from "@/components/FormField";
 import { formatCurrency } from "@/lib/calculator-utils";
 
 import { useHomeLoanStore } from "./home-loan-store";
@@ -112,13 +113,7 @@ export default function HomeLoanCalculator() {
         <h2 className={`${excali.className} text-2xl mb-6`}>Loan Details</h2>
 
         <div className="space-y-6">
-          <div>
-            <label
-              htmlFor="propertyPrice"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Property Price
-            </label>
+          <FormField label="Property Price" htmlFor="propertyPrice">
             <NumericInput
               id="propertyPrice"
               value={propertyPrice}
@@ -126,20 +121,22 @@ export default function HomeLoanCalculator() {
               placeholder="0"
               prefix="R"
             />
-          </div>
+          </FormField>
 
-          <div>
-            <label
-              htmlFor="deposit"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Deposit{" "}
-              {deposit && propertyPrice && (
-                <span className="text-gray-500 font-normal">
-                  ({depositPercentage}%)
-                </span>
-              )}
-            </label>
+          <FormField
+            label={
+              <>
+                Deposit{" "}
+                {deposit && propertyPrice && (
+                  <span className="text-gray-500 font-normal">
+                    ({depositPercentage}%)
+                  </span>
+                )}
+              </>
+            }
+            htmlFor="deposit"
+            helperText="Banks may offer 100% loans for first-time buyers (0% deposit)"
+          >
             <NumericInput
               id="deposit"
               value={deposit}
@@ -147,45 +144,35 @@ export default function HomeLoanCalculator() {
               placeholder="0"
               prefix="R"
             />
-            <p className="text-xs text-gray-500 mt-1">
-              Banks may offer 100% loans for first-time buyers (0% deposit)
-            </p>
-          </div>
+          </FormField>
 
-          <div>
-            <label
-              htmlFor="interestRate"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Interest Rate (% per year)
-            </label>
+          <FormField
+            label="Interest Rate (% per year)"
+            htmlFor="interestRate"
+            helperText="SA prime rate: 10.5% (Oct 2025). Shop around and negotiate!"
+          >
             <NumericInput
               id="interestRate"
               value={interestRate}
               onChange={setInterestRate}
               placeholder="10.5"
               suffix="%"
+              allowDecimals
             />
-            <p className="text-xs text-gray-500 mt-1">
-              SA prime rate: 10.5% (Oct 2025). Shop around and negotiate!
-            </p>
-          </div>
+          </FormField>
 
-          <div>
-            <label
-              htmlFor="loanTerm"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Loan Term (years)
-            </label>
+          <FormField
+            label="Loan Term (years)"
+            htmlFor="loanTerm"
+            helperText="Typical: 20-30 years"
+          >
             <NumericInput
               id="loanTerm"
               value={loanTerm}
               onChange={setLoanTerm}
               placeholder="20"
             />
-            <p className="text-xs text-gray-500 mt-1">Typical: 20-30 years</p>
-          </div>
+          </FormField>
 
           <div className="space-y-3">
             <Button onClick={handleCalculate} className="w-full" size="lg">

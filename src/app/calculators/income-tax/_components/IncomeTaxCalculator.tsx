@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { excali } from "@/fonts";
 import { Button } from "@/components/Button";
 import { NumericInput } from "@/components/NumericInput";
+import { FormField } from "@/components/FormField";
 import { formatCurrency, formatPercentage } from "@/lib/calculator-utils";
 
 import { useIncomeTaxStore } from "./income-tax-store";
@@ -427,13 +428,7 @@ export default function IncomeTaxCalculator() {
 
         <div className="space-y-6">
           {isAdvancedMode && (
-            <div>
-              <label
-                htmlFor="taxYear"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Tax Year
-              </label>
+            <FormField label="Tax Year" htmlFor="taxYear">
               <select
                 id="taxYear"
                 value={taxYear}
@@ -446,16 +441,10 @@ export default function IncomeTaxCalculator() {
                 <option value="2022/2023">2023 (Mar 2022 - Feb 2023)</option>
                 <option value="2021/2022">2022 (Mar 2021 - Feb 2022)</option>
               </select>
-            </div>
+            </FormField>
           )}
 
-          <div>
-            <label
-              htmlFor="income"
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              {getIncomeLabel()}
-            </label>
+          <FormField label={getIncomeLabel()} htmlFor="income">
             <div className="flex gap-2">
               <div className="flex-1">
                 <NumericInput
@@ -479,7 +468,7 @@ export default function IncomeTaxCalculator() {
                 <option value="weekly">Weekly</option>
               </select>
             </div>
-          </div>
+          </FormField>
 
           {isAdvancedMode && (
             <>
