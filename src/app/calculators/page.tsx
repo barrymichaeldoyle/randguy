@@ -51,6 +51,13 @@ const calculators = [
     href: "/calculators/ltv",
     icon: "📊",
   },
+  {
+    title: "TFSA Calculator",
+    description:
+      "Calculate how long it will take to max out your Tax-Free Savings Account. Track your contributions and plan your timeline to reach the R500,000 lifetime limit.",
+    href: "/calculators/tfsa",
+    icon: "🎯",
+  },
   // Add more calculators here in the future
 ];
 
@@ -106,7 +113,7 @@ export default function CalculatorsPage() {
   };
 
   return (
-    <main className="flex flex-col items-center pt-12 p-8 flex-1">
+    <main className="flex flex-col items-center pt-8 md:pt-12 px-4 pb-8 md:px-8 flex-1">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}

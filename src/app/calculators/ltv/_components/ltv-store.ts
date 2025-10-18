@@ -19,6 +19,7 @@ interface LTVState {
 
   // Results
   results: LTVResults | null;
+  isDirty: boolean; // Track if form has changed since last calculation
 
   // Actions
   setPropertyValue: (value: string) => void;
@@ -26,7 +27,8 @@ interface LTVState {
   setDeposit: (deposit: string) => void;
   setInputMode: (mode: "loan" | "deposit") => void;
   setResults: (results: LTVResults | null) => void;
-  clearForm: () => void;
+  setIsDirty: (isDirty: boolean) => void;
+  resetForm: () => void;
 }
 
 const initialState = {
@@ -35,6 +37,7 @@ const initialState = {
   deposit: "",
   inputMode: "deposit" as "loan" | "deposit",
   results: null as LTVResults | null,
+  isDirty: true, // Start as dirty so initial calculation is enabled
 };
 
 export const useLTVStore = create<LTVState>()(
@@ -42,15 +45,25 @@ export const useLTVStore = create<LTVState>()(
     (set) => ({
       ...initialState,
 
-      setPropertyValue: (propertyValue) => set({ propertyValue }),
-      setLoanAmount: (loanAmount) => set({ loanAmount }),
-      setDeposit: (deposit) => set({ deposit }),
-      setInputMode: (inputMode) => set({ inputMode }),
+      setPropertyValue: (propertyValue) =>
+        set({ propertyValue, isDirty: true }),
+      setLoanAmount: (loanAmount) => set({ loanAmount, isDirty: true }),
+      setDeposit: (deposit) => set({ deposit, isDirty: true }),
+      setInputMode: (inputMode) => set({ inputMode, isDirty: true }),
       setResults: (results) => set({ results }),
-      clearForm: () => set(initialState),
+      setIsDirty: (isDirty) => set({ isDirty }),
+      resetForm: () => set(initialState),
     }),
     {
       name: "ltv-calculator",
+      partialize: (state) => ({
+        propertyValue: state.propertyValue,
+        loanAmount: state.loanAmount,
+        deposit: state.deposit,
+        inputMode: state.inputMode,
+        results: state.results,
+        isDirty: state.isDirty,
+      }),
     },
   ),
 );

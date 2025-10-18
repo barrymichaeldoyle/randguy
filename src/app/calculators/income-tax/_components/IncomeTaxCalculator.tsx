@@ -6,6 +6,8 @@ import { excali } from "@/fonts";
 import { Button } from "@/components/Button";
 import { NumericInput } from "@/components/NumericInput";
 import { FormField } from "@/components/FormField";
+import { ResultCard, ResultCardItem } from "@/components/ResultCard";
+import { Select } from "@/components/Select";
 import { formatCurrency, formatPercentage } from "@/lib/calculator-utils";
 
 import { useIncomeTaxStore } from "./income-tax-store";
@@ -267,6 +269,7 @@ export default function IncomeTaxCalculator() {
     isSalary,
     isAdvancedMode,
     results,
+    isDirty,
     setIncome,
     setPayFrequency,
     setAgeGroup,
@@ -274,7 +277,8 @@ export default function IncomeTaxCalculator() {
     setIsSalary,
     setIsAdvancedMode,
     setResults,
-    clearForm,
+    setIsDirty,
+    resetForm,
   } = useIncomeTaxStore();
 
   const previousFrequency = useRef<PayFrequency>("monthly");
@@ -361,6 +365,7 @@ export default function IncomeTaxCalculator() {
       previousYear: prevYear,
       previousYearResults: prevYearResults,
     });
+    setIsDirty(false); // Mark as clean after successful calculation
   };
 
   const handleIncomeChange = (value: string) => {
@@ -399,8 +404,8 @@ export default function IncomeTaxCalculator() {
     setIsAdvancedMode(!isAdvancedMode);
   };
 
-  const handleClearForm = () => {
-    clearForm();
+  const handleResetForm = () => {
+    resetForm();
     // Reset refs
     previousFrequency.current = "monthly";
     incomeByFrequency.current = {
@@ -429,18 +434,18 @@ export default function IncomeTaxCalculator() {
         <div className="space-y-6">
           {isAdvancedMode && (
             <FormField label="Tax Year" htmlFor="taxYear">
-              <select
+              <Select
                 id="taxYear"
                 value={taxYear}
-                onChange={(e) => setTaxYear(e.target.value as TaxYear)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none transition bg-white"
-              >
-                <option value="2025/2026">2026 (Mar 2025 - Feb 2026)</option>
-                <option value="2024/2025">2025 (Mar 2024 - Feb 2025)</option>
-                <option value="2023/2024">2024 (Mar 2023 - Feb 2024)</option>
-                <option value="2022/2023">2023 (Mar 2022 - Feb 2023)</option>
-                <option value="2021/2022">2022 (Mar 2021 - Feb 2022)</option>
-              </select>
+                onChange={setTaxYear}
+                options={[
+                  { value: "2025/2026", label: "2026 (Mar 2025 - Feb 2026)" },
+                  { value: "2024/2025", label: "2025 (Mar 2024 - Feb 2025)" },
+                  { value: "2023/2024", label: "2024 (Mar 2023 - Feb 2024)" },
+                  { value: "2022/2023", label: "2023 (Mar 2022 - Feb 2023)" },
+                  { value: "2021/2022", label: "2022 (Mar 2021 - Feb 2022)" },
+                ]}
+              />
             </FormField>
           )}
 
@@ -455,18 +460,17 @@ export default function IncomeTaxCalculator() {
                   prefix="R"
                 />
               </div>
-              <select
+              <Select
                 value={payFrequency}
-                onChange={(e) =>
-                  setPayFrequency(e.target.value as PayFrequency)
-                }
-                className="px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none transition bg-white"
-              >
-                <option value="monthly">Monthly</option>
-                <option value="annual">Annual</option>
-                <option value="biweekly">Bi-weekly</option>
-                <option value="weekly">Weekly</option>
-              </select>
+                onChange={setPayFrequency}
+                options={[
+                  { value: "monthly", label: "Monthly" },
+                  { value: "annual", label: "Annual" },
+                  { value: "biweekly", label: "Bi-weekly" },
+                  { value: "weekly", label: "Weekly" },
+                ]}
+                className="w-30"
+              />
             </div>
           </FormField>
 
@@ -551,15 +555,20 @@ export default function IncomeTaxCalculator() {
           )}
 
           <div className="space-y-3">
-            <Button onClick={handleCalculate} className="w-full" size="lg">
-              Calculate Tax
+            <Button
+              onClick={handleCalculate}
+              className="w-full"
+              size="lg"
+              disabled={!isDirty && results !== null}
+            >
+              {!isDirty && results !== null ? "Calculated" : "Calculate Tax"}
             </Button>
             <button
               type="button"
-              onClick={handleClearForm}
+              onClick={handleResetForm}
               className="w-full px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
             >
-              Clear Form
+              Reset Form
             </button>
           </div>
         </div>
@@ -583,63 +592,63 @@ export default function IncomeTaxCalculator() {
                 </h3>
 
                 <div className="flex flex-col gap-4">
-                  <div className="bg-green-50 rounded-lg p-5 border-2 border-green-200">
-                    <span className="text-sm text-gray-600 block mb-1">
-                      Take-Home Pay
-                    </span>
-                    <span
-                      className={`${excali.className} text-4xl text-green-700 block`}
-                    >
-                      {formatCurrency(results.monthlyTakeHome)}
-                    </span>
-                  </div>
+                  <ResultCard color="green" variant="highlight">
+                    <ResultCardItem
+                      label="Take-Home Pay"
+                      value={
+                        <span className="text-4xl font-bold text-green-700 block">
+                          {formatCurrency(results.monthlyTakeHome)}
+                        </span>
+                      }
+                    />
+                  </ResultCard>
 
-                  <div className="bg-yellow-50 rounded-lg p-5 border border-yellow-200">
-                    <span className="text-sm text-gray-600 block mb-1">
-                      Tax Deducted
-                    </span>
-                    <span
-                      className={`${excali.className} text-3xl text-gray-900 block`}
-                    >
-                      {formatCurrency(results.monthlyTax)}
-                    </span>
-                  </div>
+                  <ResultCard color="yellow">
+                    <ResultCardItem
+                      label="Tax Deducted"
+                      value={
+                        <span className="text-3xl font-bold text-gray-900 block">
+                          {formatCurrency(results.monthlyTax)}
+                        </span>
+                      }
+                    />
+                  </ResultCard>
 
                   {results.uifMonthly > 0 && (
-                    <div className="bg-blue-50 rounded-lg p-5 border border-blue-200">
-                      <span className="text-sm text-gray-600 block mb-1">
-                        UIF Contribution
-                      </span>
-                      <span
-                        className={`${excali.className} text-3xl text-gray-900 block`}
-                      >
-                        {formatCurrency(results.uifMonthly)}
-                      </span>
-                    </div>
+                    <ResultCard color="blue">
+                      <ResultCardItem
+                        label="UIF Contribution"
+                        value={
+                          <span className="text-3xl font-bold text-gray-900 block">
+                            {formatCurrency(results.uifMonthly)}
+                          </span>
+                        }
+                      />
+                    </ResultCard>
                   )}
 
-                  <div className="bg-gray-50 rounded-lg p-5 border border-gray-200">
-                    <span className="text-sm text-gray-600 block mb-1">
-                      Gross Income
-                    </span>
-                    <span
-                      className={`${excali.className} text-3xl text-gray-900 block`}
-                    >
-                      {formatCurrency(results.taxableIncome / 12)}
-                    </span>
-                  </div>
+                  <ResultCard color="gray">
+                    <ResultCardItem
+                      label="Gross Income"
+                      value={
+                        <span className="text-3xl font-bold text-gray-900 block">
+                          {formatCurrency(results.taxableIncome / 12)}
+                        </span>
+                      }
+                    />
+                  </ResultCard>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 mt-6">
                   <div className="text-center p-4 bg-gray-50 rounded-lg border border-gray-200">
                     <p className="text-xs text-gray-600 mb-1">Effective Rate</p>
-                    <p className={`${excali.className} text-xl text-gray-900`}>
+                    <p className="font-bold text-xl text-gray-900">
                       {formatPercentage(results.effectiveRate)}
                     </p>
                   </div>
                   <div className="text-center p-4 bg-gray-50 rounded-lg border border-gray-200">
                     <p className="text-xs text-gray-600 mb-1">Marginal Rate</p>
-                    <p className={`${excali.className} text-xl text-gray-900`}>
+                    <p className="font-bold text-xl text-gray-900">
                       {formatPercentage(results.marginalRate)}
                     </p>
                   </div>
@@ -685,31 +694,29 @@ export default function IncomeTaxCalculator() {
                     </div>
                   )}
 
-                  <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200 mt-4">
-                    <div className="flex justify-between items-center">
-                      <span className="font-semibold text-gray-700">
-                        Tax Payable
-                      </span>
-                      <span
-                        className={`${excali.className} text-2xl text-gray-900`}
-                      >
-                        {formatCurrency(results.taxPayable)}
-                      </span>
-                    </div>
-                  </div>
+                  <ResultCard color="yellow" size="sm" className="mt-4">
+                    <ResultCardItem
+                      label="Tax Payable"
+                      value={
+                        <span className="text-2xl font-bold text-gray-900">
+                          {formatCurrency(results.taxPayable)}
+                        </span>
+                      }
+                      layout="horizontal"
+                    />
+                  </ResultCard>
 
-                  <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-                    <div className="flex justify-between items-center">
-                      <span className="font-semibold text-gray-700">
-                        Take-Home Pay
-                      </span>
-                      <span
-                        className={`${excali.className} text-2xl text-green-700`}
-                      >
-                        {formatCurrency(results.takeHomePay)}
-                      </span>
-                    </div>
-                  </div>
+                  <ResultCard color="green" size="sm">
+                    <ResultCardItem
+                      label="Take-Home Pay"
+                      value={
+                        <span className="text-2xl font-bold text-green-700">
+                          {formatCurrency(results.takeHomePay)}
+                        </span>
+                      }
+                      layout="horizontal"
+                    />
+                  </ResultCard>
                 </div>
               </div>
             </div>
@@ -738,7 +745,7 @@ export default function IncomeTaxCalculator() {
                           Annual Take-Home Change
                         </p>
                         <p
-                          className={`${excali.className} text-2xl font-semibold ${
+                          className={`text-2xl font-bold ${
                             annualTakeHomeDiff > 0
                               ? "text-green-600"
                               : annualTakeHomeDiff < 0
@@ -756,7 +763,7 @@ export default function IncomeTaxCalculator() {
                           Monthly Take-Home Change
                         </p>
                         <p
-                          className={`${excali.className} text-2xl font-semibold ${
+                          className={`text-2xl font-bold ${
                             monthlyTakeHomeDiff > 0
                               ? "text-green-600"
                               : monthlyTakeHomeDiff < 0

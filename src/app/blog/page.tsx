@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Metadata } from "next";
 
 import { getAllPosts } from "@/lib/posts";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 import { excali } from "../../fonts";
 
@@ -29,6 +30,8 @@ export default async function BlogPage() {
   return (
     <main className="flex flex-col items-center p-8 flex-1">
       <div className="max-w-3xl w-full">
+        <Breadcrumb items={[{ name: "Home", href: "/" }, { name: "Blog" }]} />
+
         <h1 className={`${excali.className} text-5xl mb-4 text-center`}>
           Rand Guy&apos;s Blog
         </h1>

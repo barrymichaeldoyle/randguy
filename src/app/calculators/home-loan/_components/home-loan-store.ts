@@ -9,31 +9,42 @@ interface LoanResults {
   loanTermYears: number;
 }
 
+type TermUnit = "years" | "months";
+
 interface HomeLoanState {
   // Form inputs
   propertyPrice: string;
   deposit: string;
   interestRate: string;
-  loanTerm: string; // in years
+  loanTerm: string; // displayed term value
+  termUnit: TermUnit; // "years" or "months"
+  monthlyServiceFee: string; // monthly bank service fee
 
   // Results
   results: LoanResults | null;
+  isDirty: boolean; // Track if form has changed since last calculation
 
   // Actions
   setPropertyPrice: (price: string) => void;
   setDeposit: (deposit: string) => void;
   setInterestRate: (rate: string) => void;
   setLoanTerm: (term: string) => void;
+  setTermUnit: (unit: TermUnit) => void;
+  setMonthlyServiceFee: (fee: string) => void;
   setResults: (results: LoanResults | null) => void;
-  clearForm: () => void;
+  setIsDirty: (isDirty: boolean) => void;
+  resetForm: () => void;
 }
 
 const initialState = {
   propertyPrice: "",
   deposit: "",
-  interestRate: "",
+  interestRate: "10.5", // default to prime rate
   loanTerm: "20",
+  termUnit: "years" as TermUnit,
+  monthlyServiceFee: "69", // Default R69 service fee
   results: null as LoanResults | null,
+  isDirty: true, // Start as dirty so initial calculation is enabled
 };
 
 export const useHomeLoanStore = create<HomeLoanState>()(
@@ -41,15 +52,30 @@ export const useHomeLoanStore = create<HomeLoanState>()(
     (set) => ({
       ...initialState,
 
-      setPropertyPrice: (propertyPrice) => set({ propertyPrice }),
-      setDeposit: (deposit) => set({ deposit }),
-      setInterestRate: (interestRate) => set({ interestRate }),
-      setLoanTerm: (loanTerm) => set({ loanTerm }),
+      setPropertyPrice: (propertyPrice) =>
+        set({ propertyPrice, isDirty: true }),
+      setDeposit: (deposit) => set({ deposit, isDirty: true }),
+      setInterestRate: (interestRate) => set({ interestRate, isDirty: true }),
+      setLoanTerm: (loanTerm) => set({ loanTerm, isDirty: true }),
+      setTermUnit: (termUnit) => set({ termUnit, isDirty: true }),
+      setMonthlyServiceFee: (monthlyServiceFee) =>
+        set({ monthlyServiceFee, isDirty: true }),
       setResults: (results) => set({ results }),
-      clearForm: () => set(initialState),
+      setIsDirty: (isDirty) => set({ isDirty }),
+      resetForm: () => set(initialState),
     }),
     {
       name: "home-loan-calculator",
+      partialize: (state) => ({
+        propertyPrice: state.propertyPrice,
+        deposit: state.deposit,
+        interestRate: state.interestRate,
+        loanTerm: state.loanTerm,
+        termUnit: state.termUnit,
+        monthlyServiceFee: state.monthlyServiceFee,
+        results: state.results,
+        isDirty: state.isDirty,
+      }),
     },
   ),
 );

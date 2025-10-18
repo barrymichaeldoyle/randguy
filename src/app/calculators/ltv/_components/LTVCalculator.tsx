@@ -77,12 +77,14 @@ export default function LTVCalculator() {
     deposit,
     inputMode,
     results,
+    isDirty,
     setPropertyValue,
     setLoanAmount,
     setDeposit,
     setInputMode,
     setResults,
-    clearForm,
+    setIsDirty,
+    resetForm,
   } = useLTVStore();
 
   const handleCalculate = () => {
@@ -116,6 +118,7 @@ export default function LTVCalculator() {
 
     const calculatedResults = calculateLTV(propValue, calculatedLoanAmount);
     setResults(calculatedResults);
+    setIsDirty(false); // Mark as clean after successful calculation
   };
 
   return (
@@ -195,15 +198,20 @@ export default function LTVCalculator() {
           )}
 
           <div className="space-y-3">
-            <Button onClick={handleCalculate} className="w-full" size="lg">
-              Calculate LTV
+            <Button
+              onClick={handleCalculate}
+              className="w-full"
+              size="lg"
+              disabled={!isDirty && results !== null}
+            >
+              {!isDirty && results !== null ? "Calculated" : "Calculate LTV"}
             </Button>
             <button
               type="button"
-              onClick={clearForm}
+              onClick={resetForm}
               className="w-full px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
             >
-              Clear Form
+              Reset Form
             </button>
           </div>
         </div>
@@ -226,7 +234,7 @@ export default function LTVCalculator() {
                   Loan-to-Value (LTV) Ratio
                 </span>
                 <span
-                  className={`${excali.className} text-5xl block ${getLTVStatus(results.ltvPercentage).color}`}
+                  className={`text-5xl font-bold block ${getLTVStatus(results.ltvPercentage).color}`}
                 >
                   {results.ltvPercentage.toFixed(1)}%
                 </span>
@@ -248,9 +256,7 @@ export default function LTVCalculator() {
                   <span className="text-sm text-gray-600 block mb-1">
                     Loan Amount
                   </span>
-                  <span
-                    className={`${excali.className} text-3xl text-gray-900 block`}
-                  >
+                  <span className="text-3xl font-bold text-gray-900 block">
                     {formatCurrency(results.loanAmount)}
                   </span>
                 </div>
@@ -259,54 +265,65 @@ export default function LTVCalculator() {
                   <span className="text-sm text-gray-600 block mb-1">
                     Your Equity (Deposit)
                   </span>
-                  <span
-                    className={`${excali.className} text-3xl text-gray-900 block`}
-                  >
+                  <span className="text-3xl font-bold text-gray-900 block">
                     {formatCurrency(results.deposit)}
                   </span>
                 </div>
               </div>
 
-              {/* Visual Representation */}
+              {/* Visual Representation - Stacked Bar */}
               <div className="pt-4">
                 <h3
                   className={`${excali.className} text-lg text-gray-700 mb-3`}
                 >
-                  Breakdown
+                  Property Composition
                 </h3>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1 bg-gray-200 rounded-full h-10 overflow-hidden">
-                      <div
-                        className="bg-blue-500 h-full flex items-center justify-end pr-3"
-                        style={{
-                          width: `${results.ltvPercentage}%`,
-                        }}
-                      >
-                        <span className="text-xs text-white font-semibold">
-                          {results.ltvPercentage.toFixed(1)}%
-                        </span>
-                      </div>
-                    </div>
-                    <span className="text-sm text-gray-600 w-24">
-                      Bank Loan
+
+                {/* Stacked Bar */}
+                <div className="w-full bg-gray-200 rounded-lg h-16 overflow-hidden flex">
+                  {/* Loan Amount (Blue) */}
+                  <div
+                    className="bg-blue-500 flex items-center justify-center transition-all duration-300"
+                    style={{ width: `${results.ltvPercentage}%` }}
+                  >
+                    {results.ltvPercentage >= 15 && (
+                      <span className="text-sm text-white font-semibold px-2 text-center">
+                        {results.ltvPercentage >= 25
+                          ? `Loan ${results.ltvPercentage.toFixed(1)}%`
+                          : `${results.ltvPercentage.toFixed(1)}%`}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Equity (Green) */}
+                  <div
+                    className="bg-green-500 flex items-center justify-center transition-all duration-300"
+                    style={{ width: `${results.equityPercentage}%` }}
+                  >
+                    {results.equityPercentage >= 15 && (
+                      <span className="text-sm text-white font-semibold px-2 text-center">
+                        {results.equityPercentage >= 25
+                          ? `Equity ${results.equityPercentage.toFixed(1)}%`
+                          : `${results.equityPercentage.toFixed(1)}%`}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Legend */}
+                <div className="flex gap-6 mt-4 justify-center text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-blue-500 rounded"></div>
+                    <span className="text-gray-700">
+                      Bank Loan: {results.ltvPercentage.toFixed(1)}% (
+                      {formatCurrency(results.loanAmount)})
                     </span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1 bg-gray-200 rounded-full h-10 overflow-hidden">
-                      <div
-                        className="bg-green-500 h-full flex items-center justify-end pr-3"
-                        style={{
-                          width: `${results.equityPercentage}%`,
-                        }}
-                      >
-                        <span className="text-xs text-white font-semibold">
-                          {results.equityPercentage.toFixed(1)}%
-                        </span>
-                      </div>
-                    </div>
-                    <span className="text-sm text-gray-600 w-24">
-                      Your Equity
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-green-500 rounded"></div>
+                    <span className="text-gray-700">
+                      Your Equity: {results.equityPercentage.toFixed(1)}% (
+                      {formatCurrency(results.deposit)})
                     </span>
                   </div>
                 </div>

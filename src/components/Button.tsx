@@ -8,17 +8,10 @@ type ButtonProps = {
   variant?: "primary" | "secondary";
   size?: "sm" | "md" | "lg";
   className?: string;
+  disabled?: boolean;
 } & (
-  | {
-      href: string;
-      onClick?: never;
-      type?: never;
-    }
-  | {
-      href?: never;
-      onClick: () => void;
-      type?: "button" | "submit" | "reset";
-    }
+  | { href: string; onClick?: never; type?: never }
+  | { href?: never; onClick: () => void; type?: "button" | "submit" | "reset" }
 );
 
 export function Button({
@@ -26,12 +19,17 @@ export function Button({
   variant = "primary",
   size = "md",
   className = "",
+  disabled = false,
   ...props
 }: ButtonProps) {
   const baseStyles = `${excali.className} rounded font-medium transition inline-block`;
   const variantStyles = {
-    primary: "bg-yellow-400 text-black hover:bg-yellow-500",
-    secondary: "bg-gray-200 text-gray-900 hover:bg-gray-300",
+    primary: disabled
+      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+      : "bg-yellow-400 text-black hover:bg-yellow-500",
+    secondary: disabled
+      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+      : "bg-gray-200 text-gray-900 hover:bg-gray-300",
   };
   const sizeStyles = {
     sm: "px-4 py-2 text-sm",
@@ -55,6 +53,7 @@ export function Button({
     <button
       onClick={props.onClick}
       type={props.type || "button"}
+      disabled={disabled}
       className={combinedClassName}
     >
       {children}

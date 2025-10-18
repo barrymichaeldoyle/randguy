@@ -49,6 +49,7 @@ interface IncomeTaxState {
 
   // Results
   results: TaxResults | null;
+  isDirty: boolean; // Track if form has changed since last calculation
 
   // Actions
   setIncome: (income: string) => void;
@@ -58,7 +59,8 @@ interface IncomeTaxState {
   setIsSalary: (isSalary: boolean) => void;
   setIsAdvancedMode: (isAdvanced: boolean) => void;
   setResults: (results: TaxResults | null) => void;
-  clearForm: () => void;
+  setIsDirty: (isDirty: boolean) => void;
+  resetForm: () => void;
 }
 
 const initialState = {
@@ -69,6 +71,7 @@ const initialState = {
   isSalary: true,
   isAdvancedMode: false,
   results: null as TaxResults | null,
+  isDirty: true, // Start as dirty so initial calculation is enabled
 };
 
 export const useIncomeTaxStore = create<IncomeTaxState>()(
@@ -76,17 +79,29 @@ export const useIncomeTaxStore = create<IncomeTaxState>()(
     (set) => ({
       ...initialState,
 
-      setIncome: (income) => set({ income }),
-      setPayFrequency: (payFrequency) => set({ payFrequency }),
-      setAgeGroup: (ageGroup) => set({ ageGroup }),
-      setTaxYear: (taxYear) => set({ taxYear }),
-      setIsSalary: (isSalary) => set({ isSalary }),
-      setIsAdvancedMode: (isAdvancedMode) => set({ isAdvancedMode }),
+      setIncome: (income) => set({ income, isDirty: true }),
+      setPayFrequency: (payFrequency) => set({ payFrequency, isDirty: true }),
+      setAgeGroup: (ageGroup) => set({ ageGroup, isDirty: true }),
+      setTaxYear: (taxYear) => set({ taxYear, isDirty: true }),
+      setIsSalary: (isSalary) => set({ isSalary, isDirty: true }),
+      setIsAdvancedMode: (isAdvancedMode) =>
+        set({ isAdvancedMode, isDirty: true }),
       setResults: (results) => set({ results }),
-      clearForm: () => set(initialState),
+      setIsDirty: (isDirty) => set({ isDirty }),
+      resetForm: () => set(initialState),
     }),
     {
       name: "income-tax-calculator",
+      partialize: (state) => ({
+        income: state.income,
+        payFrequency: state.payFrequency,
+        ageGroup: state.ageGroup,
+        taxYear: state.taxYear,
+        isSalary: state.isSalary,
+        isAdvancedMode: state.isAdvancedMode,
+        results: state.results,
+        isDirty: state.isDirty,
+      }),
     },
   ),
 );

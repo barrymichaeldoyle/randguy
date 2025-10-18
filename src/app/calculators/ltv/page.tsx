@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { excali } from "@/fonts";
 import { Button } from "@/components/Button";
+import { CalculatorInfo } from "@/components/CalculatorInfo";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 import LTVCalculator from "./_components/LTVCalculator";
 
@@ -86,7 +87,7 @@ export default function LTVCalculatorPage() {
   };
 
   return (
-    <main className="flex flex-col items-center pt-12 p-8 flex-1">
+    <main className="flex flex-col items-center pt-8 md:pt-12 px-4 pb-8 md:px-8 flex-1">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -96,29 +97,13 @@ export default function LTVCalculatorPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
       <div className="max-w-7xl w-full">
-        {/* Breadcrumb Navigation */}
-        <nav className="mb-6 text-sm" aria-label="Breadcrumb">
-          <ol className="flex items-center space-x-2 text-gray-600">
-            <li>
-              <Link href="/" className="hover:text-yellow-600 transition">
-                Home
-              </Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link
-                href="/calculators"
-                className="hover:text-yellow-600 transition"
-              >
-                Calculators
-              </Link>
-            </li>
-            <li>/</li>
-            <li className="text-gray-900 font-medium" aria-current="page">
-              LTV Calculator
-            </li>
-          </ol>
-        </nav>
+        <Breadcrumb
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Calculators", href: "/calculators" },
+            { name: "LTV Calculator" },
+          ]}
+        />
 
         <div className="text-center mb-8">
           <h1 className={`${excali.className} text-4xl mb-4`}>
@@ -131,49 +116,47 @@ export default function LTVCalculatorPage() {
 
         <LTVCalculator />
 
-        <article className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-          <h2 className={`${excali.className} text-xl mb-3 text-blue-900`}>
-            About Loan-to-Value (LTV) Ratio
-          </h2>
-          <ul className="space-y-2 text-sm text-blue-900">
-            <li>
+        <CalculatorInfo
+          title="About Loan-to-Value (LTV) Ratio"
+          items={[
+            <>
               • <strong>LTV (Loan-to-Value)</strong> is the ratio of your loan
               amount to the property value, expressed as a percentage
-            </li>
-            <li>
+            </>,
+            <>
               • <strong>Formula:</strong> LTV = (Loan Amount / Property Value) ×
               100
-            </li>
-            <li>
+            </>,
+            <>
               • <strong>Lower LTV = Better rates:</strong> Banks offer better
               interest rates for LTV below 80%
-            </li>
-            <li>
+            </>,
+            <>
               • <strong>100% LTV</strong> means a full loan with no deposit.
               Available for first-time buyers but may have higher rates
-            </li>
-            <li>
+            </>,
+            <>
               • <strong>Your equity</strong> is the difference between property
               value and loan amount (your deposit)
-            </li>
-            <li>
+            </>,
+            <>
               • <strong>80% LTV or less</strong> typically gets you the best
               rates and terms from SA banks
-            </li>
-            <li>
+            </>,
+            <>
               • A larger deposit (lower LTV) gives you more{" "}
               <strong>negotiating power</strong> with banks
-            </li>
-            <li>
+            </>,
+            <>
               • LTV can change over time as you pay down your bond or as
               property values fluctuate
-            </li>
-            <li>
+            </>,
+            <>
               • For informational purposes only - actual rates depend on credit
               score, income, and bank policies
-            </li>
-          </ul>
-        </article>
+            </>,
+          ]}
+        />
 
         <div className="text-center mt-8">
           <Button href="/calculators" variant="secondary">

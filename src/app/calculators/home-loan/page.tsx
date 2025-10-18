@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { excali } from "@/fonts";
 import { Button } from "@/components/Button";
+import { CalculatorInfo } from "@/components/CalculatorInfo";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 import HomeLoanCalculator from "./_components/HomeLoanCalculator";
 
@@ -51,8 +52,9 @@ export default function HomeLoanCalculatorPage() {
     featureList: [
       "Monthly repayment calculation",
       "Total interest calculation",
-      "Loan term flexibility (1-30 years)",
+      "Loan term flexibility (1-100 years or months)",
       "Deposit percentage calculator",
+      "Configurable monthly service fee",
       "Visual cost breakdown",
       "South African bond calculator",
     ],
@@ -86,7 +88,7 @@ export default function HomeLoanCalculatorPage() {
   };
 
   return (
-    <main className="flex flex-col items-center pt-12 p-8 flex-1">
+    <main className="flex flex-col items-center pt-8 md:pt-12 px-4 pb-8 md:px-8 flex-1">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -96,29 +98,13 @@ export default function HomeLoanCalculatorPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
       <div className="max-w-7xl w-full">
-        {/* Breadcrumb Navigation */}
-        <nav className="mb-6 text-sm" aria-label="Breadcrumb">
-          <ol className="flex items-center space-x-2 text-gray-600">
-            <li>
-              <Link href="/" className="hover:text-yellow-600 transition">
-                Home
-              </Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link
-                href="/calculators"
-                className="hover:text-yellow-600 transition"
-              >
-                Calculators
-              </Link>
-            </li>
-            <li>/</li>
-            <li className="text-gray-900 font-medium" aria-current="page">
-              Home Loan Calculator
-            </li>
-          </ol>
-        </nav>
+        <Breadcrumb
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Calculators", href: "/calculators" },
+            { name: "Home Loan Calculator" },
+          ]}
+        />
 
         <div className="text-center mb-8">
           <h1 className={`${excali.className} text-4xl mb-4`}>
@@ -131,46 +117,48 @@ export default function HomeLoanCalculatorPage() {
 
         <HomeLoanCalculator />
 
-        <article className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-          <h2 className={`${excali.className} text-xl mb-3 text-blue-900`}>
-            About This Home Loan Calculator
-          </h2>
-          <ul className="space-y-2 text-sm text-blue-900">
-            <li>
+        <CalculatorInfo
+          title="About This Home Loan Calculator"
+          items={[
+            <>
               • Calculates <strong>monthly repayments</strong> based on loan
               amount, interest rate, and term
-            </li>
-            <li>
+            </>,
+            <>
               • Uses the standard <strong>amortization formula</strong> used by
               South African banks
-            </li>
-            <li>
+            </>,
+            <>
               • Current <strong>SA prime rate</strong> is 10.5% (as of Oct
               2025). Interest rates vary by bank and are negotiable
-            </li>
-            <li>
+            </>,
+            <>
               • <strong>100% home loans</strong> are available from many banks,
               especially for first-time home buyers. Adding a deposit may help
               you negotiate better rates
-            </li>
-            <li>
+            </>,
+            <>
+              • Includes optional <strong>monthly service fee</strong>{" "}
+              (typically R69) - this is the bank admin fee charged each month
+            </>,
+            <>
               • Does not include additional costs like transfer fees, bond
               registration, or insurance
-            </li>
-            <li>
+            </>,
+            <>
               • <strong>Loan term</strong> typically ranges from 20-30 years for
               home loans
-            </li>
-            <li>
+            </>,
+            <>
               • Shorter loan terms mean higher monthly payments but less total
               interest paid
-            </li>
-            <li>
+            </>,
+            <>
               • For informational purposes only - contact a bank or bond
               originator for accurate quotes
-            </li>
-          </ul>
-        </article>
+            </>,
+          ]}
+        />
 
         <div className="text-center mt-8">
           <Button href="/calculators" variant="secondary">

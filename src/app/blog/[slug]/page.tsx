@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 
 import { excali } from "@/fonts";
 import { getAllPosts } from "@/lib/posts";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 interface BlogPostMetadata {
   title: string;
@@ -75,9 +75,10 @@ export default async function BlogPost({
   }
 
   const Content = post.content;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
   // Structured data for SEO
-  const jsonLd = {
+  const blogPostData = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.metadata.title,
@@ -89,20 +90,50 @@ export default async function BlogPost({
     },
   };
 
+  const breadcrumbData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: baseUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Blog",
+        item: `${baseUrl}/blog`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: post.metadata.title,
+        item: `${baseUrl}/blog/${slug}`,
+      },
+    ],
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostData) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
       <main className="flex flex-col items-center p-8 flex-1">
         <article className="max-w-3xl w-full">
-          <Link
-            href="/blog"
-            className="text-blue-600 hover:text-blue-800 mb-6 inline-block"
-          >
-            ← Back to Blog
-          </Link>
+          <Breadcrumb
+            items={[
+              { name: "Home", href: "/" },
+              { name: "Blog", href: "/blog" },
+              { name: post.metadata.title },
+            ]}
+          />
 
           <header className="mb-8 pb-6 border-b border-gray-200">
             <h1

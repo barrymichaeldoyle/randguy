@@ -140,6 +140,13 @@ export default async function Home() {
         description:
           "Calculate your LTV ratio and understand your equity position for property financing",
       },
+      {
+        "@type": "WebPage",
+        name: "TFSA Calculator",
+        url: `${baseUrl}/calculators/tfsa`,
+        description:
+          "Calculate how long to max out your Tax-Free Savings Account",
+      },
     ],
   };
 

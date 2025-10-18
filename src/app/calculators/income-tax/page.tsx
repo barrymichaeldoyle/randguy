@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { excali } from "@/fonts";
 import { Button } from "@/components/Button";
+import { CalculatorInfo } from "@/components/CalculatorInfo";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 import IncomeTaxCalculator from "./_components/IncomeTaxCalculator";
 
@@ -85,7 +86,7 @@ export default function IncomeTaxCalculatorPage() {
   };
 
   return (
-    <main className="flex flex-col items-center pt-12 p-8 flex-1">
+    <main className="flex flex-col items-center pt-8 md:pt-12 px-4 pb-8 md:px-8 flex-1">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -95,29 +96,13 @@ export default function IncomeTaxCalculatorPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
       <div className="max-w-7xl w-full">
-        {/* Breadcrumb Navigation */}
-        <nav className="mb-6 text-sm" aria-label="Breadcrumb">
-          <ol className="flex items-center space-x-2 text-gray-600">
-            <li>
-              <Link href="/" className="hover:text-yellow-600 transition">
-                Home
-              </Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link
-                href="/calculators"
-                className="hover:text-yellow-600 transition"
-              >
-                Calculators
-              </Link>
-            </li>
-            <li>/</li>
-            <li className="text-gray-900 font-medium" aria-current="page">
-              Income Tax Calculator
-            </li>
-          </ol>
-        </nav>
+        <Breadcrumb
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Calculators", href: "/calculators" },
+            { name: "Income Tax Calculator" },
+          ]}
+        />
 
         <div className="text-center mb-8">
           <h1 className={`${excali.className} text-4xl mb-4`}>
@@ -131,43 +116,41 @@ export default function IncomeTaxCalculatorPage() {
 
         <IncomeTaxCalculator />
 
-        <article className="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
-          <h2 className={`${excali.className} text-xl mb-3 text-blue-900`}>
-            About This Income Tax Calculator
-          </h2>
-          <ul className="space-y-2 text-sm text-blue-900">
-            <li>
+        <CalculatorInfo
+          title="About This Income Tax Calculator"
+          items={[
+            <>
               • Based on official <strong>SARS tax brackets and rebates</strong>{" "}
               for the selected tax year (2020/2021 - 2025/2026)
-            </li>
-            <li>
+            </>,
+            <>
               • <strong>UIF (Unemployment Insurance Fund)</strong> is calculated
               at 1% for salary income, capped at R177.12/month (R17,712 monthly
               income ceiling)
-            </li>
-            <li>
+            </>,
+            <>
               • Tax brackets remained unchanged from 2024/2025 to 2025/2026,
               which may result in <strong>&quot;bracket creep&quot;</strong> as
               inflation pushes salaries into higher tax brackets
-            </li>
-            <li>
+            </>,
+            <>
               • Includes <strong>age-based rebates</strong> for taxpayers 65+
               and 75+
-            </li>
-            <li>
+            </>,
+            <>
               • Supports multiple <strong>pay frequencies</strong>: monthly,
               annual, bi-weekly, and weekly
-            </li>
-            <li>
+            </>,
+            <>
               • Does not include medical aid tax credits, retirement fund
               contributions, or other deductions
-            </li>
-            <li>
+            </>,
+            <>
               • For informational purposes only - consult a tax professional for
               personalized advice
-            </li>
-          </ul>
-        </article>
+            </>,
+          ]}
+        />
 
         <div className="text-center mt-8">
           <Button href="/" variant="secondary">

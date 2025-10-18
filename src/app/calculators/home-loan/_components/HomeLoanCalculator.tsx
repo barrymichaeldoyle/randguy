@@ -1,9 +1,11 @@
 "use client";
 
+import { useRef, useEffect } from "react";
 import { excali } from "@/fonts";
 import { Button } from "@/components/Button";
 import { NumericInput } from "@/components/NumericInput";
 import { FormField } from "@/components/FormField";
+import { Select } from "@/components/Select";
 import { formatCurrency } from "@/lib/calculator-utils";
 
 import { useHomeLoanStore } from "./home-loan-store";
@@ -41,26 +43,97 @@ function calculateHomeLoan(
   };
 }
 
+type TermUnit = "years" | "months";
+
 export default function HomeLoanCalculator() {
   const {
     propertyPrice,
     deposit,
     interestRate,
     loanTerm,
+    termUnit,
+    monthlyServiceFee,
     results,
+    isDirty,
     setPropertyPrice,
     setDeposit,
     setInterestRate,
     setLoanTerm,
+    setTermUnit,
+    setMonthlyServiceFee,
     setResults,
-    clearForm,
+    setIsDirty,
+    resetForm,
   } = useHomeLoanStore();
+
+  // Store the last entered value for each unit to avoid losing precision
+  const termByUnit = useRef<Record<TermUnit, string>>({
+    years: "",
+    months: "",
+  });
+  const previousUnit = useRef<TermUnit>(termUnit);
+
+  // Convert term between years and months
+  const convertTerm = (value: string, from: TermUnit, to: TermUnit): string => {
+    if (!value || value === "") return "";
+    const numValue = parseFloat(value);
+    if (isNaN(numValue)) return "";
+
+    if (from === "years" && to === "months") {
+      // Years to months: multiply by 12, no decimals for months
+      return Math.round(numValue * 12).toString();
+    } else if (from === "months" && to === "years") {
+      // Months to years: divide by 12, round to 1 decimal
+      const years = numValue / 12;
+      const rounded = parseFloat(years.toFixed(1));
+      // Remove .0 if it's a whole number
+      return rounded % 1 === 0 ? rounded.toString() : rounded.toFixed(1);
+    }
+    return value;
+  };
+
+  // Handle term value changes (manual edits)
+  const handleTermChange = (value: string) => {
+    setLoanTerm(value);
+    // Store the value for the current unit and clear other units
+    termByUnit.current[termUnit] = value;
+    const otherUnit = termUnit === "years" ? "months" : "years";
+    termByUnit.current[otherUnit] = "";
+  };
+
+  // Handle unit changes (years <-> months)
+  useEffect(() => {
+    if (previousUnit.current !== termUnit && loanTerm) {
+      // Check if we have a stored value for the new unit
+      if (termByUnit.current[termUnit]) {
+        // Use the stored value
+        setLoanTerm(termByUnit.current[termUnit]);
+      } else {
+        // Convert from the previous unit
+        const converted = convertTerm(loanTerm, previousUnit.current, termUnit);
+        setLoanTerm(converted);
+        termByUnit.current[termUnit] = converted;
+      }
+      previousUnit.current = termUnit;
+    }
+  }, [termUnit, loanTerm, setLoanTerm]);
+
+  // Get term in years for calculation
+  const getTermInYears = (): number => {
+    const termValue = parseFloat(loanTerm);
+    if (isNaN(termValue)) return 0;
+
+    if (termUnit === "months") {
+      return termValue / 12;
+    }
+    return termValue;
+  };
 
   const handleCalculate = () => {
     const priceValue = parseFloat(propertyPrice.replace(/,/g, ""));
     const depositValue = parseFloat(deposit.replace(/,/g, "")) || 0;
     const rateValue = parseFloat(interestRate);
-    const termValue = parseFloat(loanTerm);
+    const termInYears = getTermInYears();
 
     if (isNaN(priceValue) || priceValue <= 0) {
       alert("Please enter a valid property price");
@@ -72,7 +145,7 @@ export default function HomeLoanCalculator() {
       return;
     }
 
-    if (isNaN(termValue) || termValue <= 0) {
+    if (termInYears <= 0) {
       alert("Please enter a valid loan term");
       return;
     }
@@ -92,9 +165,10 @@ export default function HomeLoanCalculator() {
     const calculatedResults = calculateHomeLoan(
       loanAmount,
       rateValue,
-      termValue,
+      termInYears,
     );
     setResults(calculatedResults);
+    setIsDirty(false); // Mark as clean after successful calculation
   };
 
   const depositPercentage =
@@ -158,32 +232,73 @@ export default function HomeLoanCalculator() {
               placeholder="10.5"
               suffix="%"
               allowDecimals
+              max={100}
             />
           </FormField>
 
           <FormField
-            label="Loan Term (years)"
+            label="Loan Term"
             htmlFor="loanTerm"
-            helperText="Typical: 20-30 years"
+            helperText={
+              termUnit === "years"
+                ? "Typical: 20-30 years"
+                : "Typical: 240-360 months"
+            }
+          >
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <NumericInput
+                  id="loanTerm"
+                  value={loanTerm}
+                  onChange={handleTermChange}
+                  placeholder={termUnit === "years" ? "20" : "240"}
+                  allowDecimals={termUnit === "years"}
+                  max={termUnit === "years" ? 100 : 1200}
+                />
+              </div>
+              <Select
+                value={termUnit}
+                onChange={setTermUnit}
+                options={[
+                  { value: "years", label: "Years" },
+                  { value: "months", label: "Months" },
+                ]}
+                className="w-30"
+              />
+            </div>
+          </FormField>
+
+          <FormField
+            label="Monthly Service Fee"
+            htmlFor="monthlyServiceFee"
+            helperText="Typical bank admin fee (default: R69)"
           >
             <NumericInput
-              id="loanTerm"
-              value={loanTerm}
-              onChange={setLoanTerm}
-              placeholder="20"
+              id="monthlyServiceFee"
+              value={monthlyServiceFee}
+              onChange={setMonthlyServiceFee}
+              placeholder="69"
+              prefix="R"
             />
           </FormField>
 
           <div className="space-y-3">
-            <Button onClick={handleCalculate} className="w-full" size="lg">
-              Calculate Repayment
+            <Button
+              onClick={handleCalculate}
+              className="w-full"
+              size="lg"
+              disabled={!isDirty && results !== null}
+            >
+              {!isDirty && results !== null
+                ? "Calculated"
+                : "Calculate Repayment"}
             </Button>
             <button
               type="button"
-              onClick={clearForm}
+              onClick={resetForm}
               className="w-full px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
             >
-              Clear Form
+              Reset Form
             </button>
           </div>
         </div>
@@ -201,16 +316,23 @@ export default function HomeLoanCalculator() {
               {/* Primary Result - Monthly Payment */}
               <div className="bg-green-50 rounded-lg p-6 border-2 border-green-200">
                 <span className="text-sm text-gray-600 block mb-1">
-                  Monthly Repayment
+                  Total Monthly Payment
                 </span>
-                <span
-                  className={`${excali.className} text-5xl text-green-700 block`}
-                >
-                  {formatCurrency(results.monthlyPayment)}
+                <span className="text-5xl font-bold text-green-700 block">
+                  {formatCurrency(
+                    results.monthlyPayment +
+                      parseFloat(monthlyServiceFee || "0"),
+                  )}
                 </span>
                 <span className="text-xs text-gray-600 block mt-2">
                   for {results.loanTermYears} years
                 </span>
+                {parseFloat(monthlyServiceFee || "0") > 0 && (
+                  <div className="text-xs text-gray-600 mt-2 pt-2 border-t border-green-200">
+                    Bond: {formatCurrency(results.monthlyPayment)} + Service
+                    Fee: {formatCurrency(parseFloat(monthlyServiceFee))}
+                  </div>
+                )}
               </div>
 
               {/* Loan Summary */}
@@ -219,9 +341,7 @@ export default function HomeLoanCalculator() {
                   <span className="text-sm text-gray-600 block mb-1">
                     Loan Amount
                   </span>
-                  <span
-                    className={`${excali.className} text-3xl text-gray-900 block`}
-                  >
+                  <span className="text-3xl font-bold text-gray-900 block">
                     {formatCurrency(results.loanAmount)}
                   </span>
                 </div>
@@ -230,9 +350,7 @@ export default function HomeLoanCalculator() {
                   <span className="text-sm text-gray-600 block mb-1">
                     Total Interest
                   </span>
-                  <span
-                    className={`${excali.className} text-3xl text-gray-900 block`}
-                  >
+                  <span className="text-3xl font-bold text-gray-900 block">
                     {formatCurrency(results.totalInterest)}
                   </span>
                 </div>
@@ -265,9 +383,7 @@ export default function HomeLoanCalculator() {
                     <span className="font-semibold text-gray-700">
                       Total Amount to Repay
                     </span>
-                    <span
-                      className={`${excali.className} text-2xl text-gray-900`}
-                    >
+                    <span className="text-2xl font-bold text-gray-900">
                       {formatCurrency(results.totalPayment)}
                     </span>
                   </div>
@@ -281,46 +397,70 @@ export default function HomeLoanCalculator() {
                 >
                   Cost Breakdown
                 </h3>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1 bg-gray-200 rounded-full h-8 overflow-hidden">
-                      <div
-                        className="bg-green-500 h-full flex items-center justify-end pr-2"
-                        style={{
-                          width: `${(results.loanAmount / results.totalPayment) * 100}%`,
-                        }}
-                      >
-                        <span className="text-xs text-white font-semibold">
-                          {(
-                            (results.loanAmount / results.totalPayment) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </span>
-                      </div>
-                    </div>
-                    <span className="text-sm text-gray-600 w-24">
-                      Principal
+                <div className="bg-gray-200 rounded-lg h-12 overflow-hidden flex">
+                  {(() => {
+                    const principalPercent =
+                      (results.loanAmount / results.totalPayment) * 100;
+                    const interestPercent =
+                      (results.totalInterest / results.totalPayment) * 100;
+
+                    return (
+                      <>
+                        <div
+                          className="bg-green-500 flex items-center justify-center transition-all"
+                          style={{
+                            width: `${principalPercent}%`,
+                          }}
+                        >
+                          {principalPercent >= 15 && (
+                            <span className="text-sm text-white font-semibold">
+                              {principalPercent >= 25
+                                ? `Principal ${principalPercent.toFixed(1)}%`
+                                : `${principalPercent.toFixed(1)}%`}
+                            </span>
+                          )}
+                        </div>
+                        <div
+                          className="bg-yellow-500 flex items-center justify-center transition-all"
+                          style={{
+                            width: `${interestPercent}%`,
+                          }}
+                        >
+                          {interestPercent >= 15 && (
+                            <span className="text-sm text-white font-semibold">
+                              {interestPercent >= 25
+                                ? `Interest ${interestPercent.toFixed(1)}%`
+                                : `${interestPercent.toFixed(1)}%`}
+                            </span>
+                          )}
+                        </div>
+                      </>
+                    );
+                  })()}
+                </div>
+                {/* Legend */}
+                <div className="flex items-center justify-center gap-6 mt-3 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-green-500 rounded"></div>
+                    <span>
+                      Principal (
+                      {(
+                        (results.loanAmount / results.totalPayment) *
+                        100
+                      ).toFixed(1)}
+                      %)
                     </span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1 bg-gray-200 rounded-full h-8 overflow-hidden">
-                      <div
-                        className="bg-yellow-500 h-full flex items-center justify-end pr-2"
-                        style={{
-                          width: `${(results.totalInterest / results.totalPayment) * 100}%`,
-                        }}
-                      >
-                        <span className="text-xs text-white font-semibold">
-                          {(
-                            (results.totalInterest / results.totalPayment) *
-                            100
-                          ).toFixed(1)}
-                          %
-                        </span>
-                      </div>
-                    </div>
-                    <span className="text-sm text-gray-600 w-24">Interest</span>
+                  <div className="flex items-center gap-2">
+                    <div className="w-4 h-4 bg-yellow-500 rounded"></div>
+                    <span>
+                      Interest (
+                      {(
+                        (results.totalInterest / results.totalPayment) *
+                        100
+                      ).toFixed(1)}
+                      %)
+                    </span>
                   </div>
                 </div>
               </div>

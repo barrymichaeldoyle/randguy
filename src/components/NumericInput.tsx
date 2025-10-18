@@ -9,6 +9,7 @@ interface NumericInputProps {
   prefix?: string;
   suffix?: string;
   allowDecimals?: boolean; // Enable decimal point input (default: false)
+  max?: number; // Maximum allowed value
 }
 
 export function NumericInput({
@@ -20,6 +21,7 @@ export function NumericInput({
   prefix,
   suffix,
   allowDecimals = false,
+  max,
 }: NumericInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const cursorPositionRef = useRef<number | null>(null);
@@ -37,6 +39,14 @@ export function NumericInput({
     const parts = rawValue.split(".");
     if (parts.length > 2) {
       rawValue = parts[0] + "." + parts.slice(1).join("");
+    }
+
+    // Check max constraint
+    if (max !== undefined && rawValue !== "") {
+      const numValue = parseFloat(rawValue);
+      if (!isNaN(numValue) && numValue > max) {
+        return; // Don't update if exceeds max
+      }
     }
 
     onChange(rawValue);
@@ -75,7 +85,7 @@ export function NumericInput({
     const newFormattedValue = input.value;
 
     // Remove all non-numeric characters (decimals not allowed for whole numbers)
-    let rawValue = newFormattedValue.replace(/[^0-9]/g, "");
+    const rawValue = newFormattedValue.replace(/[^0-9]/g, "");
 
     // Count digits before cursor in the current input
     const digitsBeforeCursor = newFormattedValue
@@ -101,6 +111,14 @@ export function NumericInput({
 
     cursorPositionRef.current = targetPos;
     previousValueRef.current = formatted;
+
+    // Check max constraint
+    if (max !== undefined && rawValue !== "") {
+      const numValue = parseFloat(rawValue);
+      if (!isNaN(numValue) && numValue > max) {
+        return; // Don't update if exceeds max
+      }
+    }
 
     onChange(rawValue);
   };
