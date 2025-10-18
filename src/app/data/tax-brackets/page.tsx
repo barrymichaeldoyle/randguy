@@ -1,85 +1,60 @@
-"use client";
-
+import { Metadata } from "next";
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-  LineChart,
-  Line,
-} from "recharts";
-
 import { excali } from "@/fonts";
 import { taxBracketsHistory } from "@/lib/historical-data";
 
+import TaxYearSelector from "./_components/TaxYearSelector";
+import TaxThresholdChart from "./_components/TaxThresholdChart";
+import TopMarginalRateChart from "./_components/TopMarginalRateChart";
+import { Breadcrumb } from "@/components/Breadcrumb";
+
+export const metadata: Metadata = {
+  title: "Historical Tax Brackets & Rates - South Africa",
+  description:
+    "Explore South Africa's income tax brackets from 2015 to present. See how SARS tax rates, thresholds, and rebates have evolved over time.",
+  keywords: [
+    "tax brackets",
+    "SARS",
+    "income tax",
+    "South Africa",
+    "tax rates",
+    "historical data",
+    "tax rebates",
+    "marginal tax rate",
+  ],
+  alternates: {
+    canonical: "/data/tax-brackets",
+  },
+  openGraph: {
+    title: "Historical Tax Brackets - South Africa",
+    description:
+      "Track how South Africa's income tax brackets, rates and rebates have changed since 2015.",
+    type: "website",
+    url: "/data/tax-brackets",
+  },
+};
+
+// Format number as currency
+const formatCurrency = (value: number) => {
+  return new Intl.NumberFormat("en-ZA", {
+    style: "currency",
+    currency: "ZAR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(value);
+};
+
 export default function TaxBracketsPage() {
-  const [selectedYear, setSelectedYear] = useState(
-    taxBracketsHistory[taxBracketsHistory.length - 1].year,
-  );
-
-  const selectedYearData = useMemo(
-    () => taxBracketsHistory.find((y) => y.year === selectedYear),
-    [selectedYear],
-  );
-
-  // Prepare data for tax threshold chart (how thresholds have changed)
-  const thresholdData = useMemo(() => {
-    return taxBracketsHistory.map((year) => ({
-      year: year.year,
-      firstBracket: year.brackets[0].max || 0,
-      secondBracket: year.brackets[1].max || 0,
-      thirdBracket: year.brackets[2].max || 0,
-      primaryRebate: year.rebates.primary,
-    }));
-  }, []);
-
-  // Prepare data for top marginal rate over time
-  const topRateData = useMemo(() => {
-    return taxBracketsHistory.map((year) => ({
-      year: year.year,
-      topRate: year.brackets[year.brackets.length - 1].rate,
-    }));
-  }, []);
-
-  // Format number as currency
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat("en-ZA", {
-      style: "currency",
-      currency: "ZAR",
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(value);
-  };
-
   return (
     <main className="flex flex-col items-center pt-8 md:pt-12 px-4 pb-8 md:px-8 flex-1">
       <div className="max-w-6xl w-full">
-        {/* Breadcrumb Navigation */}
-        <nav className="mb-6 text-sm" aria-label="Breadcrumb">
-          <ol className="flex items-center space-x-2 text-gray-600">
-            <li>
-              <Link href="/" className="hover:text-yellow-600 transition">
-                Home
-              </Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link href="/data" className="hover:text-yellow-600 transition">
-                Historical Data
-              </Link>
-            </li>
-            <li>/</li>
-            <li className="text-gray-900 font-medium" aria-current="page">
-              Tax Brackets
-            </li>
-          </ol>
-        </nav>
+        <Breadcrumb
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Historical Data", href: "/data" },
+            { name: "Tax Brackets" },
+          ]}
+        />
 
         <div className="mb-8">
           <h1 className={`${excali.className} text-4xl mb-4`}>
@@ -92,207 +67,14 @@ export default function TaxBracketsPage() {
           </p>
         </div>
 
-        {/* Year Selector */}
-        <div className="mb-8">
-          <label
-            htmlFor="year-select"
-            className="block text-sm font-medium text-gray-700 mb-2"
-          >
-            Select Tax Year
-          </label>
-          <select
-            id="year-select"
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(e.target.value)}
-            className="w-full md:w-64 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-          >
-            {taxBracketsHistory.map((year) => (
-              <option key={year.year} value={year.year}>
-                {year.year}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Current Year Brackets */}
-        {selectedYearData && (
-          <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
-            <h2 className={`${excali.className} text-2xl mb-4`}>
-              Tax Brackets for {selectedYearData.year}
-            </h2>
-
-            <div className="overflow-x-auto mb-6">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-3 px-4">Taxable Income</th>
-                    <th className="text-center py-3 px-4">Rate</th>
-                    <th className="text-right py-3 px-4">Tax on Bracket</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {selectedYearData.brackets.map((bracket, index) => {
-                    const taxOnBracket =
-                      bracket.max !== null
-                        ? ((bracket.max - bracket.min) * bracket.rate) / 100
-                        : 0;
-                    return (
-                      <tr key={index} className="border-b border-gray-100">
-                        <td className="py-3 px-4">{bracket.label}</td>
-                        <td className="text-center py-3 px-4 font-semibold">
-                          {bracket.rate}%
-                        </td>
-                        <td className="text-right py-3 px-4">
-                          {bracket.max !== null
-                            ? formatCurrency(taxOnBracket)
-                            : "Variable"}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Rebates */}
-            <div className="grid md:grid-cols-3 gap-4">
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <div className="text-sm text-gray-600 mb-1">
-                  Primary Rebate (Under 65)
-                </div>
-                <div className={`${excali.className} text-2xl text-gray-900`}>
-                  {formatCurrency(selectedYearData.rebates.primary)}
-                </div>
-              </div>
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <div className="text-sm text-gray-600 mb-1">
-                  Secondary Rebate (65-74)
-                </div>
-                <div className={`${excali.className} text-2xl text-gray-900`}>
-                  {formatCurrency(selectedYearData.rebates.secondary)}
-                </div>
-              </div>
-              <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-                <div className="text-sm text-gray-600 mb-1">
-                  Tertiary Rebate (75+)
-                </div>
-                <div className={`${excali.className} text-2xl text-gray-900`}>
-                  {formatCurrency(selectedYearData.rebates.tertiary)}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Year Selector and Current Year Brackets */}
+        <TaxYearSelector />
 
         {/* Tax Threshold Evolution Chart */}
-        <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
-          <h2 className={`${excali.className} text-2xl mb-6`}>
-            Tax Threshold Evolution
-          </h2>
-          <p className="text-sm text-gray-600 mb-4">
-            How the upper limits of the first three tax brackets have changed
-            over time.
-          </p>
-          <div className="h-96">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart
-                data={thresholdData}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis
-                  dataKey="year"
-                  stroke="#6b7280"
-                  style={{ fontSize: "12px" }}
-                  angle={-45}
-                  textAnchor="end"
-                  height={100}
-                />
-                <YAxis
-                  stroke="#6b7280"
-                  style={{ fontSize: "12px" }}
-                  tickFormatter={(value) => `R${(value / 1000).toFixed(0)}k`}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#fff",
-                    border: "1px solid #e5e7eb",
-                    borderRadius: "8px",
-                  }}
-                  formatter={(value: number) => formatCurrency(value)}
-                />
-                <Legend wrapperStyle={{ paddingTop: "20px" }} />
-                <Line
-                  type="monotone"
-                  dataKey="firstBracket"
-                  name="1st Bracket"
-                  stroke="#3b82f6"
-                  strokeWidth={2}
-                  dot={{ r: 3 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="secondBracket"
-                  name="2nd Bracket"
-                  stroke="#10b981"
-                  strokeWidth={2}
-                  dot={{ r: 3 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="thirdBracket"
-                  name="3rd Bracket"
-                  stroke="#f59e0b"
-                  strokeWidth={2}
-                  dot={{ r: 3 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+        <TaxThresholdChart />
 
         {/* Top Marginal Rate Chart */}
-        <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
-          <h2 className={`${excali.className} text-2xl mb-6`}>
-            Top Marginal Tax Rate Over Time
-          </h2>
-          <p className="text-sm text-gray-600 mb-4">
-            The highest tax rate applied to top earners.
-          </p>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={topRateData}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis
-                  dataKey="year"
-                  stroke="#6b7280"
-                  style={{ fontSize: "12px" }}
-                  angle={-45}
-                  textAnchor="end"
-                  height={100}
-                />
-                <YAxis
-                  stroke="#6b7280"
-                  style={{ fontSize: "12px" }}
-                  domain={[0, 50]}
-                  tickFormatter={(value) => `${value}%`}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#fff",
-                    border: "1px solid #e5e7eb",
-                    borderRadius: "8px",
-                  }}
-                  formatter={(value: number) => [`${value}%`, "Top Rate"]}
-                />
-                <Bar dataKey="topRate" fill="#eab308" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+        <TopMarginalRateChart />
 
         {/* Information Section */}
         <div className="grid md:grid-cols-2 gap-6 mb-8">

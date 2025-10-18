@@ -1,92 +1,63 @@
-"use client";
-
+import { Metadata } from "next";
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
 
+import { Breadcrumb } from "@/components/Breadcrumb";
 import { excali } from "@/fonts";
-import {
-  PRIME_LENDING_RATE_ZA,
-  REPO_RATE_ZA,
-  REPO_RATE_SPREAD,
-} from "@/lib/historical-data";
+import { PRIME_LENDING_RATE_ZA, REPO_RATE_SPREAD } from "@/lib/historical-data";
+
+import PrimeRatesChart from "./_components/PrimeRatesChart";
+
+export const metadata: Metadata = {
+  title: "Historical Prime Lending & Repo Rates in South Africa",
+  description:
+    "Track South Africa's prime lending rate and SARB repo rate from 2000 to present. See how interest rates have changed and understand their impact on home loans and credit.",
+  keywords: [
+    "prime lending rate",
+    "repo rate",
+    "South Africa",
+    "interest rates",
+    "SARB",
+    "historical data",
+    "home loan rates",
+    "monetary policy",
+  ],
+  alternates: {
+    canonical: "/data/prime-rates",
+  },
+  openGraph: {
+    title: "Historical Prime & Repo Rates - South Africa",
+    description:
+      "Track South Africa's prime lending rate and SARB repo rate from 2000 to present. Interactive charts and analysis.",
+    type: "website",
+    url: "/data/prime-rates",
+  },
+};
+
+// Calculate statistics
+const rates = PRIME_LENDING_RATE_ZA.map((d) => d.rate);
+const currentRate = rates[0]; // First item is most recent
+const avgRate = rates.reduce((a, b) => a + b, 0) / rates.length;
+const maxRate = Math.max(...rates);
+const minRate = Math.min(...rates);
+
+const stats = {
+  current: currentRate,
+  average: avgRate,
+  max: maxRate,
+  min: minRate,
+};
 
 export default function PrimeRatesPage() {
-  const [hoveredPoint, setHoveredPoint] = useState<{
-    date: string;
-    rate: number;
-  } | null>(null);
-
-  // Calculate statistics
-  const stats = useMemo(() => {
-    const rates = PRIME_LENDING_RATE_ZA.map((d) => d.rate);
-    const currentRate = rates[rates.length - 1];
-    const avgRate = rates.reduce((a, b) => a + b, 0) / rates.length;
-    const maxRate = Math.max(...rates);
-    const minRate = Math.min(...rates);
-
-    return {
-      current: currentRate,
-      average: avgRate,
-      max: maxRate,
-      min: minRate,
-    };
-  }, []);
-
-  // Format data for the chart
-  const chartData = useMemo(() => {
-    // Sort by date ascending (oldest first) and convert to proper date objects
-    const sortedPrime = [...PRIME_LENDING_RATE_ZA].sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-    );
-    const sortedRepo = [...REPO_RATE_ZA].sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-    );
-
-    return sortedPrime.map((item, index) => ({
-      date: new Date(item.date).getTime(), // Use timestamp for proper time scaling
-      primeRate: item.rate,
-      repoRate: sortedRepo[index].rate,
-      fullDate: new Date(item.date).toLocaleDateString("en-ZA", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }),
-    }));
-  }, []);
-
   return (
     <main className="flex flex-col items-center pt-8 md:pt-12 px-4 pb-8 md:px-8 flex-1">
       <div className="max-w-6xl w-full">
-        {/* Breadcrumb Navigation */}
-        <nav className="mb-6 text-sm" aria-label="Breadcrumb">
-          <ol className="flex items-center space-x-2 text-gray-600">
-            <li>
-              <Link href="/" className="hover:text-yellow-600 transition">
-                Home
-              </Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link href="/data" className="hover:text-yellow-600 transition">
-                Historical Data
-              </Link>
-            </li>
-            <li>/</li>
-            <li className="text-gray-900 font-medium" aria-current="page">
-              Prime Lending Rates
-            </li>
-          </ol>
-        </nav>
+        <Breadcrumb
+          items={[
+            { name: "Home", href: "/" },
+            { name: "Historical Data", href: "/data" },
+            { name: "Prime Lending & Repo Rates" },
+          ]}
+        />
 
         <div className="mb-8">
           <h1 className={`${excali.className} text-4xl mb-4`}>
@@ -105,25 +76,33 @@ export default function PrimeRatesPage() {
           {/* Statistics Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
             <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-              <div className="text-sm text-gray-600 mb-1">Current Rate</div>
+              <div className="text-sm text-gray-600 mb-1">
+                Current Prime Rate
+              </div>
               <div className="text-3xl font-bold text-gray-900">
                 {stats.current}%
               </div>
             </div>
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-              <div className="text-sm text-gray-600 mb-1">Average</div>
+              <div className="text-sm text-gray-600 mb-1">
+                Average Prime (Since 2002)
+              </div>
               <div className="text-3xl font-bold text-gray-900">
                 {stats.average.toFixed(2)}%
               </div>
             </div>
             <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <div className="text-sm text-gray-600 mb-1">Highest</div>
+              <div className="text-sm text-gray-600 mb-1">
+                Highest Prime Rate
+              </div>
               <div className="text-3xl font-bold text-gray-900">
                 {stats.max}%
               </div>
             </div>
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <div className="text-sm text-gray-600 mb-1">Lowest</div>
+              <div className="text-sm text-gray-600 mb-1">
+                Lowest Prime Rate
+              </div>
               <div className="text-3xl font-bold text-gray-900">
                 {stats.min}%
               </div>
@@ -132,100 +111,7 @@ export default function PrimeRatesPage() {
         </div>
 
         {/* Chart */}
-        <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
-          <h2 className={`${excali.className} text-2xl mb-6`}>
-            Prime & Repo Rates Over Time
-          </h2>
-          <div className="h-96">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart
-                data={chartData}
-                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                onMouseMove={(e: any) => {
-                  if (e.activePayload && e.activePayload.length > 0) {
-                    setHoveredPoint({
-                      date: e.activePayload[0].payload.fullDate,
-                      rate: e.activePayload[0].payload.primeRate,
-                    });
-                  }
-                }}
-                onMouseLeave={() => setHoveredPoint(null)}
-              >
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis
-                  dataKey="date"
-                  type="number"
-                  domain={["dataMin", "dataMax"]}
-                  stroke="#6b7280"
-                  style={{ fontSize: "12px" }}
-                  tickFormatter={(timestamp) => {
-                    const date = new Date(timestamp);
-                    return date.toLocaleDateString("en-ZA", {
-                      year: "numeric",
-                      month: "short",
-                    });
-                  }}
-                  scale="time"
-                />
-                <YAxis
-                  stroke="#6b7280"
-                  style={{ fontSize: "12px" }}
-                  label={{
-                    value: "Rate (%)",
-                    angle: -90,
-                    position: "insideLeft",
-                  }}
-                  domain={[0, 20]}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#fff",
-                    border: "1px solid #e5e7eb",
-                    borderRadius: "8px",
-                  }}
-                  formatter={(value: number, name: string) => [
-                    `${value}%`,
-                    name,
-                  ]}
-                  labelFormatter={(timestamp: number) => {
-                    const point = chartData.find((d) => d.date === timestamp);
-                    return point
-                      ? point.fullDate
-                      : new Date(timestamp).toLocaleDateString("en-ZA");
-                  }}
-                />
-                <Legend />
-                <Line
-                  type="stepAfter"
-                  dataKey="primeRate"
-                  name="Prime Rate"
-                  stroke="#eab308"
-                  strokeWidth={2}
-                  dot={{ fill: "#eab308", r: 4 }}
-                  activeDot={{ r: 6 }}
-                />
-                <Line
-                  type="stepAfter"
-                  dataKey="repoRate"
-                  name="Repo Rate"
-                  stroke="#3b82f6"
-                  strokeWidth={2}
-                  dot={{ fill: "#3b82f6", r: 4 }}
-                  activeDot={{ r: 6 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-          {hoveredPoint && (
-            <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-              <div className="text-sm text-gray-600">Highlighted Point:</div>
-              <div className="text-lg font-semibold">
-                {hoveredPoint.date}: {hoveredPoint.rate}%
-              </div>
-            </div>
-          )}
-        </div>
+        <PrimeRatesChart />
 
         {/* Information Section */}
         <div className="grid md:grid-cols-2 gap-6">

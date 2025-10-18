@@ -1,13 +1,13 @@
-import Link from "next/link";
 import { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 
 import { excali } from "@/fonts";
 
 export const metadata: Metadata = {
   title: "Historical Financial Data for South Africa",
   description:
-    "Explore historical financial data for South Africa. View prime lending rates, tax brackets, and other important financial trends over time.",
+    "Explore historical financial data for South Africa. View prime lending & repo rates, tax brackets, and other important financial trends over time.",
   keywords: [
     "historical data",
     "South Africa",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Historical Financial Data for South Africa",
     description:
-      "Explore historical financial data for South Africa. View prime lending rates, tax brackets, and other important financial trends.",
+      "Explore historical financial data for South Africa. View prime lending & repo rates, tax brackets, and other important financial trends.",
     type: "website",
     url: "/data",
   },
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
 
 const datasets = [
   {
-    title: "Prime Lending Rates",
+    title: "Prime & Repo Rates",
     description:
-      "Historical South African prime lending rates from major banks. Track how interest rates have changed over the decades and understand their impact on loans and mortgages.",
+      "Historical South African prime lending & repo rates from major banks. Track how interest rates have changed over the decades and understand their impact on loans and mortgages.",
     href: "/data/prime-rates",
     icon: "📈",
   },
