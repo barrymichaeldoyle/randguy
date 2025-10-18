@@ -62,7 +62,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
               className="h-10 w-auto"
             />
             <h1
-              className={`${excali.className} text-2xl text-gray-900 hover:text-yellow-600 transition-colors`}
+              className={`${excali.className} text-2xl leading-none text-gray-900 hover:text-yellow-600 transition-colors`}
             >
               Rand Guy
             </h1>
