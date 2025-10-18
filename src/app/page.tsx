@@ -114,6 +114,13 @@ export default async function Home() {
       },
       {
         "@type": "WebPage",
+        name: "Historical Data",
+        url: `${baseUrl}/data`,
+        description:
+          "Historical financial data visualizations for South Africa",
+      },
+      {
+        "@type": "WebPage",
         name: "Blog",
         url: `${baseUrl}/blog`,
         description:
@@ -189,7 +196,7 @@ export default async function Home() {
 
       <div className="max-w-3xl w-full">
         {/* Features Section */}
-        <section className="mb-12 grid md:grid-cols-2 gap-6">
+        <section className="mb-12 grid md:grid-cols-3 gap-6">
           <Link
             href="/calculators"
             className="group border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all hover:border-yellow-400"
@@ -205,6 +212,24 @@ export default async function Home() {
             <p className="text-gray-700 text-sm">
               Calculate your <strong>income tax</strong>, <strong>UIF</strong>,
               and more with our SA-specific tools
+            </p>
+          </Link>
+
+          <Link
+            href="/data"
+            className="group border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all hover:border-yellow-400"
+          >
+            <div className="flex items-center gap-3">
+              <div className="text-3xl mb-3">📊</div>
+              <h2
+                className={`${excali.className} text-xl font-bold mb-2 group-hover:text-yellow-600 transition-colors`}
+              >
+                Historical Data & Trends
+              </h2>
+            </div>
+            <p className="text-gray-700 text-sm">
+              Explore <strong>prime rates</strong>,{" "}
+              <strong>tax brackets</strong>, and how SA finances have evolved
             </p>
           </Link>
 

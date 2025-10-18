@@ -4,6 +4,10 @@ import { excali } from "@/fonts";
 import { Button } from "@/components/Button";
 import { CalculatorInfo } from "@/components/CalculatorInfo";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import {
+  PRIME_LENDING_RATE_ZA,
+  PRIME_LENDING_RATE_LAST_UPDATED,
+} from "@/lib/historical-data";
 
 import HomeLoanCalculator from "./_components/HomeLoanCalculator";
 
@@ -35,6 +39,16 @@ export const metadata: Metadata = {
 
 export default function HomeLoanCalculatorPage() {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+
+  // Get current prime rate (first item in the array since it's reverse chronological)
+  const currentPrimeRate = PRIME_LENDING_RATE_ZA[0].rate;
+  const lastUpdated = new Date(
+    PRIME_LENDING_RATE_LAST_UPDATED,
+  ).toLocaleDateString("en-ZA", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 
   const structuredData = {
     "@context": "https://schema.org",
@@ -129,8 +143,15 @@ export default function HomeLoanCalculatorPage() {
               South African banks
             </>,
             <>
-              • Current <strong>SA prime rate</strong> is 10.5% (as of Oct
-              2025). Interest rates vary by bank and are negotiable
+              • Current <strong>SA prime rate</strong> is {currentPrimeRate}%
+              (as of {lastUpdated}).{" "}
+              <a
+                href="/data/prime-rates"
+                className="text-yellow-600 hover:underline font-semibold"
+              >
+                View historical rates
+              </a>
+              . Interest rates vary by bank and are negotiable
             </>,
             <>
               • <strong>100% home loans</strong> are available from many banks,

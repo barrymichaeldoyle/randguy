@@ -71,6 +71,9 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
             <Button href="/calculators" size="sm">
               Calculators
             </Button>
+            <Button href="/data" size="sm">
+              Data
+            </Button>
             <Button href="/blog" size="sm">
               Blog
             </Button>
