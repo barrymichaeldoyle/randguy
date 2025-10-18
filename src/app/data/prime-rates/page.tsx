@@ -141,6 +141,7 @@ export default function PrimeRatesPage() {
               <LineChart
                 data={chartData}
                 margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 onMouseMove={(e: any) => {
                   if (e.activePayload && e.activePayload.length > 0) {
                     setHoveredPoint({
@@ -327,6 +328,7 @@ export default function PrimeRatesPage() {
                   <th className="text-left py-2 px-4">Date</th>
                   <th className="text-right py-2 px-4">Prime Rate</th>
                   <th className="text-right py-2 px-4">Change</th>
+                  <th className="text-right py-2 px-4">Duration</th>
                 </tr>
               </thead>
               <tbody>
@@ -338,6 +340,34 @@ export default function PrimeRatesPage() {
                       ? PRIME_LENDING_RATE_ZA[index + 1].rate
                       : item.rate;
                   const change = item.rate - prevRate;
+
+                  // Calculate duration until next rate change
+                  let durationText = "-";
+                  if (index > 0) {
+                    const currentDate = new Date(item.date);
+                    const nextDate = new Date(
+                      PRIME_LENDING_RATE_ZA[index - 1].date,
+                    );
+                    const diffMs = nextDate.getTime() - currentDate.getTime();
+                    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                    const diffMonths = Math.floor(diffDays / 30.44); // Average days per month
+                    const years = Math.floor(diffMonths / 12);
+                    const months = diffMonths % 12;
+
+                    if (years > 0 && months > 0) {
+                      durationText = `${years}y ${months}m`;
+                    } else if (years > 0) {
+                      durationText = `${years}y`;
+                    } else if (months > 0) {
+                      durationText = `${months}m`;
+                    } else {
+                      durationText = `${diffDays}d`;
+                    }
+                  } else {
+                    // For the most recent rate (index 0), show "Current"
+                    durationText = "Current";
+                  }
+
                   return (
                     <tr key={item.date} className="border-b border-gray-100">
                       <td className="py-2 px-4">{item.date}</td>
@@ -352,6 +382,9 @@ export default function PrimeRatesPage() {
                         ) : (
                           <span className="text-green-600">{change}%</span>
                         )}
+                      </td>
+                      <td className="text-right py-2 px-4 text-gray-600">
+                        {durationText}
                       </td>
                     </tr>
                   );

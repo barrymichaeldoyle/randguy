@@ -54,6 +54,7 @@ export default function HomeLoanCalculator() {
     loanTerm,
     termUnit,
     monthlyServiceFee,
+    isAdvancedMode,
     results,
     isDirty,
     setPropertyPrice,
@@ -62,6 +63,7 @@ export default function HomeLoanCalculator() {
     setLoanTerm,
     setTermUnit,
     setMonthlyServiceFee,
+    setIsAdvancedMode,
     setResults,
     setIsDirty,
     resetForm,
@@ -168,7 +170,13 @@ export default function HomeLoanCalculator() {
       rateValue,
       termInYears,
     );
-    setResults(calculatedResults);
+
+    // Include the service fee that was used in this calculation
+    const serviceFeeValue = parseFloat(effectiveServiceFee || "0");
+    setResults({
+      ...calculatedResults,
+      serviceFee: serviceFeeValue,
+    });
     setIsDirty(false); // Mark as clean after successful calculation
   };
 
@@ -212,8 +220,6 @@ export default function HomeLoanCalculator() {
     if (!results) return null;
 
     const currentRate = parseFloat(interestRate);
-    const loanAmount = results.loanAmount;
-    const termInYears = results.loanTermYears;
 
     // Calculate margin to prime (e.g., if rate is 9.5% and prime is 10.5%, margin is -1.0%)
     const marginToPrime = currentRate - currentPrimeRate;
@@ -252,11 +258,27 @@ export default function HomeLoanCalculator() {
 
   const rateScenarios = calculateRateScenarios();
 
+  const toggleMode = () => {
+    setIsAdvancedMode(!isAdvancedMode);
+  };
+
+  // Get effective service fee - use default if not in advanced mode
+  const effectiveServiceFee = isAdvancedMode ? monthlyServiceFee : "69";
+
   return (
     <div className="grid lg:grid-cols-[400px_1fr] gap-8 items-start">
       {/* Input Form - Left Side */}
       <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm lg:sticky lg:top-8">
-        <h2 className={`${excali.className} text-2xl mb-6`}>Loan Details</h2>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className={`${excali.className} text-2xl`}>Loan Details</h2>
+          <button
+            type="button"
+            onClick={toggleMode}
+            className="text-sm text-yellow-600 hover:text-yellow-700 font-medium transition"
+          >
+            {isAdvancedMode ? "Switch to Basic" : "Advanced Options"}
+          </button>
+        </div>
 
         <div className="space-y-6">
           <FormField label="Property Price" htmlFor="propertyPrice">
@@ -349,19 +371,21 @@ export default function HomeLoanCalculator() {
             </div>
           </FormField>
 
-          <FormField
-            label="Monthly Service Fee"
-            htmlFor="monthlyServiceFee"
-            helperText="Typical bank admin fee (default: R69)"
-          >
-            <NumericInput
-              id="monthlyServiceFee"
-              value={monthlyServiceFee}
-              onChange={setMonthlyServiceFee}
-              placeholder="69"
-              prefix="R"
-            />
-          </FormField>
+          {isAdvancedMode && (
+            <FormField
+              label="Monthly Service Fee"
+              htmlFor="monthlyServiceFee"
+              helperText="Typical bank admin fee (default: R69)"
+            >
+              <NumericInput
+                id="monthlyServiceFee"
+                value={monthlyServiceFee}
+                onChange={setMonthlyServiceFee}
+                placeholder="69"
+                prefix="R"
+              />
+            </FormField>
+          )}
 
           <div className="space-y-3">
             <Button
@@ -400,18 +424,15 @@ export default function HomeLoanCalculator() {
                   Total Monthly Payment
                 </span>
                 <span className="text-5xl font-bold text-green-700 block">
-                  {formatCurrency(
-                    results.monthlyPayment +
-                      parseFloat(monthlyServiceFee || "0"),
-                  )}
+                  {formatCurrency(results.monthlyPayment + results.serviceFee)}
                 </span>
                 <span className="text-xs text-gray-600 block mt-2">
                   for {results.loanTermYears.toFixed(1)} years
                 </span>
-                {parseFloat(monthlyServiceFee || "0") > 0 && (
+                {results.serviceFee > 0 && (
                   <div className="text-xs text-gray-600 mt-2 pt-2 border-t border-green-200">
                     Bond: {formatCurrency(results.monthlyPayment)} + Service
-                    Fee: {formatCurrency(parseFloat(monthlyServiceFee))}
+                    Fee: {formatCurrency(results.serviceFee)}
                   </div>
                 )}
               </div>
@@ -582,19 +603,16 @@ export default function HomeLoanCalculator() {
                         </div>
 
                         {/* Scenarios */}
-                        {rateScenarios.scenarios.map((scenario, index) => {
+                        {rateScenarios.scenarios.map((scenario) => {
                           const payment = calculateHomeLoan(
                             results.loanAmount,
                             scenario.rate,
                             results.loanTermYears,
                           ).monthlyPayment;
-                          const serviceFee = parseFloat(
-                            monthlyServiceFee || "0",
-                          );
-                          const totalPayment = payment + serviceFee;
+                          const totalPayment = payment + results.serviceFee;
                           const difference =
                             totalPayment -
-                            (results.monthlyPayment + serviceFee);
+                            (results.monthlyPayment + results.serviceFee);
 
                           return (
                             <Fragment key={scenario.label}>
@@ -672,10 +690,10 @@ export default function HomeLoanCalculator() {
                           historic.rate,
                           results.loanTermYears,
                         ).monthlyPayment;
-                        const serviceFee = parseFloat(monthlyServiceFee || "0");
-                        const totalPayment = payment + serviceFee;
+                        const totalPayment = payment + results.serviceFee;
                         const difference =
-                          totalPayment - (results.monthlyPayment + serviceFee);
+                          totalPayment -
+                          (results.monthlyPayment + results.serviceFee);
                         const isPeak = historic.label === "2008 Crisis Peak";
 
                         return (
