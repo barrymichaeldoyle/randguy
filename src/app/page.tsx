@@ -189,7 +189,7 @@ export default async function Home() {
           South African Personal Finance Made Simple
         </h1>
         <p className="text-lg text-gray-700 mb-6">
-          Learn about investing, TFSAs, ETFs, and building wealth in South
+          Learn how to invest, use TFSAs, buy ETFs, and build wealth in South
           Africa
         </p>
       </div>
@@ -206,12 +206,12 @@ export default async function Home() {
               <h2
                 className={`${excali.className} text-xl font-bold mb-2 group-hover:text-yellow-600 transition-colors`}
               >
-                Free Financial Calculators
+                Financial Calculators (Free!)
               </h2>
             </div>
             <p className="text-gray-700 text-sm">
               Calculate your <strong>income tax</strong>, <strong>UIF</strong>,
-              and more with our SA-specific tools
+              and more with these SA-specific tools
             </p>
           </Link>
 
@@ -228,7 +228,7 @@ export default async function Home() {
               </h2>
             </div>
             <p className="text-gray-700 text-sm">
-              Explore <strong>prime rates</strong>,{" "}
+              Check out <strong>prime rates</strong>,{" "}
               <strong>tax brackets</strong>, and how SA finances have evolved
             </p>
           </Link>
@@ -246,8 +246,8 @@ export default async function Home() {
               </h2>
             </div>
             <p className="text-gray-700 text-sm">
-              Learn about <strong>TFSAs</strong>, <strong>ETFs</strong>, and
-              building wealth in South Africa
+              Learn how <strong>TFSAs</strong> work, what <strong>ETFs</strong>{" "}
+              are, and how to build wealth in South Africa
             </p>
           </Link>
         </section>
