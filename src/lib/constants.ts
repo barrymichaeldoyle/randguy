@@ -1,6 +1,7 @@
 // Affiliate and external links
 export const LINKS = {
-  easyEquities: "https://bit.ly/47Y76M2",
+  easyEquities:
+    "https://easyidentity.io/profile-type?productid=easyequities&affiliateid=1&affiliatekey=/pohWtteakwQlSM7qFHjyVbXN1r/0Bsu/UD0VcV36cDWa8SJdX27lPZIgTkiVmLY/%2B0pAziRrJSwaBdBPkcJ6pAITz4pKEZrvP94fmVzYaEiOlDMjN0ah1w52s4T7AuZ",
 } as const;
 
 // Social links (add when needed)
