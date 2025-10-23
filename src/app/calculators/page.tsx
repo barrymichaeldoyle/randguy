@@ -58,6 +58,13 @@ const calculators = [
     href: "/calculators/tfsa",
     icon: "🎯",
   },
+  {
+    title: "Interest Calculator",
+    description:
+      "Calculate interest gains across different time periods. Convert between annual, monthly, weekly, daily, and hourly interest rates for investments and loans.",
+    href: "/calculators/interest",
+    icon: "💹",
+  },
   // Add more calculators here in the future
 ];
 
