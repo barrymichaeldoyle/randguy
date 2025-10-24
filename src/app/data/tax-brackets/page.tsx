@@ -1,58 +1,92 @@
-import { Metadata } from "next";
-import Link from "next/link";
-import { excali } from "@/fonts";
-import { taxBracketsHistory } from "@/lib/historical-data";
+import { Metadata } from 'next';
+import Link from 'next/link';
 
-import TaxYearSelector from "./_components/TaxYearSelector";
-import TaxThresholdChart from "./_components/TaxThresholdChart";
-import TopMarginalRateChart from "./_components/TopMarginalRateChart";
-import { Breadcrumb } from "@/components/Breadcrumb";
+import { Breadcrumb } from '@/components/Breadcrumb';
+import { excali } from '@/fonts';
+import { taxBracketsHistory } from '@/lib/historical-data';
+
+import TaxYearSelector from './_components/TaxYearSelector';
 
 export const metadata: Metadata = {
-  title: "Historical Tax Brackets & Rates - South Africa",
+  title: 'Historical Tax Brackets & Rates - South Africa',
   description:
     "Explore South Africa's income tax brackets from 2015 to present. See how SARS tax rates, thresholds, and rebates have evolved over time.",
   keywords: [
-    "tax brackets",
-    "SARS",
-    "income tax",
-    "South Africa",
-    "tax rates",
-    "historical data",
-    "tax rebates",
-    "marginal tax rate",
+    'tax brackets',
+    'SARS',
+    'income tax',
+    'South Africa',
+    'tax rates',
+    'historical data',
+    'tax rebates',
+    'marginal tax rate',
   ],
   alternates: {
-    canonical: "/data/tax-brackets",
+    canonical: '/data/tax-brackets',
   },
   openGraph: {
-    title: "Historical Tax Brackets - South Africa",
+    title: 'Historical Tax Brackets - South Africa',
     description:
       "Track how South Africa's income tax brackets, rates and rebates have changed since 2015.",
-    type: "website",
-    url: "/data/tax-brackets",
+    type: 'website',
+    url: '/data/tax-brackets',
   },
 };
 
 // Format number as currency
 const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat("en-ZA", {
-    style: "currency",
-    currency: "ZAR",
+  return new Intl.NumberFormat('en-ZA', {
+    style: 'currency',
+    currency: 'ZAR',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(value);
 };
 
 export default function TaxBracketsPage() {
+  // Prepare chart data - done server-side
+  // Map bracket RANGES (size of each bracket) for stacked visualization
+  const thresholdData = taxBracketsHistory.map((year) => {
+    const data: { year: string; [key: string]: string | number } = {
+      year: year.year,
+    };
+
+    // For each bracket, store the SIZE (range) of that bracket
+    // This allows for proper stacked bar visualization
+    year.brackets.forEach((bracket) => {
+      const bracketSize = bracket.max !== null ? bracket.max - bracket.min : 0; // Can't show unlimited brackets
+
+      if (bracketSize > 0) {
+        data[`${bracket.rate}%`] = bracketSize;
+      }
+    });
+
+    return data;
+  });
+
+  // Prepare data showing ALL bracket rates over time
+  const bracketRatesData = taxBracketsHistory.map((year) => {
+    const data: { year: string; [key: string]: string | number } = {
+      year: year.year,
+    };
+
+    // Add each bracket rate with its position label
+    year.brackets.forEach((bracket, index) => {
+      // Use percentage as key for consistency
+      data[`${bracket.rate}%`] = bracket.rate;
+    });
+
+    return data;
+  });
+
   return (
     <main className="flex flex-col items-center pt-8 md:pt-12 px-4 pb-8 md:px-8 flex-1">
       <div className="max-w-6xl w-full">
         <Breadcrumb
           items={[
-            { name: "Home", href: "/" },
-            { name: "Historical Data", href: "/data" },
-            { name: "Tax Brackets" },
+            { name: 'Home', href: '/' },
+            { name: 'Historical Data', href: '/data' },
+            { name: 'Tax Brackets' },
           ]}
         />
 
@@ -70,12 +104,6 @@ export default function TaxBracketsPage() {
         {/* Year Selector and Current Year Brackets */}
         <TaxYearSelector />
 
-        {/* Tax Threshold Evolution Chart */}
-        <TaxThresholdChart />
-
-        {/* Top Marginal Rate Chart */}
-        <TopMarginalRateChart />
-
         {/* Information Section */}
         <div className="grid md:grid-cols-2 gap-6 mb-8">
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
@@ -89,13 +117,13 @@ export default function TaxBracketsPage() {
               higher rate.
             </p>
             <p className="text-gray-700 text-sm">
-              Use our{" "}
+              Use our{' '}
               <Link
                 href="/calculators/income-tax"
                 className="text-yellow-600 hover:underline font-semibold"
               >
                 Income Tax Calculator
-              </Link>{" "}
+              </Link>{' '}
               to see exactly how much tax you&apos;ll pay.
             </p>
           </div>

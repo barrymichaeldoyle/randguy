@@ -1,158 +1,158 @@
-import Image from "next/image";
-import Link from "next/link";
-import { Metadata } from "next";
+import Image from 'next/image';
+import Link from 'next/link';
+import { Metadata } from 'next';
 
-import { excali } from "@/fonts";
-import { Button } from "@/components/Button";
-import { getAllPosts } from "@/lib/posts";
+import { excali } from '@/fonts';
+import { Button } from '@/components/Button';
+import { getAllPosts } from '@/lib/posts';
 
 export const metadata: Metadata = {
-  title: "Rand Guy | South African Personal Finance & Investment Guide",
+  title: 'Rand Guy | South African Personal Finance & Investment Guide',
   description:
-    "Learn about personal finance, investing, TFSAs, ETFs, and building wealth in South Africa. Free financial calculators, tax guides, and investment advice for South Africans.",
+    'Learn about personal finance, investing, TFSAs, ETFs, and building wealth in South Africa. Free financial calculators, tax guides, and investment advice for South Africans.',
   keywords: [
-    "South African personal finance",
-    "investing in South Africa",
-    "TFSA",
-    "ETF investing",
-    "tax-free savings",
-    "wealth building",
-    "SARS tax",
-    "financial planning",
-    "SA investment guide",
+    'South African personal finance',
+    'investing in South Africa',
+    'TFSA',
+    'ETF investing',
+    'tax-free savings',
+    'wealth building',
+    'SARS tax',
+    'financial planning',
+    'SA investment guide',
   ],
   alternates: {
-    canonical: "/",
+    canonical: '/',
   },
   openGraph: {
-    title: "Rand Guy | South African Personal Finance & Investment Guide",
+    title: 'Rand Guy | South African Personal Finance & Investment Guide',
     description:
-      "Learn about personal finance, investing, TFSAs, ETFs, and building wealth in South Africa. Free financial calculators and investment advice.",
-    type: "website",
-    url: "/",
-    siteName: "Rand Guy",
+      'Learn about personal finance, investing, TFSAs, ETFs, and building wealth in South Africa. Free financial calculators and investment advice.',
+    type: 'website',
+    url: '/',
+    siteName: 'Rand Guy',
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Rand Guy | South African Personal Finance",
+    card: 'summary_large_image',
+    title: 'Rand Guy | South African Personal Finance',
     description:
-      "Learn about personal finance, investing, TFSAs, ETFs, and building wealth in South Africa.",
+      'Learn about personal finance, investing, TFSAs, ETFs, and building wealth in South Africa.',
   },
 };
 
 export default async function Home() {
   const posts = await getAllPosts();
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
   const websiteSchema = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "Rand Guy",
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Rand Guy',
     description:
-      "South African personal finance and investment guide. Learn about investing, TFSAs, ETFs, and building wealth.",
+      'South African personal finance and investment guide. Learn about investing, TFSAs, ETFs, and building wealth.',
     url: baseUrl,
-    inLanguage: "en-ZA",
+    inLanguage: 'en-ZA',
     potentialAction: {
-      "@type": "SearchAction",
+      '@type': 'SearchAction',
       target: {
-        "@type": "EntryPoint",
+        '@type': 'EntryPoint',
         urlTemplate: `${baseUrl}/blog?q={search_term_string}`,
       },
-      "query-input": "required name=search_term_string",
+      'query-input': 'required name=search_term_string',
     },
   };
 
   const organizationSchema = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "Rand Guy",
-    description: "South African Personal Finance & Investment Guide",
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Rand Guy',
+    description: 'South African Personal Finance & Investment Guide',
     url: baseUrl,
     logo: `${baseUrl}/RandGuyLogo.png`,
     sameAs: [],
   };
 
   const blogPostsSchema = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
     itemListElement: posts.slice(0, 5).map((post, index) => ({
-      "@type": "ListItem",
+      '@type': 'ListItem',
       position: index + 1,
       item: {
-        "@type": "BlogPosting",
+        '@type': 'BlogPosting',
         headline: post.title,
         description: post.description,
         datePublished: post.date,
         url: `${baseUrl}/blog/${post.slug}`,
         author: {
-          "@type": "Person",
-          name: "Rand Guy",
+          '@type': 'Person',
+          name: 'Rand Guy',
         },
       },
     })),
   };
 
   const siteNavigationSchema = {
-    "@context": "https://schema.org",
-    "@type": "SiteNavigationElement",
-    name: "Main Navigation",
+    '@context': 'https://schema.org',
+    '@type': 'SiteNavigationElement',
+    name: 'Main Navigation',
     url: baseUrl,
     hasPart: [
       {
-        "@type": "WebPage",
-        name: "Home",
+        '@type': 'WebPage',
+        name: 'Home',
         url: baseUrl,
         description:
-          "South African personal finance and investment advice, calculators, and guides",
+          'South African personal finance and investment advice, calculators, and guides',
       },
       {
-        "@type": "WebPage",
-        name: "Calculators",
+        '@type': 'WebPage',
+        name: 'Calculators',
         url: `${baseUrl}/calculators`,
         description:
-          "Free financial calculators for South Africans - income tax, UIF, and more",
+          'Free financial calculators for South Africans - income tax, UIF, and more',
       },
       {
-        "@type": "WebPage",
-        name: "Historical Data",
+        '@type': 'WebPage',
+        name: 'Historical Data',
         url: `${baseUrl}/data`,
         description:
-          "Historical financial data visualizations for South Africa",
+          'Historical financial data visualizations for South Africa',
       },
       {
-        "@type": "WebPage",
-        name: "Blog",
+        '@type': 'WebPage',
+        name: 'Blog',
         url: `${baseUrl}/blog`,
         description:
-          "Personal finance articles and investment guides for South Africans",
+          'Personal finance articles and investment guides for South Africans',
       },
       {
-        "@type": "WebPage",
-        name: "Income Tax Calculator",
+        '@type': 'WebPage',
+        name: 'Income Tax Calculator',
         url: `${baseUrl}/calculators/income-tax`,
         description:
-          "Calculate your South African income tax with UIF and age-based rebates",
+          'Calculate your South African income tax with UIF and age-based rebates',
       },
       {
-        "@type": "WebPage",
-        name: "Home Loan Calculator",
+        '@type': 'WebPage',
+        name: 'Home Loan Calculator',
         url: `${baseUrl}/calculators/home-loan`,
         description:
-          "Calculate your home loan repayments and total interest for property purchases",
+          'Calculate your home loan repayments and total interest for property purchases',
       },
       {
-        "@type": "WebPage",
-        name: "Loan-to-Value Calculator",
+        '@type': 'WebPage',
+        name: 'Loan-to-Value Calculator',
         url: `${baseUrl}/calculators/ltv`,
         description:
-          "Calculate your LTV ratio and understand your equity position for property financing",
+          'Calculate your LTV ratio and understand your equity position for property financing',
       },
       {
-        "@type": "WebPage",
-        name: "TFSA Calculator",
+        '@type': 'WebPage',
+        name: 'TFSA Calculator',
         url: `${baseUrl}/calculators/tfsa`,
         description:
-          "Calculate how long to max out your Tax-Free Savings Account",
+          'Calculate how long to max out your Tax-Free Savings Account',
       },
     ],
   };
@@ -206,7 +206,7 @@ export default async function Home() {
               <h2
                 className={`${excali.className} text-xl font-bold mb-2 group-hover:text-yellow-600 transition-colors`}
               >
-                Financial Calculators (Free!)
+                Financial Calculators
               </h2>
             </div>
             <p className="text-gray-700 text-sm">
@@ -228,7 +228,7 @@ export default async function Home() {
               </h2>
             </div>
             <p className="text-gray-700 text-sm">
-              Check out <strong>prime rates</strong>,{" "}
+              Check out <strong>prime rates</strong>,{' '}
               <strong>tax brackets</strong>, and how SA finances have evolved
             </p>
           </Link>
@@ -246,7 +246,7 @@ export default async function Home() {
               </h2>
             </div>
             <p className="text-gray-700 text-sm">
-              Learn how <strong>TFSAs</strong> work, what <strong>ETFs</strong>{" "}
+              Learn how <strong>TFSAs</strong> work, what <strong>ETFs</strong>{' '}
               are, and how to build wealth in South Africa
             </p>
           </Link>
@@ -267,10 +267,10 @@ export default async function Home() {
                     {post.title}
                   </h3>
                   <time className="text-sm text-gray-500 block mb-3">
-                    {new Date(post.date).toLocaleDateString("en-ZA", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
+                    {new Date(post.date).toLocaleDateString('en-ZA', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
                     })}
                   </time>
                   <p className="text-gray-700 mb-4">{post.description}</p>

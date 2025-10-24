@@ -1,5 +1,5 @@
-import type { MDXComponents } from "mdx/types";
-import { excali } from "@/fonts";
+import type { MDXComponents } from 'mdx/types';
+import { excali } from '@/fonts';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -42,8 +42,8 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       <a
         href={href}
         className="text-yellow-600 hover:text-yellow-700 underline font-medium"
-        target={href?.startsWith("http") ? "_blank" : undefined}
-        rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
+        target={href?.startsWith('http') ? '_blank' : undefined}
+        rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
       >
         {children}
       </a>
@@ -55,16 +55,16 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     code: ({ children, className }) => {
       // Code block (inside pre tag)
-      if (className?.includes("language-")) {
+      if (className?.includes('language-')) {
         return <code className={className}>{children}</code>;
       }
       // Check if it's in a pre by checking if children is a string with newlines
       const isCodeBlock =
-        typeof children === "string" && children.includes("\n");
+        typeof children === 'string' && children.includes('\n');
       if (isCodeBlock) {
         // Trim the leading/trailing newlines for code blocks
         const trimmed =
-          typeof children === "string" ? children.trim() : children;
+          typeof children === 'string' ? children.trim() : children;
         return <code>{trimmed}</code>;
       }
       // Inline code styling

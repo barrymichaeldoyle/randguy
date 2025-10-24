@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useMemo, useState } from "react";
+import { useState } from 'react';
 import {
   LineChart,
   Line,
@@ -10,44 +10,29 @@ import {
   Tooltip,
   ResponsiveContainer,
   Legend,
-} from "recharts";
+} from 'recharts';
 
-import { excali } from "@/fonts";
-import { PRIME_LENDING_RATE_ZA, REPO_RATE_ZA } from "@/lib/historical-data";
+type ChartDataPoint = {
+  date: number;
+  primeRate: number;
+  repoRate: number;
+  fullDate: string;
+};
 
-export default function PrimeRatesChart() {
+type PrimeRatesChartClientProps = {
+  chartData: ChartDataPoint[];
+};
+
+export default function PrimeRatesChartClient({
+  chartData,
+}: PrimeRatesChartClientProps) {
   const [hoveredPoint, setHoveredPoint] = useState<{
     date: string;
     rate: number;
   } | null>(null);
 
-  // Format data for the chart
-  const chartData = useMemo(() => {
-    // Sort by date ascending (oldest first) and convert to proper date objects
-    const sortedPrime = [...PRIME_LENDING_RATE_ZA].sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-    );
-    const sortedRepo = [...REPO_RATE_ZA].sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-    );
-
-    return sortedPrime.map((item, index) => ({
-      date: new Date(item.date).getTime(), // Use timestamp for proper time scaling
-      primeRate: item.rate,
-      repoRate: sortedRepo[index].rate,
-      fullDate: new Date(item.date).toLocaleDateString("en-ZA", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-      }),
-    }));
-  }, []);
-
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
-      <h2 className={`${excali.className} text-2xl mb-6`}>
-        Prime & Repo Rates Over Time
-      </h2>
+    <>
       <div className="h-96">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
@@ -68,40 +53,40 @@ export default function PrimeRatesChart() {
             <XAxis
               dataKey="date"
               type="number"
-              domain={["dataMin", "dataMax"]}
+              domain={['dataMin', 'dataMax']}
               stroke="#6b7280"
-              style={{ fontSize: "12px" }}
+              style={{ fontSize: '12px' }}
               tickFormatter={(timestamp) => {
                 const date = new Date(timestamp);
-                return date.toLocaleDateString("en-ZA", {
-                  year: "numeric",
-                  month: "short",
+                return date.toLocaleDateString('en-ZA', {
+                  year: 'numeric',
+                  month: 'short',
                 });
               }}
               scale="time"
             />
             <YAxis
               stroke="#6b7280"
-              style={{ fontSize: "12px" }}
+              style={{ fontSize: '12px' }}
               label={{
-                value: "Rate (%)",
+                value: 'Rate (%)',
                 angle: -90,
-                position: "insideLeft",
+                position: 'insideLeft',
               }}
               domain={[0, 20]}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#fff",
-                border: "1px solid #e5e7eb",
-                borderRadius: "8px",
+                backgroundColor: '#fff',
+                border: '1px solid #e5e7eb',
+                borderRadius: '8px',
               }}
               formatter={(value: number, name: string) => [`${value}%`, name]}
               labelFormatter={(timestamp: number) => {
                 const point = chartData.find((d) => d.date === timestamp);
                 return point
                   ? point.fullDate
-                  : new Date(timestamp).toLocaleDateString("en-ZA");
+                  : new Date(timestamp).toLocaleDateString('en-ZA');
               }}
             />
             <Legend />
@@ -111,7 +96,7 @@ export default function PrimeRatesChart() {
               name="Prime Rate"
               stroke="#eab308"
               strokeWidth={2}
-              dot={{ fill: "#eab308", r: 4 }}
+              dot={{ fill: '#eab308', r: 4 }}
               activeDot={{ r: 6 }}
             />
             <Line
@@ -120,7 +105,7 @@ export default function PrimeRatesChart() {
               name="Repo Rate"
               stroke="#3b82f6"
               strokeWidth={2}
-              dot={{ fill: "#3b82f6", r: 4 }}
+              dot={{ fill: '#3b82f6', r: 4 }}
               activeDot={{ r: 6 }}
             />
           </LineChart>
@@ -134,6 +119,6 @@ export default function PrimeRatesChart() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

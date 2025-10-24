@@ -1,35 +1,39 @@
-import { Metadata } from "next";
-import Link from "next/link";
+import { Metadata } from 'next';
+import Link from 'next/link';
 
-import { Breadcrumb } from "@/components/Breadcrumb";
-import { excali } from "@/fonts";
-import { PRIME_LENDING_RATE_ZA, REPO_RATE_SPREAD } from "@/lib/historical-data";
+import { Breadcrumb } from '@/components/Breadcrumb';
+import { excali } from '@/fonts';
+import {
+  PRIME_LENDING_RATE_ZA,
+  REPO_RATE_SPREAD,
+  REPO_RATE_ZA,
+} from '@/lib/historical-data';
 
-import PrimeRatesChart from "./_components/PrimeRatesChart";
+import PrimeRatesChartClient from './_components/PrimeRatesChartClient';
 
 export const metadata: Metadata = {
-  title: "Historical Prime Lending & Repo Rates in South Africa",
+  title: 'Historical Prime Lending & Repo Rates in South Africa',
   description:
     "Track South Africa's prime lending rate and SARB repo rate from 2000 to present. See how interest rates have changed and understand their impact on home loans and credit.",
   keywords: [
-    "prime lending rate",
-    "repo rate",
-    "South Africa",
-    "interest rates",
-    "SARB",
-    "historical data",
-    "home loan rates",
-    "monetary policy",
+    'prime lending rate',
+    'repo rate',
+    'South Africa',
+    'interest rates',
+    'SARB',
+    'historical data',
+    'home loan rates',
+    'monetary policy',
   ],
   alternates: {
-    canonical: "/data/prime-rates",
+    canonical: '/data/prime-rates',
   },
   openGraph: {
-    title: "Historical Prime & Repo Rates - South Africa",
+    title: 'Historical Prime & Repo Rates - South Africa',
     description:
       "Track South Africa's prime lending rate and SARB repo rate from 2000 to present. Interactive charts and analysis.",
-    type: "website",
-    url: "/data/prime-rates",
+    type: 'website',
+    url: '/data/prime-rates',
   },
 };
 
@@ -48,14 +52,33 @@ const stats = {
 };
 
 export default function PrimeRatesPage() {
+  // Prepare chart data - done server-side
+  const sortedPrime = [...PRIME_LENDING_RATE_ZA].sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+  );
+  const sortedRepo = [...REPO_RATE_ZA].sort(
+    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+  );
+
+  const chartData = sortedPrime.map((item, index) => ({
+    date: new Date(item.date).getTime(),
+    primeRate: item.rate,
+    repoRate: sortedRepo[index].rate,
+    fullDate: new Date(item.date).toLocaleDateString('en-ZA', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    }),
+  }));
+
   return (
     <main className="flex flex-col items-center pt-8 md:pt-12 px-4 pb-8 md:px-8 flex-1">
       <div className="max-w-6xl w-full">
         <Breadcrumb
           items={[
-            { name: "Home", href: "/" },
-            { name: "Historical Data", href: "/data" },
-            { name: "Prime Lending & Repo Rates" },
+            { name: 'Home', href: '/' },
+            { name: 'Historical Data', href: '/data' },
+            { name: 'Prime Lending & Repo Rates' },
           ]}
         />
 
@@ -111,7 +134,12 @@ export default function PrimeRatesPage() {
         </div>
 
         {/* Chart */}
-        <PrimeRatesChart />
+        <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
+          <h2 className={`${excali.className} text-2xl mb-6`}>
+            Prime & Repo Rates Over Time
+          </h2>
+          <PrimeRatesChartClient chartData={chartData} />
+        </div>
 
         {/* Information Section */}
         <div className="grid md:grid-cols-2 gap-6">
@@ -165,13 +193,13 @@ export default function PrimeRatesPage() {
             <p className="text-gray-700 text-sm">
               A 1% change in prime rate on a R1 million bond can increase or
               decrease your monthly repayment by approximately R650-R700. Use
-              our{" "}
+              our{' '}
               <Link
                 href="/calculators/home-loan"
                 className="text-yellow-600 hover:underline font-semibold"
               >
                 Home Loan Calculator
-              </Link>{" "}
+              </Link>{' '}
               to see how different rates affect your repayments.
             </p>
           </div>
@@ -228,11 +256,11 @@ export default function PrimeRatesPage() {
                   const change = item.rate - prevRate;
 
                   // Calculate duration until next rate change
-                  let durationText = "-";
+                  let durationText = '-';
                   if (index > 0) {
                     const currentDate = new Date(item.date);
                     const nextDate = new Date(
-                      PRIME_LENDING_RATE_ZA[index - 1].date,
+                      PRIME_LENDING_RATE_ZA[index - 1].date
                     );
                     const diffMs = nextDate.getTime() - currentDate.getTime();
                     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
@@ -251,7 +279,7 @@ export default function PrimeRatesPage() {
                     }
                   } else {
                     // For the most recent rate (index 0), show "Current"
-                    durationText = "Current";
+                    durationText = 'Current';
                   }
 
                   return (
