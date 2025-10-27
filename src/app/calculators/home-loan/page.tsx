@@ -35,6 +35,21 @@ export const metadata: Metadata = {
       'Calculate your home loan repayments in South Africa. Free bond calculator with monthly payments, total interest, and loan breakdown.',
     type: 'website',
     url: '/calculators/home-loan',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Rand Guy - Making Cents of SA Finance',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Home Loan Calculator | South Africa',
+    description:
+      'Calculate your home loan repayments in South Africa. Free bond calculator with monthly payments, total interest, and loan breakdown.',
+    images: ['/og-image.png'],
   },
 };
 

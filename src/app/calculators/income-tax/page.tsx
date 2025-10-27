@@ -30,6 +30,21 @@ export const metadata: Metadata = {
       'Calculate your South African income tax for 2025/2026. Free income tax calculator with UIF, age-based rebates, and year-over-year comparison.',
     type: 'website',
     url: '/calculators/income-tax',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Rand Guy - Making Cents of SA Finance',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Income Tax Calculator | South Africa 2025/2026',
+    description:
+      'Calculate your South African income tax for 2025/2026. Free income tax calculator with UIF, age-based rebates, and year-over-year comparison.',
+    images: ['/og-image.png'],
   },
 };
 

@@ -30,6 +30,21 @@ export const metadata: Metadata = {
       "Track how South Africa's income tax brackets, rates and rebates have changed since 2015.",
     type: 'website',
     url: '/data/tax-brackets',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Rand Guy - Making Cents of SA Finance',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Historical Tax Brackets - South Africa',
+    description:
+      "Track how South Africa's income tax brackets, rates and rebates have changed since 2015.",
+    images: ['/og-image.png'],
   },
 };
 

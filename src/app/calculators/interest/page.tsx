@@ -35,6 +35,21 @@ export const metadata: Metadata = {
       'Calculate simple and compound interest gains across different time periods. Convert between annual, monthly, weekly, daily, and hourly interest rates with multiple compounding options.',
     type: 'website',
     url: '/calculators/interest',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Rand Guy - Making Cents of SA Finance',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Interest Calculator | South Africa',
+    description:
+      'Calculate simple and compound interest gains across different time periods. Convert between annual, monthly, weekly, daily, and hourly interest rates with multiple compounding options.',
+    images: ['/og-image.png'],
   },
 };
 

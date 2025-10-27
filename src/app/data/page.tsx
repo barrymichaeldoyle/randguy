@@ -27,6 +27,21 @@ export const metadata: Metadata = {
       'Explore historical financial data for South Africa. View prime lending & repo rates, tax brackets, and other important financial trends.',
     type: 'website',
     url: '/data',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Rand Guy - Making Cents of SA Finance',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Historical Financial Data for South Africa',
+    description:
+      'Explore historical financial data for South Africa. View prime lending & repo rates, tax brackets, and other important financial trends.',
+    images: ['/og-image.png'],
   },
 };
 

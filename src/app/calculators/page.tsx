@@ -27,6 +27,21 @@ export const metadata: Metadata = {
       'Free online financial calculators for South Africans. Calculate income tax, SARS deductions, UIF, and more.',
     type: 'website',
     url: '/calculators',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Rand Guy - Making Cents of SA Finance',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Free Financial Calculators for South Africans',
+    description:
+      'Free online financial calculators for South Africans. Calculate income tax, SARS deductions, UIF, and more.',
+    images: ['/og-image.png'],
   },
 };
 

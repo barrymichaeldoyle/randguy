@@ -54,11 +54,20 @@ export async function generateMetadata({
       type: 'article',
       publishedTime: post.metadata.date,
       authors: ['Rand Guy'],
+      images: [
+        {
+          url: '/og-image.png',
+          width: 1200,
+          height: 630,
+          alt: 'Rand Guy - Making Cents of SA Finance',
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title: post.metadata.title,
       description: post.metadata.description,
+      images: ['/og-image.png'],
     },
   };
 }

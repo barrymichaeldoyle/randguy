@@ -31,6 +31,21 @@ export const metadata: Metadata = {
       'Calculate your Loan-to-Value (LTV) ratio for property purchases in South Africa. Understand your equity position and loan terms.',
     type: 'website',
     url: '/calculators/ltv',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Rand Guy - Making Cents of SA Finance',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Loan-to-Value (LTV) Calculator | South Africa',
+    description:
+      'Calculate your Loan-to-Value (LTV) ratio for property purchases in South Africa. Understand your equity position and loan terms.',
+    images: ['/og-image.png'],
   },
 };
 

@@ -31,12 +31,21 @@ export const metadata: Metadata = {
     type: 'website',
     url: '/',
     siteName: 'Rand Guy',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Rand Guy - Making Cents of SA Finance',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Rand Guy | South African Personal Finance',
     description:
       'Learn about personal finance, investing, TFSAs, ETFs, and building wealth in South Africa.',
+    images: ['/og-image.png'],
   },
 };
 

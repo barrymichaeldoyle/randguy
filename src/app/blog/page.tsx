@@ -1,26 +1,35 @@
-import Link from "next/link";
-import { Metadata } from "next";
+import Link from 'next/link';
+import { Metadata } from 'next';
 
-import { getAllPosts } from "@/lib/posts";
-import { Breadcrumb } from "@/components/Breadcrumb";
+import { getAllPosts } from '@/lib/posts';
+import { Breadcrumb } from '@/components/Breadcrumb';
 
-import { excali } from "../../fonts";
+import { excali } from '../../fonts';
 
 export const metadata: Metadata = {
-  title: "Blog | Rand Guy",
+  title: 'Blog | Rand Guy',
   description:
-    "Read about personal finance, investing, TFSAs, and building wealth in South Africa. Practical advice for everyday South Africans.",
+    'Read about personal finance, investing, TFSAs, and building wealth in South Africa. Practical advice for everyday South Africans.',
   openGraph: {
-    title: "Blog | Rand Guy",
+    title: 'Blog | Rand Guy',
     description:
-      "Read about personal finance, investing, TFSAs, and building wealth in South Africa. Practical advice for everyday South Africans.",
-    type: "website",
+      'Read about personal finance, investing, TFSAs, and building wealth in South Africa. Practical advice for everyday South Africans.',
+    type: 'website',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Rand Guy - Making Cents of SA Finance',
+      },
+    ],
   },
   twitter: {
-    card: "summary",
-    title: "Blog | Rand Guy",
+    card: 'summary_large_image',
+    title: 'Blog | Rand Guy',
     description:
-      "Read about personal finance, investing, TFSAs, and building wealth in South Africa. Practical advice for everyday South Africans.",
+      'Read about personal finance, investing, TFSAs, and building wealth in South Africa. Practical advice for everyday South Africans.',
+    images: ['/og-image.png'],
   },
 };
 
@@ -30,7 +39,7 @@ export default async function BlogPage() {
   return (
     <main className="flex flex-col items-center p-8 flex-1">
       <div className="max-w-3xl w-full">
-        <Breadcrumb items={[{ name: "Home", href: "/" }, { name: "Blog" }]} />
+        <Breadcrumb items={[{ name: 'Home', href: '/' }, { name: 'Blog' }]} />
 
         <h1 className={`${excali.className} text-5xl mb-4 text-center`}>
           Rand Guy&apos;s Blog
@@ -49,10 +58,10 @@ export default async function BlogPage() {
                   {post.title}
                 </h2>
                 <time className="text-sm text-gray-500 block mb-3">
-                  {new Date(post.date).toLocaleDateString("en-ZA", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
+                  {new Date(post.date).toLocaleDateString('en-ZA', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
                   })}
                 </time>
                 <p className="text-gray-700 mb-4">{post.description}</p>
