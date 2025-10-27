@@ -130,6 +130,7 @@ export default async function Image({
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
+            gap: 10,
           }}
         >
           <div
