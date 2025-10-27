@@ -1,4 +1,5 @@
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -59,7 +60,7 @@ export const metadata: Metadata = {
   },
 };
 
-const footerLinks = {
+const footerLinks: Record<string, { href: string; label: string }[]> = {
   calculators: [
     { href: '/calculators/income-tax', label: 'Income Tax Calculator' },
     { href: '/calculators/home-loan', label: 'Home Loan Calculator' },
@@ -81,7 +82,6 @@ const footerLinks = {
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
   return (
     <html lang="en">
-      <Analytics />
       <body
         className={`${excali.variable} ${assistant.variable} ${assistant.className} antialiased min-h-screen flex flex-col`}
       >
@@ -201,6 +201,8 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
             </div>
           </div>
         </footer>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
