@@ -6,6 +6,7 @@ import { CalculatorInfo } from '@/components/CalculatorInfo';
 import { Breadcrumb } from '@/components/Breadcrumb';
 
 import InterestCalculator from './_components/InterestCalculator';
+import { BASE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
   title: 'Interest Calculator | South Africa',
@@ -38,8 +39,6 @@ export const metadata: Metadata = {
 };
 
 export default function InterestCalculatorPage() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
@@ -64,7 +63,7 @@ export default function InterestCalculatorPage() {
       'Simple vs Compound comparison',
     ],
     inLanguage: 'en-ZA',
-    url: `${baseUrl}/calculators/interest`,
+    url: `${BASE_URL}/calculators/interest`,
   };
 
   const breadcrumbData = {
@@ -75,19 +74,19 @@ export default function InterestCalculatorPage() {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: baseUrl,
+        item: BASE_URL,
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Calculators',
-        item: `${baseUrl}/calculators`,
+        item: `${BASE_URL}/calculators`,
       },
       {
         '@type': 'ListItem',
         position: 3,
         name: 'Interest Calculator',
-        item: `${baseUrl}/calculators/interest`,
+        item: `${BASE_URL}/calculators/interest`,
       },
     ],
   };

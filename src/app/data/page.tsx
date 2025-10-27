@@ -1,80 +1,79 @@
-import { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
+import { Metadata } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { excali } from "@/fonts";
+import { excali } from '@/fonts';
+import { BASE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: "Historical Financial Data for South Africa",
+  title: 'Historical Financial Data for South Africa',
   description:
-    "Explore historical financial data for South Africa. View prime lending & repo rates, tax brackets, and other important financial trends over time.",
+    'Explore historical financial data for South Africa. View prime lending & repo rates, tax brackets, and other important financial trends over time.',
   keywords: [
-    "historical data",
-    "South Africa",
-    "prime lending rate",
-    "tax brackets",
-    "SARS",
-    "financial history",
-    "interest rates",
+    'historical data',
+    'South Africa',
+    'prime lending rate',
+    'tax brackets',
+    'SARS',
+    'financial history',
+    'interest rates',
   ],
   alternates: {
-    canonical: "/data",
+    canonical: '/data',
   },
   openGraph: {
-    title: "Historical Financial Data for South Africa",
+    title: 'Historical Financial Data for South Africa',
     description:
-      "Explore historical financial data for South Africa. View prime lending & repo rates, tax brackets, and other important financial trends.",
-    type: "website",
-    url: "/data",
+      'Explore historical financial data for South Africa. View prime lending & repo rates, tax brackets, and other important financial trends.',
+    type: 'website',
+    url: '/data',
   },
 };
 
 const datasets = [
   {
-    title: "Prime & Repo Rates",
+    title: 'Prime & Repo Rates',
     description:
-      "Historical South African prime lending & repo rates from major banks. Track how interest rates have changed over the decades and understand their impact on loans and mortgages.",
-    href: "/data/prime-rates",
-    icon: "📈",
+      'Historical South African prime lending & repo rates from major banks. Track how interest rates have changed over the decades and understand their impact on loans and mortgages.',
+    href: '/data/prime-rates',
+    icon: '📈',
   },
   {
-    title: "Tax Brackets History",
+    title: 'Tax Brackets History',
     description:
-      "See how SARS income tax brackets and rates have evolved over time. Compare historical tax thresholds and understand how tax policy has changed.",
-    href: "/data/tax-brackets",
-    icon: "📊",
+      'See how SARS income tax brackets and rates have evolved over time. Compare historical tax thresholds and understand how tax policy has changed.',
+    href: '/data/tax-brackets',
+    icon: '📊',
   },
   // Add more datasets here in the future
 ];
 
 export default function DataPage() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-
   const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: "Historical Financial Data",
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Historical Financial Data',
     description:
-      "Historical financial data visualizations for South Africa including prime rates, tax brackets, and more.",
-    url: `${baseUrl}/data`,
-    inLanguage: "en-ZA",
+      'Historical financial data visualizations for South Africa including prime rates, tax brackets, and more.',
+    url: `${BASE_URL}/data`,
+    inLanguage: 'en-ZA',
   };
 
   const breadcrumbData = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
     itemListElement: [
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 1,
-        name: "Home",
-        item: baseUrl,
+        name: 'Home',
+        item: BASE_URL,
       },
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 2,
-        name: "Historical Data",
-        item: `${baseUrl}/data`,
+        name: 'Historical Data',
+        item: `${BASE_URL}/data`,
       },
     ],
   };

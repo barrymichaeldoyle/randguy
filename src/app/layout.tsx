@@ -1,47 +1,46 @@
-import { Analytics } from "@vercel/analytics/next";
-import type { Metadata } from "next";
-import Link from "next/link";
-import Image from "next/image";
-import { PropsWithChildren } from "react";
+import { Analytics } from '@vercel/analytics/next';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import Image from 'next/image';
+import { PropsWithChildren } from 'react';
 
-import "./globals.css";
-import { assistant, excali } from "../fonts";
-import { Button } from "@/components/Button";
+import './globals.css';
+import { assistant, excali } from '../fonts';
+import { Button } from '@/components/Button';
+import { BASE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000",
-  ),
+  metadataBase: new URL(BASE_URL),
   title: {
-    default: "Rand Guy | South African Personal Finance",
-    template: "%s | Rand Guy",
+    default: 'Rand Guy | South African Personal Finance',
+    template: '%s | Rand Guy',
   },
   description:
-    "Making Cents of SA Finance. Practical personal finance advice for everyday South Africans.",
+    'Making Cents of SA Finance. Practical personal finance advice for everyday South Africans.',
   keywords: [
-    "South African personal finance",
-    "investing in South Africa",
-    "TFSA",
-    "tax-free savings account",
-    "ETFs South Africa",
-    "wealth building",
+    'South African personal finance',
+    'investing in South Africa',
+    'TFSA',
+    'tax-free savings account',
+    'ETFs South Africa',
+    'wealth building',
   ],
-  authors: [{ name: "Rand Guy" }],
+  authors: [{ name: 'Rand Guy' }],
   openGraph: {
-    type: "website",
-    locale: "en_ZA",
-    siteName: "Rand Guy",
+    type: 'website',
+    locale: 'en_ZA',
+    siteName: 'Rand Guy',
   },
   twitter: {
-    card: "summary",
+    card: 'summary',
   },
   icons: {
     icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: '/favicon.ico' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
     ],
-    apple: "/apple-touch-icon.png",
+    apple: '/apple-touch-icon.png',
   },
 };
 

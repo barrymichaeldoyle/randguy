@@ -1,86 +1,85 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
-import { excali } from "@/fonts";
-import { Button } from "@/components/Button";
-import { CalculatorInfo } from "@/components/CalculatorInfo";
-import { Breadcrumb } from "@/components/Breadcrumb";
+import { excali } from '@/fonts';
+import { Button } from '@/components/Button';
+import { CalculatorInfo } from '@/components/CalculatorInfo';
+import { Breadcrumb } from '@/components/Breadcrumb';
 
-import LTVCalculator from "./_components/LTVCalculator";
+import LTVCalculator from './_components/LTVCalculator';
+import { BASE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: "Loan-to-Value (LTV) Calculator | South Africa",
+  title: 'Loan-to-Value (LTV) Calculator | South Africa',
   description:
-    "Calculate your Loan-to-Value (LTV) ratio for property purchases in South Africa. Free LTV calculator to understand your equity position and loan terms. Essential for home buyers.",
+    'Calculate your Loan-to-Value (LTV) ratio for property purchases in South Africa. Free LTV calculator to understand your equity position and loan terms. Essential for home buyers.',
   keywords: [
-    "LTV calculator",
-    "loan to value calculator",
-    "South Africa property",
-    "home loan LTV",
-    "property equity calculator",
-    "bond LTV",
-    "SA home loan",
-    "mortgage calculator",
+    'LTV calculator',
+    'loan to value calculator',
+    'South Africa property',
+    'home loan LTV',
+    'property equity calculator',
+    'bond LTV',
+    'SA home loan',
+    'mortgage calculator',
   ],
   alternates: {
-    canonical: "/calculators/ltv",
+    canonical: '/calculators/ltv',
   },
   openGraph: {
-    title: "Loan-to-Value (LTV) Calculator | South Africa",
+    title: 'Loan-to-Value (LTV) Calculator | South Africa',
     description:
-      "Calculate your Loan-to-Value (LTV) ratio for property purchases in South Africa. Understand your equity position and loan terms.",
-    type: "website",
-    url: "/calculators/ltv",
+      'Calculate your Loan-to-Value (LTV) ratio for property purchases in South Africa. Understand your equity position and loan terms.',
+    type: 'website',
+    url: '/calculators/ltv',
   },
 };
 
 export default function LTVCalculatorPage() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-
   const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "Loan-to-Value Calculator",
-    applicationCategory: "FinanceApplication",
-    operatingSystem: "Any",
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Loan-to-Value Calculator',
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Any',
     offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "ZAR",
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'ZAR',
     },
     description:
-      "Calculate your Loan-to-Value (LTV) ratio for property purchases in South Africa. Free calculator to understand your equity position.",
+      'Calculate your Loan-to-Value (LTV) ratio for property purchases in South Africa. Free calculator to understand your equity position.',
     featureList: [
-      "LTV percentage calculation",
-      "Equity position calculation",
-      "Visual breakdown of loan vs equity",
-      "Flexible input (deposit or loan amount)",
-      "South African property context",
-      "Interest rate guidance by LTV level",
+      'LTV percentage calculation',
+      'Equity position calculation',
+      'Visual breakdown of loan vs equity',
+      'Flexible input (deposit or loan amount)',
+      'South African property context',
+      'Interest rate guidance by LTV level',
     ],
-    inLanguage: "en-ZA",
-    url: `${baseUrl}/calculators/ltv`,
+    inLanguage: 'en-ZA',
+    url: `${BASE_URL}/calculators/ltv`,
   };
 
   const breadcrumbData = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
     itemListElement: [
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 1,
-        name: "Home",
-        item: baseUrl,
+        name: 'Home',
+        item: BASE_URL,
       },
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 2,
-        name: "Calculators",
-        item: `${baseUrl}/calculators`,
+        name: 'Calculators',
+        item: `${BASE_URL}/calculators`,
       },
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 3,
-        name: "LTV Calculator",
+        name: 'LTV Calculator',
         item: `${baseUrl}/calculators/ltv`,
       },
     ],
@@ -99,9 +98,9 @@ export default function LTVCalculatorPage() {
       <div className="max-w-7xl w-full">
         <Breadcrumb
           items={[
-            { name: "Home", href: "/" },
-            { name: "Calculators", href: "/calculators" },
-            { name: "LTV Calculator" },
+            { name: 'Home', href: '/' },
+            { name: 'Calculators', href: '/calculators' },
+            { name: 'LTV Calculator' },
           ]}
         />
 
@@ -144,7 +143,7 @@ export default function LTVCalculatorPage() {
               rates and terms from SA banks
             </>,
             <>
-              • A larger deposit (lower LTV) gives you more{" "}
+              • A larger deposit (lower LTV) gives you more{' '}
               <strong>negotiating power</strong> with banks
             </>,
             <>

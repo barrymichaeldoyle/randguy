@@ -1,8 +1,9 @@
-import { notFound } from "next/navigation";
+import { notFound } from 'next/navigation';
 
-import { excali } from "@/fonts";
-import { getAllPosts } from "@/lib/posts";
-import { Breadcrumb } from "@/components/Breadcrumb";
+import { excali } from '@/fonts';
+import { getAllPosts } from '@/lib/posts';
+import { Breadcrumb } from '@/components/Breadcrumb';
+import { BASE_URL } from '@/lib/constants';
 
 interface BlogPostMetadata {
   title: string;
@@ -40,7 +41,7 @@ export async function generateMetadata({
 
   if (!post) {
     return {
-      title: "Post Not Found",
+      title: 'Post Not Found',
     };
   }
 
@@ -50,12 +51,12 @@ export async function generateMetadata({
     openGraph: {
       title: post.metadata.title,
       description: post.metadata.description,
-      type: "article",
+      type: 'article',
       publishedTime: post.metadata.date,
-      authors: ["Rand Guy"],
+      authors: ['Rand Guy'],
     },
     twitter: {
-      card: "summary_large_image",
+      card: 'summary_large_image',
       title: post.metadata.title,
       description: post.metadata.description,
     },
@@ -75,42 +76,41 @@ export default async function BlogPost({
   }
 
   const Content = post.content;
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
   // Structured data for SEO
   const blogPostData = {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
     headline: post.metadata.title,
     description: post.metadata.description,
     datePublished: post.metadata.date,
     author: {
-      "@type": "Person",
-      name: "Rand Guy",
+      '@type': 'Person',
+      name: 'Rand Guy',
     },
   };
 
   const breadcrumbData = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
     itemListElement: [
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 1,
-        name: "Home",
-        item: baseUrl,
+        name: 'Home',
+        item: BASE_URL,
       },
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 2,
-        name: "Blog",
-        item: `${baseUrl}/blog`,
+        name: 'Blog',
+        item: `${BASE_URL}/blog`,
       },
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 3,
         name: post.metadata.title,
-        item: `${baseUrl}/blog/${slug}`,
+        item: `${BASE_URL}/blog/${slug}`,
       },
     ],
   };
@@ -129,8 +129,8 @@ export default async function BlogPost({
         <article className="max-w-3xl w-full">
           <Breadcrumb
             items={[
-              { name: "Home", href: "/" },
-              { name: "Blog", href: "/blog" },
+              { name: 'Home', href: '/' },
+              { name: 'Blog', href: '/blog' },
               { name: post.metadata.title },
             ]}
           />
@@ -142,10 +142,10 @@ export default async function BlogPost({
               {post.metadata.title}
             </h1>
             <time className="text-gray-600">
-              {new Date(post.metadata.date).toLocaleDateString("en-ZA", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
+              {new Date(post.metadata.date).toLocaleDateString('en-ZA', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
               })}
             </time>
           </header>

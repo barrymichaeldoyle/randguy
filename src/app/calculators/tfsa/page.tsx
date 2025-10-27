@@ -1,87 +1,86 @@
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
-import { excali } from "@/fonts";
-import { Button } from "@/components/Button";
-import { CalculatorInfo } from "@/components/CalculatorInfo";
-import { Breadcrumb } from "@/components/Breadcrumb";
+import { excali } from '@/fonts';
+import { Button } from '@/components/Button';
+import { CalculatorInfo } from '@/components/CalculatorInfo';
+import { Breadcrumb } from '@/components/Breadcrumb';
 
-import TFSACalculator from "./_components/TFSACalculator";
+import TFSACalculator from './_components/TFSACalculator';
+import { BASE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: "TFSA Calculator | South Africa",
+  title: 'TFSA Calculator | South Africa',
   description:
-    "Calculate how long it will take to max out your Tax-Free Savings Account (TFSA) in South Africa. Free TFSA calculator with contribution tracking, timeline projections, and progress visualization.",
+    'Calculate how long it will take to max out your Tax-Free Savings Account (TFSA) in South Africa. Free TFSA calculator with contribution tracking, timeline projections, and progress visualization.',
   keywords: [
-    "TFSA calculator",
-    "tax-free savings account",
-    "South Africa TFSA",
-    "TFSA contribution calculator",
-    "TFSA timeline",
-    "tax-free investment",
-    "SA savings calculator",
-    "TFSA limit calculator",
+    'TFSA calculator',
+    'tax-free savings account',
+    'South Africa TFSA',
+    'TFSA contribution calculator',
+    'TFSA timeline',
+    'tax-free investment',
+    'SA savings calculator',
+    'TFSA limit calculator',
   ],
   alternates: {
-    canonical: "/calculators/tfsa",
+    canonical: '/calculators/tfsa',
   },
   openGraph: {
-    title: "TFSA Calculator | South Africa",
+    title: 'TFSA Calculator | South Africa',
     description:
-      "Calculate how long it will take to max out your Tax-Free Savings Account (TFSA) in South Africa. Free TFSA calculator with contribution tracking and timeline projections.",
-    type: "website",
-    url: "/calculators/tfsa",
+      'Calculate how long it will take to max out your Tax-Free Savings Account (TFSA) in South Africa. Free TFSA calculator with contribution tracking and timeline projections.',
+    type: 'website',
+    url: '/calculators/tfsa',
   },
 };
 
 export default function TFSACalculatorPage() {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-
   const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    name: "TFSA Calculator",
-    applicationCategory: "FinanceApplication",
-    operatingSystem: "Any",
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'TFSA Calculator',
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Any',
     offers: {
-      "@type": "Offer",
-      price: "0",
-      priceCurrency: "ZAR",
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'ZAR',
     },
     description:
-      "Calculate how long it will take to max out your Tax-Free Savings Account (TFSA) in South Africa. Free TFSA calculator with contribution tracking, timeline projections, and progress visualization.",
+      'Calculate how long it will take to max out your Tax-Free Savings Account (TFSA) in South Africa. Free TFSA calculator with contribution tracking, timeline projections, and progress visualization.',
     featureList: [
-      "TFSA contribution timeline calculation",
-      "Progress tracking visualization",
-      "Lifetime limit: R500,000",
-      "Annual limit checking: R36,000",
-      "Projected max-out date",
-      "Monthly and annual contribution planning",
+      'TFSA contribution timeline calculation',
+      'Progress tracking visualization',
+      'Lifetime limit: R500,000',
+      'Annual limit checking: R36,000',
+      'Projected max-out date',
+      'Monthly and annual contribution planning',
     ],
-    inLanguage: "en-ZA",
-    url: `${baseUrl}/calculators/tfsa`,
+    inLanguage: 'en-ZA',
+    url: `${BASE_URL}/calculators/tfsa`,
   };
 
   const breadcrumbData = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
     itemListElement: [
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 1,
-        name: "Home",
-        item: baseUrl,
+        name: 'Home',
+        item: BASE_URL,
       },
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 2,
-        name: "Calculators",
-        item: `${baseUrl}/calculators`,
+        name: 'Calculators',
+        item: `${BASE_URL}/calculators`,
       },
       {
-        "@type": "ListItem",
+        '@type': 'ListItem',
         position: 3,
-        name: "TFSA Calculator",
-        item: `${baseUrl}/calculators/tfsa`,
+        name: 'TFSA Calculator',
+        item: `${BASE_URL}/calculators/tfsa`,
       },
     ],
   };
@@ -99,9 +98,9 @@ export default function TFSACalculatorPage() {
       <div className="max-w-7xl w-full">
         <Breadcrumb
           items={[
-            { name: "Home", href: "/" },
-            { name: "Calculators", href: "/calculators" },
-            { name: "TFSA Calculator" },
+            { name: 'Home', href: '/' },
+            { name: 'Calculators', href: '/calculators' },
+            { name: 'TFSA Calculator' },
           ]}
         />
 

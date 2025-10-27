@@ -5,6 +5,7 @@ import { Metadata } from 'next';
 import { excali } from '@/fonts';
 import { Button } from '@/components/Button';
 import { getAllPosts } from '@/lib/posts';
+import { BASE_URL } from '@/lib/constants';
 
 export const metadata: Metadata = {
   title: 'Rand Guy | South African Personal Finance & Investment Guide',
@@ -42,7 +43,6 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const posts = await getAllPosts();
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
   const websiteSchema = {
     '@context': 'https://schema.org',
@@ -50,13 +50,13 @@ export default async function Home() {
     name: 'Rand Guy',
     description:
       'South African personal finance and investment guide. Learn about investing, TFSAs, ETFs, and building wealth.',
-    url: baseUrl,
+    url: BASE_URL,
     inLanguage: 'en-ZA',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: `${baseUrl}/blog?q={search_term_string}`,
+        urlTemplate: `${BASE_URL}/blog?q={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },
