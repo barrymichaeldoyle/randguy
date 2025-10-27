@@ -59,6 +59,25 @@ export const metadata: Metadata = {
   },
 };
 
+const footerLinks = {
+  calculators: [
+    { href: '/calculators/income-tax', label: 'Income Tax Calculator' },
+    { href: '/calculators/home-loan', label: 'Home Loan Calculator' },
+    { href: '/calculators/ltv', label: 'Loan-to-Value Calculator' },
+    { href: '/calculators/tfsa', label: 'TFSA Calculator' },
+    { href: '/calculators/interest', label: 'Interest Calculator' },
+  ],
+  data: [
+    { href: '/data/prime-rates', label: 'Prime Rates' },
+    { href: '/data/tax-brackets', label: 'Tax Brackets' },
+  ],
+  resources: [
+    { href: '/blog', label: 'Blog' },
+    { href: '/calculators', label: 'All Calculators' },
+    { href: '/data', label: 'All Data' },
+  ],
+};
+
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
   return (
     <html lang="en">
@@ -103,46 +122,16 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
                   Calculators
                 </h3>
                 <ul className="space-y-2 text-sm">
-                  <li>
-                    <Link
-                      href="/calculators/income-tax"
-                      className="text-gray-600 hover:text-yellow-600 transition-colors"
-                    >
-                      Income Tax Calculator
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/calculators/home-loan"
-                      className="text-gray-600 hover:text-yellow-600 transition-colors"
-                    >
-                      Home Loan Calculator
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/calculators/ltv"
-                      className="text-gray-600 hover:text-yellow-600 transition-colors"
-                    >
-                      Loan-to-Value Calculator
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/calculators/tfsa"
-                      className="text-gray-600 hover:text-yellow-600 transition-colors"
-                    >
-                      TFSA Calculator
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/calculators/interest"
-                      className="text-gray-600 hover:text-yellow-600 transition-colors"
-                    >
-                      Interest Calculator
-                    </Link>
-                  </li>
+                  {footerLinks.calculators.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="text-gray-700 hover:text-yellow-600 transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
@@ -152,22 +141,16 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
                   Historical Data
                 </h3>
                 <ul className="space-y-2 text-sm">
-                  <li>
-                    <Link
-                      href="/data/prime-rates"
-                      className="text-gray-600 hover:text-yellow-600 transition-colors"
-                    >
-                      Prime Rates
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/data/tax-brackets"
-                      className="text-gray-600 hover:text-yellow-600 transition-colors"
-                    >
-                      Tax Brackets
-                    </Link>
-                  </li>
+                  {footerLinks.data.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="text-gray-700 hover:text-yellow-600 transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
@@ -177,30 +160,16 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
                   Resources
                 </h3>
                 <ul className="space-y-2 text-sm">
-                  <li>
-                    <Link
-                      href="/blog"
-                      className="text-gray-600 hover:text-yellow-600 transition-colors"
-                    >
-                      Blog
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/calculators"
-                      className="text-gray-600 hover:text-yellow-600 transition-colors"
-                    >
-                      All Calculators
-                    </Link>
-                  </li>
-                  <li>
-                    <Link
-                      href="/data"
-                      className="text-gray-600 hover:text-yellow-600 transition-colors"
-                    >
-                      All Data
-                    </Link>
-                  </li>
+                  {footerLinks.resources.map((link) => (
+                    <li key={link.href}>
+                      <Link
+                        href={link.href}
+                        className="text-gray-700 hover:text-yellow-600 transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
@@ -211,7 +180,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
                   href="https://x.com/RandGuyZA"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-gray-600 hover:text-yellow-600 transition-colors"
+                  className="inline-flex items-center gap-2 text-gray-700 hover:text-yellow-600 transition-colors"
                   aria-label="Follow Rand Guy on X (Twitter)"
                 >
                   <svg
@@ -225,7 +194,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
                   Follow @RandGuyZA
                 </a>
               </div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-700">
                 © {new Date().getFullYear()} Rand Guy. Making Cents of SA
                 Finance.
               </div>

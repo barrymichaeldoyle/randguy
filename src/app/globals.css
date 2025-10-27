@@ -1,11 +1,11 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
   --default-font-family:
     var(--font-assistant), ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 @theme inline {
@@ -37,20 +37,25 @@ body {
 
 /* Global link styles with yellow theme */
 /* Exclude links that are styled as buttons or navigation elements */
-a:not([class*="rounded"]):not([class*="bg-"]):not([class*="flex"]):not(
+a:not([class*='rounded']):not([class*='bg-']):not([class*='flex']):not(
     header a
   ) {
   color: #ca8a04; /* yellow-600 */
   transition: color 0.2s ease;
 }
 
-a:not([class*="rounded"]):not([class*="bg-"]):not([class*="flex"]):not(
+a:not([class*='rounded']):not([class*='bg-']):not([class*='flex']):not(
     header a
   ):hover {
   color: #a16207; /* yellow-700 */
 }
 
+/* Footer links - override with accessible contrast and font weight */
+footer a {
+  font-weight: 500;
+}
+
 /* Links within blog content */
-article a:not([class*="rounded"]):not([class*="bg-"]) {
+article a:not([class*='rounded']):not([class*='bg-']) {
   font-weight: 500;
 }
