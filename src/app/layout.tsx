@@ -51,7 +51,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
       <body
         className={`${excali.variable} ${assistant.variable} ${assistant.className} antialiased min-h-screen flex flex-col`}
       >
-        <header className="flex items-center justify-between px-4 py-2 border-b border-gray-200">
+        <header className="sticky top-0 z-50 bg-white flex items-center justify-between px-4 py-2 border-b border-gray-200">
           <Link href="/" className="flex items-center gap-2">
             <Image
               src="/RandGuyLogo.png"
