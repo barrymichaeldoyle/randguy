@@ -1,4 +1,6 @@
 import { ImageResponse } from 'next/og';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 import { PRIME_LENDING_RATE_ZA } from '@/lib/historical-data';
 import { ogStyles, ogConfig } from '@/lib/og-image-utils';
 
@@ -14,15 +16,28 @@ export default async function Image() {
   const maxRate = Math.max(...rates);
   const minRate = Math.min(...rates);
 
-  // Note: Custom Excalifont has advanced OpenType features not supported by Satori yet
-  // Using system cursive fonts as fallback for similar handwritten feel
+  // Load the logo image and convert to base64
+  const logoPath = join(process.cwd(), 'public', 'PrimeAndRepoRates.png');
+  const logoBuffer = readFileSync(logoPath);
+  const logoBase64 = logoBuffer.toString('base64');
+  const logoSrc = `data:image/png;base64,${logoBase64}`;
 
   return new ImageResponse(
     (
       <div style={ogStyles.container}>
-        {/* Title */}
-        <div style={ogStyles.title}>Prime & Repo Rates</div>
-        <div style={ogStyles.subtitle}>
+        {/* Logo with text */}
+        <img
+          src={logoSrc}
+          alt="Prime & Repo Rates"
+          width={400}
+          style={{
+            marginTop: -60,
+            marginBottom: -20,
+            display: 'flex',
+          }}
+        />
+
+        <div style={{ ...ogStyles.subtitle, fontSize: 20, marginBottom: 30 }}>
           Historical Data for South Africa (Since 2002)
         </div>
 
