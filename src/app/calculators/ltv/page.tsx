@@ -80,7 +80,7 @@ export default function LTVCalculatorPage() {
         '@type': 'ListItem',
         position: 3,
         name: 'LTV Calculator',
-        item: `${baseUrl}/calculators/ltv`,
+        item: `${BASE_URL}/calculators/ltv`,
       },
     ],
   };
