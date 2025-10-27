@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 
 import { excali } from '@/fonts';
 import { Button } from '@/components/Button';
+import { BlogPostCard } from '@/components/BlogPostCard';
 import { getAllPosts } from '@/lib/posts';
 import { BASE_URL } from '@/lib/constants';
 
@@ -10,17 +11,6 @@ export const metadata: Metadata = {
   title: 'Rand Guy | South African Personal Finance & Investment Guide',
   description:
     'Learn about personal finance, investing, TFSAs, ETFs, and building wealth in South Africa. Free financial calculators, tax guides, and investment advice for South Africans.',
-  keywords: [
-    'South African personal finance',
-    'investing in South Africa',
-    'TFSA',
-    'ETF investing',
-    'tax-free savings',
-    'wealth building',
-    'SARS tax',
-    'financial planning',
-    'SA investment guide',
-  ],
   alternates: {
     canonical: '/',
   },
@@ -260,29 +250,7 @@ export default async function Home() {
             </h2>
             <div className="flex flex-col gap-6 mb-8">
               {posts.map((post) => (
-                <article
-                  key={post.slug}
-                  className="border border-gray-200 rounded-lg p-8 hover:shadow-lg transition-all hover:border-yellow-400 flex flex-col"
-                >
-                  <h3
-                    className={`${excali.className} text-2xl font-bold mb-2 text-gray-900`}
-                  >
-                    {post.title}
-                  </h3>
-                  <time className="text-sm text-gray-500 block mb-4">
-                    {new Date(post.date).toLocaleDateString('en-ZA', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                  </time>
-                  <p className="text-gray-700 mb-6 leading-relaxed flex-grow">
-                    {post.description}
-                  </p>
-                  <div className="flex justify-end">
-                    <Button href={`/blog/${post.slug}`}>Read Article</Button>
-                  </div>
-                </article>
+                <BlogPostCard key={post.slug} post={post} />
               ))}
             </div>
             <div className="text-center">

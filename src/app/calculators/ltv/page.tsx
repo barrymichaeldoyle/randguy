@@ -12,16 +12,6 @@ export const metadata: Metadata = {
   title: 'Loan-to-Value (LTV) Calculator | South Africa',
   description:
     'Calculate your Loan-to-Value (LTV) ratio for property purchases in South Africa. Free LTV calculator to understand your equity position and loan terms. Essential for home buyers.',
-  keywords: [
-    'LTV calculator',
-    'loan to value calculator',
-    'South Africa property',
-    'home loan LTV',
-    'property equity calculator',
-    'bond LTV',
-    'SA home loan',
-    'mortgage calculator',
-  ],
   alternates: {
     canonical: '/calculators/ltv',
   },

@@ -1,4 +1,6 @@
 import { notFound } from 'next/navigation';
+import fs from 'fs';
+import path from 'path';
 
 import { excali } from '@/fonts';
 import { getAllPosts } from '@/lib/posts';
@@ -11,12 +13,35 @@ interface BlogPostMetadata {
   description: string;
 }
 
+// Calculate reading time (average reading speed: 200 words per minute)
+function calculateReadingTime(content: string): number {
+  const wordsPerMinute = 200;
+  // Remove MDX/JSX syntax, code blocks, and special characters for accurate word count
+  const text = content
+    .replace(/```[\s\S]*?```/g, '') // Remove code blocks
+    .replace(/<[^>]*>/g, '') // Remove HTML/JSX tags
+    .replace(/[#*_~`]/g, '') // Remove markdown formatting
+    .trim();
+
+  const words = text.split(/\s+/).filter((word) => word.length > 0).length;
+  const minutes = Math.ceil(words / wordsPerMinute);
+  return minutes;
+}
+
 async function getPost(slug: string) {
   try {
     const post = await import(`@/app/blog/posts/${slug}.mdx`);
+    const filePath = path.join(
+      process.cwd(),
+      'src/app/blog/posts',
+      `${slug}.mdx`
+    );
+    const fileContent = fs.readFileSync(filePath, 'utf-8');
+
     return {
       content: post.default,
       metadata: post.metadata as BlogPostMetadata,
+      readingTime: calculateReadingTime(fileContent),
     };
   } catch (_e) {
     return null;
@@ -150,13 +175,17 @@ export default async function BlogPost({
             >
               {post.metadata.title}
             </h1>
-            <time className="text-gray-600">
-              {new Date(post.metadata.date).toLocaleDateString('en-ZA', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </time>
+            <div className="flex items-center gap-3 text-gray-600">
+              <time>
+                {new Date(post.metadata.date).toLocaleDateString('en-ZA', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </time>
+              <span className="text-gray-300">•</span>
+              <span>{post.readingTime} min read</span>
+            </div>
           </header>
 
           <div className="prose prose-lg max-w-none">

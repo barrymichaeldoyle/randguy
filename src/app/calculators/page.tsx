@@ -10,15 +10,6 @@ export const metadata: Metadata = {
   title: 'Free Financial Calculators for South Africans',
   description:
     'Free online financial calculators for South Africans. Calculate income tax, SARS deductions, UIF, and more. Simple tools to help you make informed financial decisions.',
-  keywords: [
-    'financial calculators',
-    'South Africa',
-    'income tax calculator',
-    'SARS calculator',
-    'tax calculator',
-    'personal finance tools',
-    'free calculators',
-  ],
   alternates: {
     canonical: '/calculators',
   },

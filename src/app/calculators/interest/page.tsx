@@ -12,20 +12,6 @@ export const metadata: Metadata = {
   title: 'Interest Calculator | South Africa',
   description:
     'Calculate simple and compound interest gains across different time periods. Convert between annual, monthly, weekly, daily, and hourly interest rates. Free interest calculator with multiple compounding options for South African investments and loans.',
-  keywords: [
-    'interest calculator',
-    'simple interest',
-    'compound interest',
-    'South Africa interest',
-    'interest rate calculator',
-    'investment calculator',
-    'loan interest',
-    'annual interest',
-    'monthly interest',
-    'monthly compounding',
-    'quarterly compounding',
-    'interest breakdown',
-  ],
   alternates: {
     canonical: '/calculators/interest',
   },
@@ -53,59 +39,59 @@ export const metadata: Metadata = {
   },
 };
 
-export default function InterestCalculatorPage() {
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: 'Interest Calculator',
-    applicationCategory: 'FinanceApplication',
-    operatingSystem: 'Any',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'ZAR',
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Interest Calculator',
+  applicationCategory: 'FinanceApplication',
+  operatingSystem: 'Any',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'ZAR',
+  },
+  description:
+    'Calculate simple and compound interest gains across different time periods. Convert between annual, monthly, weekly, daily, and hourly interest rates. Free interest calculator with multiple compounding options for South African investments and loans.',
+  featureList: [
+    'Simple and compound interest calculation',
+    'Multiple compounding frequencies (monthly, quarterly, annually, etc.)',
+    'Multiple time period conversion',
+    'Annual, monthly, weekly, daily, and hourly breakdowns',
+    'Flexible rate input periods',
+    'Investment and loan planning',
+    'Effective annual rate display',
+    'Simple vs Compound comparison',
+  ],
+  inLanguage: 'en-ZA',
+  url: `${BASE_URL}/calculators/interest`,
+};
+
+const breadcrumbData = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: BASE_URL,
     },
-    description:
-      'Calculate simple and compound interest gains across different time periods. Convert between annual, monthly, weekly, daily, and hourly interest rates. Free interest calculator with multiple compounding options for South African investments and loans.',
-    featureList: [
-      'Simple and compound interest calculation',
-      'Multiple compounding frequencies (monthly, quarterly, annually, etc.)',
-      'Multiple time period conversion',
-      'Annual, monthly, weekly, daily, and hourly breakdowns',
-      'Flexible rate input periods',
-      'Investment and loan planning',
-      'Effective annual rate display',
-      'Simple vs Compound comparison',
-    ],
-    inLanguage: 'en-ZA',
-    url: `${BASE_URL}/calculators/interest`,
-  };
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Calculators',
+      item: `${BASE_URL}/calculators`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: 'Interest Calculator',
+      item: `${BASE_URL}/calculators/interest`,
+    },
+  ],
+};
 
-  const breadcrumbData = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: BASE_URL,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Calculators',
-        item: `${BASE_URL}/calculators`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: 'Interest Calculator',
-        item: `${BASE_URL}/calculators/interest`,
-      },
-    ],
-  };
-
+export default function InterestCalculatorPage() {
   return (
     <main className="flex flex-col items-center pt-8 md:pt-12 px-4 pb-8 md:px-8 flex-1">
       <script

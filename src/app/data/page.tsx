@@ -4,20 +4,12 @@ import Link from 'next/link';
 
 import { excali } from '@/fonts';
 import { BASE_URL } from '@/lib/constants';
+import { Button } from '@/components/Button';
 
 export const metadata: Metadata = {
   title: 'Historical Financial Data for South Africa',
   description:
     'Explore historical financial data for South Africa. View prime lending & repo rates, tax brackets, and other important financial trends over time.',
-  keywords: [
-    'historical data',
-    'South Africa',
-    'prime lending rate',
-    'tax brackets',
-    'SARS',
-    'financial history',
-    'interest rates',
-  ],
   alternates: {
     canonical: '/data',
   },
@@ -138,26 +130,29 @@ export default function DataPage() {
 
         <section className="grid gap-6 md:grid-cols-2">
           {datasets.map((dataset) => (
-            <Link key={dataset.href} href={dataset.href} className="group">
-              <article className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all cursor-pointer hover:border-yellow-400 h-full">
-                <div className="flex items-center gap-3">
-                  <div className="text-4xl mb-4" aria-hidden="true">
-                    {dataset.icon}
-                  </div>
-                  <h2
-                    className={`${excali.className} text-2xl font-bold mb-3 text-gray-900 group-hover:text-yellow-600 transition-colors`}
-                  >
-                    {dataset.title}
-                  </h2>
+            <article
+              key={dataset.href}
+              className="border border-gray-200 rounded-lg p-6 shadow-sm transition-shadow h-full flex flex-col text-center"
+            >
+              <div className="flex flex-col items-center mb-4">
+                <div className="text-5xl mb-3" aria-hidden="true">
+                  {dataset.icon}
                 </div>
-                <p className="text-gray-700 mb-4">{dataset.description}</p>
-                <span
-                  className={`${excali.className} text-gray-900 group-hover:text-yellow-600 font-medium transition-colors`}
+                <h2
+                  className={`${excali.className} text-2xl font-bold text-gray-900`}
                 >
+                  {dataset.title}
+                </h2>
+              </div>
+              <p className="text-gray-700 mb-6 flex-grow">
+                {dataset.description}
+              </p>
+              <div className="flex justify-center">
+                <Button href={dataset.href} variant="primary" size="md">
                   View Data →
-                </span>
-              </article>
-            </Link>
+                </Button>
+              </div>
+            </article>
           ))}
         </section>
 

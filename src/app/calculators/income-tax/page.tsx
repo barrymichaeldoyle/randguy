@@ -12,15 +12,6 @@ export const metadata: Metadata = {
   title: 'Income Tax Calculator | South Africa 2025/2026',
   description:
     'Calculate your South African income tax for 2025/2026. Free income tax calculator with UIF, age-based rebates, and year-over-year comparison. Get instant tax breakdowns.',
-  keywords: [
-    'income tax calculator',
-    'South Africa tax',
-    'SARS tax calculator',
-    '2025/2026 tax',
-    'UIF calculator',
-    'tax rebates',
-    'take-home pay calculator',
-  ],
   alternates: {
     canonical: '/calculators/income-tax',
   },
@@ -48,57 +39,57 @@ export const metadata: Metadata = {
   },
 };
 
-export default function IncomeTaxCalculatorPage() {
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: 'Income Tax Calculator',
-    applicationCategory: 'FinanceApplication',
-    operatingSystem: 'Any',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'ZAR',
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Income Tax Calculator',
+  applicationCategory: 'FinanceApplication',
+  operatingSystem: 'Any',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'ZAR',
+  },
+  description:
+    'Calculate your South African income tax for 2025/2026. Free income tax calculator with UIF, age-based rebates, and year-over-year comparison.',
+  featureList: [
+    'Income tax calculation for South Africa',
+    'UIF (Unemployment Insurance Fund) calculation',
+    'Age-based rebates (65+ and 75+)',
+    'Year-over-year tax comparison',
+    'Multiple pay frequency options (monthly, annual, bi-weekly, weekly)',
+    'Historical tax data from 2020/2021 to 2025/2026',
+  ],
+  inLanguage: 'en-ZA',
+  url: `${BASE_URL}/calculators/income-tax`,
+};
+
+const breadcrumbData = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: BASE_URL,
     },
-    description:
-      'Calculate your South African income tax for 2025/2026. Free income tax calculator with UIF, age-based rebates, and year-over-year comparison.',
-    featureList: [
-      'Income tax calculation for South Africa',
-      'UIF (Unemployment Insurance Fund) calculation',
-      'Age-based rebates (65+ and 75+)',
-      'Year-over-year tax comparison',
-      'Multiple pay frequency options (monthly, annual, bi-weekly, weekly)',
-      'Historical tax data from 2020/2021 to 2025/2026',
-    ],
-    inLanguage: 'en-ZA',
-    url: `${BASE_URL}/calculators/income-tax`,
-  };
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Calculators',
+      item: `${BASE_URL}/calculators`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: 'Income Tax Calculator',
+      item: `${BASE_URL}/calculators/income-tax`,
+    },
+  ],
+};
 
-  const breadcrumbData = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: BASE_URL,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Calculators',
-        item: `${BASE_URL}/calculators`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: 'Income Tax Calculator',
-        item: `${BASE_URL}/calculators/income-tax`,
-      },
-    ],
-  };
-
+export default function IncomeTaxCalculatorPage() {
   return (
     <main className="flex flex-col items-center pt-8 md:pt-12 px-4 pb-8 md:px-8 flex-1">
       <script

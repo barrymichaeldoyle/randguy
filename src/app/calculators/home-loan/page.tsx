@@ -7,6 +7,7 @@ import { Breadcrumb } from '@/components/Breadcrumb';
 import {
   PRIME_LENDING_RATE_ZA,
   PRIME_LENDING_RATE_LAST_UPDATED,
+  CURRENT_PRIME_LENDING_RATE,
 } from '@/lib/historical-data';
 
 import HomeLoanCalculator from './_components/HomeLoanCalculator';
@@ -16,16 +17,6 @@ export const metadata: Metadata = {
   title: 'Home Loan Calculator | South Africa',
   description:
     'Calculate your home loan repayments in South Africa. Free bond calculator with monthly payments, total interest, and loan breakdown. Plan your property purchase with accurate repayment estimates.',
-  keywords: [
-    'home loan calculator',
-    'bond calculator',
-    'South Africa mortgage',
-    'home loan repayment',
-    'bond repayment calculator',
-    'property loan calculator',
-    'SA home loan',
-    'mortgage calculator',
-  ],
   alternates: {
     canonical: '/calculators/home-loan',
   },
@@ -53,9 +44,58 @@ export const metadata: Metadata = {
   },
 };
 
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Home Loan Calculator',
+  applicationCategory: 'FinanceApplication',
+  operatingSystem: 'Any',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'ZAR',
+  },
+  description:
+    'Calculate your home loan repayments in South Africa. Free bond calculator with monthly payments, total interest, and loan breakdown.',
+  featureList: [
+    'Monthly repayment calculation',
+    'Total interest calculation',
+    'Loan term flexibility (1-100 years or months)',
+    'Deposit percentage calculator',
+    'Configurable monthly service fee',
+    'Visual cost breakdown',
+    'South African bond calculator',
+  ],
+  inLanguage: 'en-ZA',
+  url: `${BASE_URL}/calculators/home-loan`,
+};
+
+const breadcrumbData = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: BASE_URL,
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Calculators',
+      item: `${BASE_URL}/calculators`,
+    },
+    {
+      '@type': 'ListItem',
+      position: 3,
+      name: 'Home Loan Calculator',
+      item: `${BASE_URL}/calculators/home-loan`,
+    },
+  ],
+};
+
 export default function HomeLoanCalculatorPage() {
-  // Get current prime rate (first item in the array since it's reverse chronological)
-  const currentPrimeRate = PRIME_LENDING_RATE_ZA[0].rate;
   const lastUpdated = new Date(
     PRIME_LENDING_RATE_LAST_UPDATED
   ).toLocaleDateString('en-ZA', {
@@ -63,57 +103,6 @@ export default function HomeLoanCalculatorPage() {
     month: 'short',
     day: 'numeric',
   });
-
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: 'Home Loan Calculator',
-    applicationCategory: 'FinanceApplication',
-    operatingSystem: 'Any',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'ZAR',
-    },
-    description:
-      'Calculate your home loan repayments in South Africa. Free bond calculator with monthly payments, total interest, and loan breakdown.',
-    featureList: [
-      'Monthly repayment calculation',
-      'Total interest calculation',
-      'Loan term flexibility (1-100 years or months)',
-      'Deposit percentage calculator',
-      'Configurable monthly service fee',
-      'Visual cost breakdown',
-      'South African bond calculator',
-    ],
-    inLanguage: 'en-ZA',
-    url: `${BASE_URL}/calculators/home-loan`,
-  };
-
-  const breadcrumbData = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: BASE_URL,
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Calculators',
-        item: `${BASE_URL}/calculators`,
-      },
-      {
-        '@type': 'ListItem',
-        position: 3,
-        name: 'Home Loan Calculator',
-        item: `${BASE_URL}/calculators/home-loan`,
-      },
-    ],
-  };
 
   return (
     <main className="flex flex-col items-center pt-8 md:pt-12 px-4 pb-8 md:px-8 flex-1">
@@ -157,8 +146,8 @@ export default function HomeLoanCalculatorPage() {
               South African banks
             </>,
             <>
-              • Current <strong>SA prime rate</strong> is {currentPrimeRate}%
-              (as of {lastUpdated}).{' '}
+              • Current <strong>SA prime rate</strong> is{' '}
+              {CURRENT_PRIME_LENDING_RATE}% (as of {lastUpdated}).{' '}
               <a
                 href="/data/prime-rates"
                 className="text-yellow-600 hover:underline font-semibold"

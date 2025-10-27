@@ -1,9 +1,8 @@
-import Link from 'next/link';
 import { Metadata } from 'next';
 
 import { getAllPosts } from '@/lib/posts';
 import { Breadcrumb } from '@/components/Breadcrumb';
-import { Button } from '@/components/Button';
+import { BlogPostCard } from '@/components/BlogPostCard';
 
 import { excali } from '../../fonts';
 
@@ -55,29 +54,7 @@ export default async function BlogPage() {
       <div className="max-w-3xl w-full px-8 pb-8">
         <div className="flex flex-col gap-4">
           {posts.map((post) => (
-            <article
-              key={post.slug}
-              className="border border-gray-200 rounded-lg p-6 shadow-sm transition-shadow"
-            >
-              <h2
-                className={`${excali.className} text-2xl font-bold mb-2 text-gray-900`}
-              >
-                {post.title}
-              </h2>
-              <time className="text-sm text-gray-500 block mb-3">
-                {new Date(post.date).toLocaleDateString('en-ZA', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </time>
-              <p className="text-gray-700 mb-4">{post.description}</p>
-              <div className="flex justify-end">
-                <Button href={`/blog/${post.slug}`} variant="primary" size="md">
-                  Read Article →
-                </Button>
-              </div>
-            </article>
+            <BlogPostCard key={post.slug} post={post} />
           ))}
         </div>
       </div>

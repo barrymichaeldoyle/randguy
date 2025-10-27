@@ -18,14 +18,6 @@ export const metadata: Metadata = {
   },
   description:
     'Making Cents of SA Finance. Practical personal finance advice for everyday South Africans.',
-  keywords: [
-    'South African personal finance',
-    'investing in South Africa',
-    'TFSA',
-    'tax-free savings account',
-    'ETFs South Africa',
-    'wealth building',
-  ],
   authors: [{ name: 'Rand Guy' }],
   openGraph: {
     type: 'website',
@@ -178,7 +170,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
             </div>
           </div>
         </footer>
-        <Analytics />
+        <Analytics mode="auto" />
         <SpeedInsights />
       </body>
     </html>

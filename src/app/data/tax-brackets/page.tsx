@@ -11,16 +11,6 @@ export const metadata: Metadata = {
   title: 'Historical Tax Brackets & Rates - South Africa',
   description:
     "Explore South Africa's income tax brackets from 2015 to present. See how SARS tax rates, thresholds, and rebates have evolved over time.",
-  keywords: [
-    'tax brackets',
-    'SARS',
-    'income tax',
-    'South Africa',
-    'tax rates',
-    'historical data',
-    'tax rebates',
-    'marginal tax rate',
-  ],
   alternates: {
     canonical: '/data/tax-brackets',
   },
@@ -178,24 +168,31 @@ export default function TaxBracketsPage() {
 
           <div className="bg-purple-50 border border-purple-200 rounded-lg p-6">
             <h3 className={`${excali.className} text-xl mb-3`}>
-              Tax Threshold for 2025/2026
+              Tax-Free Thresholds for 2025/2026
             </h3>
-            <div className="text-gray-700 text-sm space-y-2">
+            <div className="text-gray-700 text-sm space-y-3">
               <p>
                 Thanks to rebates, you don&apos;t pay tax until your annual
-                income exceeds:
+                income exceeds these amounts:
               </p>
-              <ul className="space-y-1 ml-4">
-                <li>
-                  <strong>Under 65:</strong> R106,084
-                </li>
-                <li>
-                  <strong>65-74:</strong> R164,530
-                </li>
-                <li>
-                  <strong>75+:</strong> R183,986
-                </li>
-              </ul>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center bg-white rounded px-3 py-2">
+                  <span className="font-medium">Under 65:</span>
+                  <span className="font-bold text-gray-900">R106,084/year</span>
+                </div>
+                <div className="flex justify-between items-center bg-white rounded px-3 py-2">
+                  <span className="font-medium">Age 65-74:</span>
+                  <span className="font-bold text-gray-900">R164,530/year</span>
+                </div>
+                <div className="flex justify-between items-center bg-white rounded px-3 py-2">
+                  <span className="font-medium">Age 75+:</span>
+                  <span className="font-bold text-gray-900">R183,986/year</span>
+                </div>
+              </div>
+              <p className="text-xs text-gray-600 italic mt-2">
+                These are income thresholds, not rebate amounts. See rebates in
+                the table above.
+              </p>
             </div>
           </div>
         </div>

@@ -12,16 +12,6 @@ export const metadata: Metadata = {
   title: 'TFSA Calculator | South Africa',
   description:
     'Calculate how long it will take to max out your Tax-Free Savings Account (TFSA) in South Africa. Free TFSA calculator with contribution tracking, timeline projections, and progress visualization.',
-  keywords: [
-    'TFSA calculator',
-    'tax-free savings account',
-    'South Africa TFSA',
-    'TFSA contribution calculator',
-    'TFSA timeline',
-    'tax-free investment',
-    'SA savings calculator',
-    'TFSA limit calculator',
-  ],
   alternates: {
     canonical: '/calculators/tfsa',
   },
