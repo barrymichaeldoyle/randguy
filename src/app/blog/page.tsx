@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 
 import { getAllPosts } from '@/lib/posts';
 import { Breadcrumb } from '@/components/Breadcrumb';
+import { Button } from '@/components/Button';
 
 import { excali } from '../../fonts';
 
@@ -37,41 +38,46 @@ export default async function BlogPage() {
   const posts = await getAllPosts();
 
   return (
-    <main className="flex flex-col items-center p-8 flex-1">
-      <div className="max-w-3xl w-full">
-        <Breadcrumb items={[{ name: 'Home', href: '/' }, { name: 'Blog' }]} />
+    <main className="flex flex-col items-center flex-1">
+      <div className="w-full bg-gray-50 py-8 px-8 mb-8">
+        <div className="max-w-3xl mx-auto">
+          <Breadcrumb items={[{ name: 'Home', href: '/' }, { name: 'Blog' }]} />
 
-        <h1 className={`${excali.className} text-5xl mb-4 text-center`}>
-          Rand Guy&apos;s Blog
-        </h1>
-        <p className="text-lg text-gray-600 mb-12 text-center">
-          A random South African guy talking about personal finance.
-        </p>
+          <h1 className={`${excali.className} text-5xl mb-4 text-center mt-8`}>
+            Rand Guy&apos;s Blog
+          </h1>
+          <p className="text-lg text-gray-600 text-center">
+            A random South African guy talking about personal finance.
+          </p>
+        </div>
+      </div>
 
+      <div className="max-w-3xl w-full px-8 pb-8">
         <div className="flex flex-col gap-4">
           {posts.map((post) => (
-            <Link key={post.slug} href={`/blog/${post.slug}`}>
-              <article className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all group cursor-pointer hover:border-yellow-400">
-                <h2
-                  className={`${excali.className} text-2xl font-bold mb-2 text-gray-900 group-hover:text-yellow-600 transition-colors`}
-                >
-                  {post.title}
-                </h2>
-                <time className="text-sm text-gray-500 block mb-3">
-                  {new Date(post.date).toLocaleDateString('en-ZA', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </time>
-                <p className="text-gray-700 mb-4">{post.description}</p>
-                <span
-                  className={`${excali.className} text-gray-900 group-hover:text-yellow-600 font-medium transition-colors`}
-                >
-                  Read more →
-                </span>
-              </article>
-            </Link>
+            <article
+              key={post.slug}
+              className="border border-gray-200 rounded-lg p-6 shadow-sm transition-shadow"
+            >
+              <h2
+                className={`${excali.className} text-2xl font-bold mb-2 text-gray-900`}
+              >
+                {post.title}
+              </h2>
+              <time className="text-sm text-gray-500 block mb-3">
+                {new Date(post.date).toLocaleDateString('en-ZA', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </time>
+              <p className="text-gray-700 mb-4">{post.description}</p>
+              <div className="flex justify-end">
+                <Button href={`/blog/${post.slug}`} variant="primary" size="md">
+                  Read Article →
+                </Button>
+              </div>
+            </article>
           ))}
         </div>
       </div>

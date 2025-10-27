@@ -40,27 +40,13 @@ body {
 a:not([class*='rounded']):not([class*='bg-']):not([class*='flex']):not(
     header a
   ) {
-  color: #ca8a04; /* yellow-600 */
+  color: #713f12; /* yellow-900 - dark for good contrast */
+  font-weight: 600;
   transition: color 0.2s ease;
 }
 
 a:not([class*='rounded']):not([class*='bg-']):not([class*='flex']):not(
     header a
   ):hover {
-  color: #a16207; /* yellow-700 */
-}
-
-/* Footer links - override with accessible contrast and font weight */
-footer a {
-  color: #854d0e; /* yellow-800 - darker for better contrast on grey */
-  font-weight: 600;
-}
-
-footer a:hover {
-  color: #713f12; /* yellow-900 */
-}
-
-/* Links within blog content */
-article a:not([class*='rounded']):not([class*='bg-']) {
-  font-weight: 500;
+  color: #a16207; /* yellow-700 - lighter and brighter on hover */
 }

@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { useRef, useEffect, Fragment } from "react";
-import { excali } from "@/fonts";
-import { Button } from "@/components/Button";
-import { NumericInput } from "@/components/NumericInput";
-import { FormField } from "@/components/FormField";
-import { Select } from "@/components/Select";
-import { formatCurrency } from "@/lib/calculator-utils";
-import { PRIME_LENDING_RATE_ZA } from "@/lib/historical-data";
+import { useRef, useEffect, Fragment } from 'react';
+import { excali } from '@/fonts';
+import { Button } from '@/components/Button';
+import { NumericInput } from '@/components/NumericInput';
+import { FormField } from '@/components/FormField';
+import { Select } from '@/components/Select';
+import { formatCurrency } from '@/lib/calculator-utils';
+import { PRIME_LENDING_RATE_ZA } from '@/lib/historical-data';
 
-import { useHomeLoanStore } from "./home-loan-store";
+import { useHomeLoanStore } from './home-loan-store';
 
 function calculateHomeLoan(
   loanAmount: number,
   annualRate: number,
-  years: number,
+  years: number
 ): {
   monthlyPayment: number;
   totalPayment: number;
@@ -44,7 +44,7 @@ function calculateHomeLoan(
   };
 }
 
-type TermUnit = "years" | "months";
+type TermUnit = 'years' | 'months';
 
 export default function HomeLoanCalculator() {
   const {
@@ -71,21 +71,21 @@ export default function HomeLoanCalculator() {
 
   // Store the last entered value for each unit to avoid losing precision
   const termByUnit = useRef<Record<TermUnit, string>>({
-    years: "",
-    months: "",
+    years: '',
+    months: '',
   });
   const previousUnit = useRef<TermUnit>(termUnit);
 
   // Convert term between years and months
   const convertTerm = (value: string, from: TermUnit, to: TermUnit): string => {
-    if (!value || value === "") return "";
+    if (!value || value === '') return '';
     const numValue = parseFloat(value);
-    if (isNaN(numValue)) return "";
+    if (isNaN(numValue)) return '';
 
-    if (from === "years" && to === "months") {
+    if (from === 'years' && to === 'months') {
       // Years to months: multiply by 12, no decimals for months
       return Math.round(numValue * 12).toString();
-    } else if (from === "months" && to === "years") {
+    } else if (from === 'months' && to === 'years') {
       // Months to years: divide by 12, round to 1 decimal
       const years = numValue / 12;
       const rounded = parseFloat(years.toFixed(1));
@@ -100,8 +100,8 @@ export default function HomeLoanCalculator() {
     setLoanTerm(value);
     // Store the value for the current unit and clear other units
     termByUnit.current[termUnit] = value;
-    const otherUnit = termUnit === "years" ? "months" : "years";
-    termByUnit.current[otherUnit] = "";
+    const otherUnit = termUnit === 'years' ? 'months' : 'years';
+    termByUnit.current[otherUnit] = '';
   };
 
   // Handle unit changes (years <-> months)
@@ -126,53 +126,53 @@ export default function HomeLoanCalculator() {
     const termValue = parseFloat(loanTerm);
     if (isNaN(termValue)) return 0;
 
-    if (termUnit === "months") {
+    if (termUnit === 'months') {
       return termValue / 12;
     }
     return termValue;
   };
 
   const handleCalculate = () => {
-    const priceValue = parseFloat(propertyPrice.replace(/,/g, ""));
-    const depositValue = parseFloat(deposit.replace(/,/g, "")) || 0;
+    const priceValue = parseFloat(propertyPrice.replace(/,/g, ''));
+    const depositValue = parseFloat(deposit.replace(/,/g, '')) || 0;
     const rateValue = parseFloat(interestRate);
     const termInYears = getTermInYears();
 
     if (isNaN(priceValue) || priceValue <= 0) {
-      alert("Please enter a valid property price");
+      alert('Please enter a valid property price');
       return;
     }
 
     if (isNaN(rateValue) || rateValue <= 0) {
-      alert("Please enter a valid interest rate");
+      alert('Please enter a valid interest rate');
       return;
     }
 
     if (termInYears <= 0) {
-      alert("Please enter a valid loan term");
+      alert('Please enter a valid loan term');
       return;
     }
 
     if (depositValue >= priceValue) {
-      alert("Deposit cannot be equal to or greater than property price");
+      alert('Deposit cannot be equal to or greater than property price');
       return;
     }
 
     const loanAmount = priceValue - depositValue;
 
     if (loanAmount <= 0) {
-      alert("Loan amount must be greater than zero");
+      alert('Loan amount must be greater than zero');
       return;
     }
 
     const calculatedResults = calculateHomeLoan(
       loanAmount,
       rateValue,
-      termInYears,
+      termInYears
     );
 
     // Include the service fee that was used in this calculation
-    const serviceFeeValue = parseFloat(effectiveServiceFee || "0");
+    const serviceFeeValue = parseFloat(effectiveServiceFee || '0');
     setResults({
       ...calculatedResults,
       serviceFee: serviceFeeValue,
@@ -183,11 +183,11 @@ export default function HomeLoanCalculator() {
   const depositPercentage =
     propertyPrice && deposit
       ? (
-          (parseFloat(deposit.replace(/,/g, "")) /
-            parseFloat(propertyPrice.replace(/,/g, ""))) *
+          (parseFloat(deposit.replace(/,/g, '')) /
+            parseFloat(propertyPrice.replace(/,/g, ''))) *
           100
         ).toFixed(1)
-      : "0";
+      : '0';
 
   // Get historical rates
   const currentPrimeRate = PRIME_LENDING_RATE_ZA[0].rate; // First item is most recent
@@ -200,7 +200,7 @@ export default function HomeLoanCalculator() {
   const marginToPrimeDisplay =
     marginToPrime !== null
       ? marginToPrime === 0
-        ? "Prime"
+        ? 'Prime'
         : marginToPrime > 0
           ? `Prime +${marginToPrime.toFixed(2)}%`
           : `Prime ${marginToPrime.toFixed(2)}%`
@@ -209,11 +209,11 @@ export default function HomeLoanCalculator() {
   // Find specific historical rates by date
   // 2008 Crisis Peak: June 2008 (15.5%)
   const crisis2008Rate =
-    PRIME_LENDING_RATE_ZA.find((r) => r.date === "2008-06-13")?.rate || 15.5;
+    PRIME_LENDING_RATE_ZA.find((r) => r.date === '2008-06-13')?.rate || 15.5;
 
   // COVID-19 Low: July 2020 (7.0%)
   const covidLowRate =
-    PRIME_LENDING_RATE_ZA.find((r) => r.date === "2020-07-24")?.rate || 7.0;
+    PRIME_LENDING_RATE_ZA.find((r) => r.date === '2020-07-24')?.rate || 7.0;
 
   // Calculate rate scenarios
   const calculateRateScenarios = () => {
@@ -225,15 +225,15 @@ export default function HomeLoanCalculator() {
     const marginToPrime = currentRate - currentPrimeRate;
 
     const scenarios = [
-      { label: "-1.00%", rate: currentRate - 1.0, change: -1.0 },
-      { label: "-0.75%", rate: currentRate - 0.75, change: -0.75 },
-      { label: "-0.50%", rate: currentRate - 0.5, change: -0.5 },
-      { label: "-0.25%", rate: currentRate - 0.25, change: -0.25 },
-      { label: "Current Rate", rate: currentRate, highlight: true, change: 0 },
-      { label: "+0.25%", rate: currentRate + 0.25, change: 0.25 },
-      { label: "+0.50%", rate: currentRate + 0.5, change: 0.5 },
-      { label: "+0.75%", rate: currentRate + 0.75, change: 0.75 },
-      { label: "+1.00%", rate: currentRate + 1.0, change: 1.0 },
+      { label: '-1.00%', rate: currentRate - 1.0, change: -1.0 },
+      { label: '-0.75%', rate: currentRate - 0.75, change: -0.75 },
+      { label: '-0.50%', rate: currentRate - 0.5, change: -0.5 },
+      { label: '-0.25%', rate: currentRate - 0.25, change: -0.25 },
+      { label: 'Current Rate', rate: currentRate, highlight: true, change: 0 },
+      { label: '+0.25%', rate: currentRate + 0.25, change: 0.25 },
+      { label: '+0.50%', rate: currentRate + 0.5, change: 0.5 },
+      { label: '+0.75%', rate: currentRate + 0.75, change: 0.75 },
+      { label: '+1.00%', rate: currentRate + 1.0, change: 1.0 },
     ];
 
     // Calculate effective rates based on user's margin to prime
@@ -242,14 +242,14 @@ export default function HomeLoanCalculator() {
 
     const historical = [
       {
-        label: "2008 Crisis Peak",
+        label: '2008 Crisis Peak',
         rate: effectiveCrisis2008Rate,
-        description: `Your rate would have been ${effectiveCrisis2008Rate.toFixed(2)}% (prime ${crisis2008Rate}% ${marginToPrime >= 0 ? "+" : ""}${marginToPrime.toFixed(2)}%)`,
+        description: `Your rate would have been ${effectiveCrisis2008Rate.toFixed(2)}% (prime ${crisis2008Rate}% ${marginToPrime >= 0 ? '+' : ''}${marginToPrime.toFixed(2)}%)`,
       },
       {
-        label: "COVID-19 Low",
+        label: 'COVID-19 Low',
         rate: effectiveCovidLowRate,
-        description: `Your rate would have been ${effectiveCovidLowRate.toFixed(2)}% (prime ${covidLowRate}% ${marginToPrime >= 0 ? "+" : ""}${marginToPrime.toFixed(2)}%)`,
+        description: `Your rate would have been ${effectiveCovidLowRate.toFixed(2)}% (prime ${covidLowRate}% ${marginToPrime >= 0 ? '+' : ''}${marginToPrime.toFixed(2)}%)`,
       },
     ];
 
@@ -263,7 +263,7 @@ export default function HomeLoanCalculator() {
   };
 
   // Get effective service fee - use default if not in advanced mode
-  const effectiveServiceFee = isAdvancedMode ? monthlyServiceFee : "69";
+  const effectiveServiceFee = isAdvancedMode ? monthlyServiceFee : '69';
 
   return (
     <div className="grid lg:grid-cols-[400px_1fr] gap-8 items-start">
@@ -271,13 +271,9 @@ export default function HomeLoanCalculator() {
       <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm lg:sticky lg:top-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className={`${excali.className} text-2xl`}>Loan Details</h2>
-          <button
-            type="button"
-            onClick={toggleMode}
-            className="text-sm text-yellow-600 hover:text-yellow-700 font-medium transition"
-          >
-            {isAdvancedMode ? "Switch to Basic" : "Advanced Options"}
-          </button>
+          <Button variant="text" size="md" onClick={toggleMode}>
+            {isAdvancedMode ? 'Switch to Basic' : 'Advanced Options'}
+          </Button>
         </div>
 
         <div className="space-y-6">
@@ -294,7 +290,7 @@ export default function HomeLoanCalculator() {
           <FormField
             label={
               <>
-                Deposit{" "}
+                Deposit{' '}
                 {deposit && propertyPrice && (
                   <span className="text-gray-500 font-normal">
                     ({depositPercentage}%)
@@ -317,7 +313,7 @@ export default function HomeLoanCalculator() {
           <FormField
             label={
               <>
-                Interest Rate (% per year){" "}
+                Interest Rate (% per year){' '}
                 {marginToPrimeDisplay && (
                   <span className="text-gray-500 font-normal">
                     ({marginToPrimeDisplay})
@@ -343,9 +339,9 @@ export default function HomeLoanCalculator() {
             label="Loan Term"
             htmlFor="loanTerm"
             helperText={
-              termUnit === "years"
-                ? "Typical: 20-30 years"
-                : "Typical: 240-360 months"
+              termUnit === 'years'
+                ? 'Typical: 20-30 years'
+                : 'Typical: 240-360 months'
             }
           >
             <div className="flex gap-2">
@@ -354,17 +350,17 @@ export default function HomeLoanCalculator() {
                   id="loanTerm"
                   value={loanTerm}
                   onChange={handleTermChange}
-                  placeholder={termUnit === "years" ? "20" : "240"}
-                  allowDecimals={termUnit === "years"}
-                  max={termUnit === "years" ? 100 : 1200}
+                  placeholder={termUnit === 'years' ? '20' : '240'}
+                  allowDecimals={termUnit === 'years'}
+                  max={termUnit === 'years' ? 100 : 1200}
                 />
               </div>
               <Select
                 value={termUnit}
                 onChange={setTermUnit}
                 options={[
-                  { value: "years", label: "Years" },
-                  { value: "months", label: "Months" },
+                  { value: 'years', label: 'Years' },
+                  { value: 'months', label: 'Months' },
                 ]}
                 className="w-30"
               />
@@ -395,8 +391,8 @@ export default function HomeLoanCalculator() {
               disabled={!isDirty && results !== null}
             >
               {!isDirty && results !== null
-                ? "Calculated"
-                : "Calculate Repayment"}
+                ? 'Calculated'
+                : 'Calculate Repayment'}
             </Button>
             <button
               type="button"
@@ -607,7 +603,7 @@ export default function HomeLoanCalculator() {
                           const payment = calculateHomeLoan(
                             results.loanAmount,
                             scenario.rate,
-                            results.loanTermYears,
+                            results.loanTermYears
                           ).monthlyPayment;
                           const totalPayment = payment + results.serviceFee;
                           const difference =
@@ -619,18 +615,18 @@ export default function HomeLoanCalculator() {
                               <div
                                 className={`py-3 px-4 hover:bg-gray-50 transition-colors ${
                                   scenario.highlight
-                                    ? "bg-yellow-50 font-semibold"
-                                    : "bg-white"
+                                    ? 'bg-yellow-50 font-semibold'
+                                    : 'bg-white'
                                 }`}
                               >
                                 <div className="flex items-center gap-2">
                                   <span
                                     className={
                                       scenario.change < 0
-                                        ? "text-green-600"
+                                        ? 'text-green-600'
                                         : scenario.change > 0
-                                          ? "text-red-600"
-                                          : "text-gray-900"
+                                          ? 'text-red-600'
+                                          : 'text-gray-900'
                                     }
                                   >
                                     {scenario.label}
@@ -648,8 +644,8 @@ export default function HomeLoanCalculator() {
                               <div
                                 className={`py-3 px-4 text-right font-semibold hover:bg-gray-50 transition-colors ${
                                   scenario.highlight
-                                    ? "bg-yellow-50"
-                                    : "bg-white"
+                                    ? 'bg-yellow-50'
+                                    : 'bg-white'
                                 }`}
                               >
                                 {formatCurrency(totalPayment)}
@@ -657,19 +653,19 @@ export default function HomeLoanCalculator() {
                               <div
                                 className={`py-3 px-4 text-right font-semibold hover:bg-gray-50 transition-colors ${
                                   scenario.highlight
-                                    ? "bg-yellow-50"
-                                    : "bg-white"
+                                    ? 'bg-yellow-50'
+                                    : 'bg-white'
                                 } ${
                                   Math.abs(difference) < 0.01
-                                    ? "text-gray-400"
+                                    ? 'text-gray-400'
                                     : difference > 0
-                                      ? "text-red-600"
-                                      : "text-green-600"
+                                      ? 'text-red-600'
+                                      : 'text-green-600'
                                 }`}
                               >
                                 {Math.abs(difference) < 0.01
-                                  ? "-"
-                                  : `${difference > 0 ? "+" : ""}${formatCurrency(difference)}`}
+                                  ? '-'
+                                  : `${difference > 0 ? '+' : ''}${formatCurrency(difference)}`}
                               </div>
                             </Fragment>
                           );
@@ -688,21 +684,21 @@ export default function HomeLoanCalculator() {
                         const payment = calculateHomeLoan(
                           results.loanAmount,
                           historic.rate,
-                          results.loanTermYears,
+                          results.loanTermYears
                         ).monthlyPayment;
                         const totalPayment = payment + results.serviceFee;
                         const difference =
                           totalPayment -
                           (results.monthlyPayment + results.serviceFee);
-                        const isPeak = historic.label === "2008 Crisis Peak";
+                        const isPeak = historic.label === '2008 Crisis Peak';
 
                         return (
                           <div
                             key={index}
                             className={`rounded-lg p-5 border-2 ${
                               isPeak
-                                ? "bg-red-50 border-red-200"
-                                : "bg-green-50 border-green-200"
+                                ? 'bg-red-50 border-red-200'
+                                : 'bg-green-50 border-green-200'
                             }`}
                           >
                             <div className="flex items-center justify-between mb-2">
@@ -711,7 +707,7 @@ export default function HomeLoanCalculator() {
                               </span>
                               <span
                                 className={`text-lg font-bold ${
-                                  isPeak ? "text-red-700" : "text-green-700"
+                                  isPeak ? 'text-red-700' : 'text-green-700'
                                 }`}
                               >
                                 {historic.rate}%
@@ -729,11 +725,11 @@ export default function HomeLoanCalculator() {
                             <div
                               className={`text-sm ${
                                 difference > 0
-                                  ? "text-red-600"
-                                  : "text-green-600"
+                                  ? 'text-red-600'
+                                  : 'text-green-600'
                               }`}
                             >
-                              {difference > 0 ? "+" : ""}
+                              {difference > 0 ? '+' : ''}
                               {formatCurrency(difference)} vs current rate
                             </div>
                           </div>
@@ -752,7 +748,7 @@ export default function HomeLoanCalculator() {
                     <p className="text-sm text-gray-700">
                       <strong>Tip:</strong> Even a 0.25% rate change can
                       significantly impact your monthly budget. It&apos;s worth
-                      shopping around and negotiating with different banks.{" "}
+                      shopping around and negotiating with different banks.{' '}
                       <a
                         href="/data/prime-rates"
                         className="text-yellow-600 hover:underline font-semibold"

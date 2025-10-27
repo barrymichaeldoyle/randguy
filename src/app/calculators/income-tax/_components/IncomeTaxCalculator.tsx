@@ -1,24 +1,24 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
-import { excali } from "@/fonts";
-import { Button } from "@/components/Button";
-import { NumericInput } from "@/components/NumericInput";
-import { FormField } from "@/components/FormField";
-import { ResultCard, ResultCardItem } from "@/components/ResultCard";
-import { Select } from "@/components/Select";
-import { formatCurrency, formatPercentage } from "@/lib/calculator-utils";
+import { excali } from '@/fonts';
+import { Button } from '@/components/Button';
+import { NumericInput } from '@/components/NumericInput';
+import { FormField } from '@/components/FormField';
+import { ResultCard, ResultCardItem } from '@/components/ResultCard';
+import { Select } from '@/components/Select';
+import { formatCurrency, formatPercentage } from '@/lib/calculator-utils';
 
-import { useIncomeTaxStore } from "./income-tax-store";
+import { useIncomeTaxStore } from './income-tax-store';
 
 // South African Tax Data by Year
 type TaxYear =
-  | "2021/2022"
-  | "2022/2023"
-  | "2023/2024"
-  | "2024/2025"
-  | "2025/2026";
+  | '2021/2022'
+  | '2022/2023'
+  | '2023/2024'
+  | '2024/2025'
+  | '2025/2026';
 
 interface TaxYearData {
   brackets: Array<{
@@ -39,8 +39,8 @@ interface TaxYearData {
   };
 }
 
-const TAX_DATA: Record<TaxYear | "2020/2021", TaxYearData> = {
-  "2020/2021": {
+const TAX_DATA: Record<TaxYear | '2020/2021', TaxYearData> = {
+  '2020/2021': {
     brackets: [
       { min: 0, max: 205900, rate: 0.18, base: 0 },
       { min: 205901, max: 321600, rate: 0.26, base: 37062 },
@@ -61,7 +61,7 @@ const TAX_DATA: Record<TaxYear | "2020/2021", TaxYearData> = {
       age75plus: 143850,
     },
   },
-  "2021/2022": {
+  '2021/2022': {
     brackets: [
       { min: 0, max: 216200, rate: 0.18, base: 0 },
       { min: 216201, max: 337800, rate: 0.26, base: 38916 },
@@ -82,7 +82,7 @@ const TAX_DATA: Record<TaxYear | "2020/2021", TaxYearData> = {
       age75plus: 151100,
     },
   },
-  "2022/2023": {
+  '2022/2023': {
     brackets: [
       { min: 0, max: 226000, rate: 0.18, base: 0 },
       { min: 226001, max: 353100, rate: 0.26, base: 40680 },
@@ -103,7 +103,7 @@ const TAX_DATA: Record<TaxYear | "2020/2021", TaxYearData> = {
       age75plus: 157900,
     },
   },
-  "2023/2024": {
+  '2023/2024': {
     brackets: [
       { min: 0, max: 237100, rate: 0.18, base: 0 },
       { min: 237101, max: 370500, rate: 0.26, base: 42678 },
@@ -124,7 +124,7 @@ const TAX_DATA: Record<TaxYear | "2020/2021", TaxYearData> = {
       age75plus: 165689,
     },
   },
-  "2024/2025": {
+  '2024/2025': {
     brackets: [
       { min: 0, max: 237100, rate: 0.18, base: 0 },
       { min: 237101, max: 370500, rate: 0.26, base: 42678 },
@@ -145,7 +145,7 @@ const TAX_DATA: Record<TaxYear | "2020/2021", TaxYearData> = {
       age75plus: 165689,
     },
   },
-  "2025/2026": {
+  '2025/2026': {
     brackets: [
       { min: 0, max: 237100, rate: 0.18, base: 0 },
       { min: 237101, max: 370500, rate: 0.26, base: 42678 },
@@ -169,12 +169,12 @@ const TAX_DATA: Record<TaxYear | "2020/2021", TaxYearData> = {
 };
 
 // Helper to get previous tax year
-const PREVIOUS_YEAR: Record<TaxYear, (TaxYear | "2020/2021") | null> = {
-  "2021/2022": "2020/2021",
-  "2022/2023": "2021/2022",
-  "2023/2024": "2022/2023",
-  "2024/2025": "2023/2024",
-  "2025/2026": "2024/2025",
+const PREVIOUS_YEAR: Record<TaxYear, (TaxYear | '2020/2021') | null> = {
+  '2021/2022': '2020/2021',
+  '2022/2023': '2021/2022',
+  '2023/2024': '2022/2023',
+  '2024/2025': '2023/2024',
+  '2025/2026': '2024/2025',
 };
 
 // UIF (Unemployment Insurance Fund) constants
@@ -184,8 +184,8 @@ const UIF_MAX_MONTHLY_INCOME = 17712; // Maximum monthly income for UIF
 function calculateIncomeTax(
   annualIncome: number,
   age: number,
-  taxYear: TaxYear | "2020/2021",
-  isSalary: boolean = false,
+  taxYear: TaxYear | '2020/2021',
+  isSalary: boolean = false
 ): {
   taxableIncome: number;
   taxBeforeRebates: number;
@@ -207,7 +207,7 @@ function calculateIncomeTax(
     if (annualIncome > bracket.min) {
       const taxableInBracket = Math.min(
         annualIncome - bracket.min + 1,
-        bracket.max - bracket.min + 1,
+        bracket.max - bracket.min + 1
       );
       taxBeforeRebates = bracket.base + taxableInBracket * bracket.rate;
     }
@@ -257,8 +257,8 @@ function calculateIncomeTax(
   };
 }
 
-type AgeGroup = "under65" | "65to74" | "75plus";
-type PayFrequency = "monthly" | "annual" | "biweekly" | "weekly";
+type AgeGroup = 'under65' | '65to74' | '75plus';
+type PayFrequency = 'monthly' | 'annual' | 'biweekly' | 'weekly';
 
 export default function IncomeTaxCalculator() {
   const {
@@ -281,12 +281,12 @@ export default function IncomeTaxCalculator() {
     resetForm,
   } = useIncomeTaxStore();
 
-  const previousFrequency = useRef<PayFrequency>("monthly");
+  const previousFrequency = useRef<PayFrequency>('monthly');
   const incomeByFrequency = useRef<Record<PayFrequency, string>>({
-    monthly: "",
-    annual: "",
-    biweekly: "",
-    weekly: "",
+    monthly: '',
+    annual: '',
+    biweekly: '',
+    weekly: '',
   });
 
   // Convert income when pay frequency changes
@@ -297,7 +297,7 @@ export default function IncomeTaxCalculator() {
         setIncome(incomeByFrequency.current[payFrequency]);
       } else if (income) {
         // Convert from previous frequency
-        const incomeValue = parseFloat(income.replace(/,/g, ""));
+        const incomeValue = parseFloat(income.replace(/,/g, ''));
 
         if (!isNaN(incomeValue) && incomeValue > 0) {
           const frequencyMultiplier: Record<PayFrequency, number> = {
@@ -324,18 +324,18 @@ export default function IncomeTaxCalculator() {
   }, [payFrequency, income, setIncome]);
 
   const handleCalculate = () => {
-    const incomeValue = parseFloat(income.replace(/,/g, ""));
+    const incomeValue = parseFloat(income.replace(/,/g, ''));
 
     if (isNaN(incomeValue) || incomeValue < 0) {
-      alert("Please enter a valid income amount");
+      alert('Please enter a valid income amount');
       return;
     }
 
     // Convert age group to a representative age for calculation
     const ageMap: Record<AgeGroup, number> = {
       under65: 35,
-      "65to74": 70,
-      "75plus": 80,
+      '65to74': 70,
+      '75plus': 80,
     };
 
     // Convert to annual income based on pay frequency
@@ -351,7 +351,7 @@ export default function IncomeTaxCalculator() {
       annualIncome,
       ageMap[ageGroup],
       taxYear,
-      isSalary,
+      isSalary
     );
 
     // Calculate previous year for comparison if available
@@ -373,32 +373,32 @@ export default function IncomeTaxCalculator() {
     // Clear all saved values except the current frequency
     // This ensures conversions are based on the latest edited value
     incomeByFrequency.current = {
-      monthly: "",
-      annual: "",
-      biweekly: "",
-      weekly: "",
+      monthly: '',
+      annual: '',
+      biweekly: '',
+      weekly: '',
     };
     incomeByFrequency.current[payFrequency] = value;
   };
 
   const getIncomeLabel = () => {
     switch (payFrequency) {
-      case "monthly":
-        return "Monthly Gross Income (before tax)";
-      case "annual":
-        return "Annual Gross Income (before tax)";
-      case "biweekly":
-        return "Bi-weekly Gross Income (before tax)";
-      case "weekly":
-        return "Weekly Gross Income (before tax)";
+      case 'monthly':
+        return 'Monthly Gross Income (before tax)';
+      case 'annual':
+        return 'Annual Gross Income (before tax)';
+      case 'biweekly':
+        return 'Bi-weekly Gross Income (before tax)';
+      case 'weekly':
+        return 'Weekly Gross Income (before tax)';
     }
   };
 
   const toggleMode = () => {
     if (isAdvancedMode) {
       // Switching to basic mode - reset to defaults
-      setTaxYear("2025/2026");
-      setAgeGroup("under65");
+      setTaxYear('2025/2026');
+      setAgeGroup('under65');
       setIsSalary(true);
     }
     setIsAdvancedMode(!isAdvancedMode);
@@ -407,12 +407,12 @@ export default function IncomeTaxCalculator() {
   const handleResetForm = () => {
     resetForm();
     // Reset refs
-    previousFrequency.current = "monthly";
+    previousFrequency.current = 'monthly';
     incomeByFrequency.current = {
-      monthly: "",
-      annual: "",
-      biweekly: "",
-      weekly: "",
+      monthly: '',
+      annual: '',
+      biweekly: '',
+      weekly: '',
     };
   };
 
@@ -422,13 +422,9 @@ export default function IncomeTaxCalculator() {
       <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm lg:sticky lg:top-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className={`${excali.className} text-2xl`}>Your Information</h2>
-          <button
-            type="button"
-            onClick={toggleMode}
-            className="text-sm text-yellow-600 hover:text-yellow-700 font-medium transition"
-          >
-            {isAdvancedMode ? "Switch to Basic" : "Advanced Options"}
-          </button>
+          <Button onClick={toggleMode} variant="text" size="sm">
+            {isAdvancedMode ? 'Switch to Basic' : 'Advanced Options'}
+          </Button>
         </div>
 
         <div className="space-y-6">
@@ -439,11 +435,11 @@ export default function IncomeTaxCalculator() {
                 value={taxYear}
                 onChange={setTaxYear}
                 options={[
-                  { value: "2025/2026", label: "2026 (Mar 2025 - Feb 2026)" },
-                  { value: "2024/2025", label: "2025 (Mar 2024 - Feb 2025)" },
-                  { value: "2023/2024", label: "2024 (Mar 2023 - Feb 2024)" },
-                  { value: "2022/2023", label: "2023 (Mar 2022 - Feb 2023)" },
-                  { value: "2021/2022", label: "2022 (Mar 2021 - Feb 2022)" },
+                  { value: '2025/2026', label: '2026 (Mar 2025 - Feb 2026)' },
+                  { value: '2024/2025', label: '2025 (Mar 2024 - Feb 2025)' },
+                  { value: '2023/2024', label: '2024 (Mar 2023 - Feb 2024)' },
+                  { value: '2022/2023', label: '2023 (Mar 2022 - Feb 2023)' },
+                  { value: '2021/2022', label: '2022 (Mar 2021 - Feb 2022)' },
                 ]}
               />
             </FormField>
@@ -464,10 +460,10 @@ export default function IncomeTaxCalculator() {
                 value={payFrequency}
                 onChange={setPayFrequency}
                 options={[
-                  { value: "monthly", label: "Monthly" },
-                  { value: "annual", label: "Annual" },
-                  { value: "biweekly", label: "Bi-weekly" },
-                  { value: "weekly", label: "Weekly" },
+                  { value: 'monthly', label: 'Monthly' },
+                  { value: 'annual', label: 'Annual' },
+                  { value: 'biweekly', label: 'Bi-weekly' },
+                  { value: 'weekly', label: 'Weekly' },
                 ]}
                 className="w-30"
               />
@@ -486,7 +482,7 @@ export default function IncomeTaxCalculator() {
                       type="radio"
                       name="ageGroup"
                       value="under65"
-                      checked={ageGroup === "under65"}
+                      checked={ageGroup === 'under65'}
                       onChange={(e) => setAgeGroup(e.target.value as AgeGroup)}
                       className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
                     />
@@ -498,7 +494,7 @@ export default function IncomeTaxCalculator() {
                       type="radio"
                       name="ageGroup"
                       value="65to74"
-                      checked={ageGroup === "65to74"}
+                      checked={ageGroup === '65to74'}
                       onChange={(e) => setAgeGroup(e.target.value as AgeGroup)}
                       className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
                     />
@@ -510,7 +506,7 @@ export default function IncomeTaxCalculator() {
                       type="radio"
                       name="ageGroup"
                       value="75plus"
-                      checked={ageGroup === "75plus"}
+                      checked={ageGroup === '75plus'}
                       onChange={(e) => setAgeGroup(e.target.value as AgeGroup)}
                       className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
                     />
@@ -561,7 +557,7 @@ export default function IncomeTaxCalculator() {
               size="lg"
               disabled={!isDirty && results !== null}
             >
-              {!isDirty && results !== null ? "Calculated" : "Calculate Tax"}
+              {!isDirty && results !== null ? 'Calculated' : 'Calculate Tax'}
             </Button>
             <button
               type="button"
@@ -747,13 +743,13 @@ export default function IncomeTaxCalculator() {
                         <p
                           className={`text-2xl font-bold ${
                             annualTakeHomeDiff > 0
-                              ? "text-green-600"
+                              ? 'text-green-600'
                               : annualTakeHomeDiff < 0
-                                ? "text-red-600"
-                                : "text-gray-600"
+                                ? 'text-red-600'
+                                : 'text-gray-600'
                           }`}
                         >
-                          {annualTakeHomeDiff > 0 ? "+" : ""}
+                          {annualTakeHomeDiff > 0 ? '+' : ''}
                           {formatCurrency(annualTakeHomeDiff)}
                         </p>
                       </div>
@@ -765,13 +761,13 @@ export default function IncomeTaxCalculator() {
                         <p
                           className={`text-2xl font-bold ${
                             monthlyTakeHomeDiff > 0
-                              ? "text-green-600"
+                              ? 'text-green-600'
                               : monthlyTakeHomeDiff < 0
-                                ? "text-red-600"
-                                : "text-gray-600"
+                                ? 'text-red-600'
+                                : 'text-gray-600'
                           }`}
                         >
-                          {monthlyTakeHomeDiff > 0 ? "+" : ""}
+                          {monthlyTakeHomeDiff > 0 ? '+' : ''}
                           {formatCurrency(monthlyTakeHomeDiff)}
                         </p>
                       </div>
