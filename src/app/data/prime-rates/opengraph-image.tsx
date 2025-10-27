@@ -1,7 +1,6 @@
 import { ImageResponse } from 'next/og';
 import { PRIME_LENDING_RATE_ZA } from '@/lib/historical-data';
 
-export const runtime = 'edge';
 export const alt = 'Historical Prime & Repo Rates - South Africa';
 export const size = {
   width: 1200,
@@ -17,6 +16,9 @@ export default async function Image() {
   const maxRate = Math.max(...rates);
   const minRate = Math.min(...rates);
 
+  // Note: Custom Excalifont has advanced OpenType features not supported by Satori yet
+  // Using system cursive fonts as fallback for similar handwritten feel
+
   return new ImageResponse(
     (
       <div
@@ -29,6 +31,7 @@ export default async function Image() {
           alignItems: 'center',
           justifyContent: 'center',
           padding: '60px',
+          fontFamily: 'Comic Sans MS, cursive, system-ui',
         }}
       >
         {/* Title */}
@@ -68,8 +71,8 @@ export default async function Image() {
           {/* Current Rate */}
           <div
             style={{
-              background: '#fef9c3',
-              border: '2px solid #fde047',
+              background: '#ffffff',
+              border: '2px solid #d1d5db',
               borderRadius: 12,
               padding: '24px',
               width: 240,
@@ -102,8 +105,8 @@ export default async function Image() {
           {/* Average Rate */}
           <div
             style={{
-              background: '#f9fafb',
-              border: '2px solid #e5e7eb',
+              background: '#dbeafe',
+              border: '2px solid #93c5fd',
               borderRadius: 12,
               padding: '24px',
               width: 240,
@@ -114,7 +117,7 @@ export default async function Image() {
             <div
               style={{
                 fontSize: 18,
-                color: '#4b5563',
+                color: '#1e3a8a',
                 marginBottom: 8,
                 display: 'flex',
               }}
@@ -125,7 +128,7 @@ export default async function Image() {
               style={{
                 fontSize: 56,
                 fontWeight: 'bold',
-                color: '#1f2937',
+                color: '#1e40af',
                 display: 'flex',
               }}
             >
