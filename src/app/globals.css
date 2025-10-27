@@ -52,7 +52,12 @@ a:not([class*='rounded']):not([class*='bg-']):not([class*='flex']):not(
 
 /* Footer links - override with accessible contrast and font weight */
 footer a {
-  font-weight: 500;
+  color: #854d0e; /* yellow-800 - darker for better contrast on grey */
+  font-weight: 600;
+}
+
+footer a:hover {
+  color: #713f12; /* yellow-900 */
 }
 
 /* Links within blog content */

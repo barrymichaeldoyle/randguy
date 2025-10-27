@@ -60,24 +60,43 @@ export const metadata: Metadata = {
   },
 };
 
-const footerLinks: Record<string, { href: string; label: string }[]> = {
-  calculators: [
-    { href: '/calculators/income-tax', label: 'Income Tax Calculator' },
-    { href: '/calculators/home-loan', label: 'Home Loan Calculator' },
-    { href: '/calculators/ltv', label: 'Loan-to-Value Calculator' },
-    { href: '/calculators/tfsa', label: 'TFSA Calculator' },
-    { href: '/calculators/interest', label: 'Interest Calculator' },
-  ],
-  data: [
-    { href: '/data/prime-rates', label: 'Prime Rates' },
-    { href: '/data/tax-brackets', label: 'Tax Brackets' },
-  ],
-  resources: [
-    { href: '/blog', label: 'Blog' },
-    { href: '/calculators', label: 'All Calculators' },
-    { href: '/data', label: 'All Data' },
-  ],
-};
+interface FooterLink {
+  href: string;
+  label: string;
+}
+
+interface FooterGroup {
+  title: string;
+  links: FooterLink[];
+}
+
+const footerGroups: FooterGroup[] = [
+  {
+    title: 'Calculators',
+    links: [
+      { href: '/calculators/income-tax', label: 'Income Tax Calculator' },
+      { href: '/calculators/home-loan', label: 'Home Loan Calculator' },
+      { href: '/calculators/ltv', label: 'Loan-to-Value Calculator' },
+      { href: '/calculators/tfsa', label: 'TFSA Calculator' },
+      { href: '/calculators/interest', label: 'Interest Calculator' },
+    ],
+  },
+  {
+    title: 'Historical Data',
+    links: [
+      { href: '/data/prime-rates', label: 'Prime Rates' },
+      { href: '/data/tax-brackets', label: 'Tax Brackets' },
+    ],
+  },
+  {
+    title: 'Resources',
+    links: [
+      { href: '/blog', label: 'Blog' },
+      { href: '/calculators', label: 'All Calculators' },
+      { href: '/data', label: 'All Data' },
+    ],
+  },
+];
 
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
   return (
@@ -116,62 +135,20 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
         <footer className="border-t border-gray-200 py-12 mt-auto bg-gray-50">
           <div className="max-w-3xl mx-auto px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-32 mb-8">
-              {/* Calculators Section */}
-              <div>
-                <h3 className={`${excali.className} text-lg font-bold mb-4`}>
-                  Calculators
-                </h3>
-                <ul className="space-y-2 text-sm">
-                  {footerLinks.calculators.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        className="text-gray-700 hover:text-yellow-600 transition-colors"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Historical Data Section */}
-              <div>
-                <h3 className={`${excali.className} text-lg font-bold mb-4`}>
-                  Historical Data
-                </h3>
-                <ul className="space-y-2 text-sm">
-                  {footerLinks.data.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        className="text-gray-700 hover:text-yellow-600 transition-colors"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Resources Section */}
-              <div>
-                <h3 className={`${excali.className} text-lg font-bold mb-4`}>
-                  Resources
-                </h3>
-                <ul className="space-y-2 text-sm">
-                  {footerLinks.resources.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        className="text-gray-700 hover:text-yellow-600 transition-colors"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              {footerGroups.map((group) => (
+                <div key={group.title}>
+                  <h3 className={`${excali.className} text-lg font-bold mb-4`}>
+                    {group.title}
+                  </h3>
+                  <ul className="space-y-2 text-sm">
+                    {group.links.map((link) => (
+                      <li key={link.href}>
+                        <Link href={link.href}>{link.label}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
 
             <div className="border-t border-gray-200 pt-6 text-center">
@@ -180,7 +157,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
                   href="https://x.com/RandGuyZA"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-gray-700 hover:text-yellow-600 transition-colors"
+                  className="inline-flex items-center gap-2"
                   aria-label="Follow Rand Guy on X (Twitter)"
                 >
                   <svg

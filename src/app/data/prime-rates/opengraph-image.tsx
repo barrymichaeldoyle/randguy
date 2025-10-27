@@ -1,12 +1,10 @@
 import { ImageResponse } from 'next/og';
 import { PRIME_LENDING_RATE_ZA } from '@/lib/historical-data';
+import { ogStyles, ogConfig } from '@/lib/og-image-utils';
 
 export const alt = 'Historical Prime & Repo Rates - South Africa';
-export const size = {
-  width: 1200,
-  height: 630,
-};
-export const contentType = 'image/png';
+export const size = ogConfig.size;
+export const contentType = ogConfig.contentType;
 
 export default async function Image() {
   // Calculate statistics (same logic as the page)
@@ -21,41 +19,10 @@ export default async function Image() {
 
   return new ImageResponse(
     (
-      <div
-        style={{
-          background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '60px',
-          fontFamily: 'Comic Sans MS, cursive, system-ui',
-        }}
-      >
+      <div style={ogStyles.container}>
         {/* Title */}
-        <div
-          style={{
-            fontSize: 64,
-            fontWeight: 'bold',
-            color: '#1f2937',
-            marginBottom: 20,
-            textAlign: 'center',
-            display: 'flex',
-          }}
-        >
-          Prime & Repo Rates
-        </div>
-        <div
-          style={{
-            fontSize: 28,
-            color: '#4b5563',
-            marginBottom: 50,
-            textAlign: 'center',
-            display: 'flex',
-          }}
-        >
+        <div style={ogStyles.title}>Prime & Repo Rates</div>
+        <div style={ogStyles.subtitle}>
           Historical Data for South Africa (Since 2002)
         </div>
 
@@ -206,15 +173,7 @@ export default async function Image() {
         </div>
 
         {/* Footer */}
-        <div
-          style={{
-            fontSize: 20,
-            color: '#6b7280',
-            marginTop: 40,
-            textAlign: 'center',
-            display: 'flex',
-          }}
-        >
+        <div style={ogStyles.footer}>
           randguy.com • Making Cents of SA Finance
         </div>
       </div>

@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 import { excali } from '@/fonts';
 import { BASE_URL } from '@/lib/constants';
+import { Button } from '@/components/Button';
 
 export const metadata: Metadata = {
   title: 'Free Financial Calculators for South Africans',
@@ -52,6 +53,7 @@ const calculators = [
       'Calculate your South African income tax based on the latest tax brackets and rebates for the 2025/2026 tax year. Includes UIF and year-over-year comparisons.',
     href: '/calculators/income-tax',
     icon: '💰',
+    buttonText: 'Calculate My Tax →',
   },
   {
     title: 'Home Loan Calculator',
@@ -59,6 +61,7 @@ const calculators = [
       'Calculate your monthly bond repayments and see total interest, repayment breakdown, and plan your property purchase.',
     href: '/calculators/home-loan',
     icon: '🏠',
+    buttonText: 'Calculate Repayments →',
   },
   {
     title: 'Loan-to-Value (LTV) Calculator',
@@ -66,6 +69,7 @@ const calculators = [
       'Calculate your LTV ratio to understand your equity position and loan terms. Essential tool for property buyers to assess their financing situation.',
     href: '/calculators/ltv',
     icon: '📊',
+    buttonText: 'Calculate LTV →',
   },
   {
     title: 'TFSA Calculator',
@@ -73,6 +77,7 @@ const calculators = [
       'Calculate how long it will take to max out your Tax-Free Savings Account. Track your contributions and plan your timeline to reach the R500,000 lifetime limit.',
     href: '/calculators/tfsa',
     icon: '🎯',
+    buttonText: 'Plan My TFSA →',
   },
   {
     title: 'Interest Calculator',
@@ -80,6 +85,7 @@ const calculators = [
       'Calculate interest gains across different time periods. Convert between annual, monthly, weekly, daily, and hourly interest rates for investments and loans.',
     href: '/calculators/interest',
     icon: '💹',
+    buttonText: 'Calculate Interest →',
   },
   // Add more calculators here in the future
 ];
@@ -177,30 +183,29 @@ export default function CalculatorsPage() {
 
         <section className="grid gap-6 md:grid-cols-2">
           {calculators.map((calculator) => (
-            <Link
+            <article
               key={calculator.href}
-              href={calculator.href}
-              className="group"
+              className="border border-gray-200 rounded-lg p-6 shadow-sm transition-shadow h-full flex flex-col text-center"
             >
-              <article className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all cursor-pointer hover:border-yellow-400 h-full">
-                <div className="flex items-center gap-3">
-                  <div className="text-4xl mb-4" aria-hidden="true">
-                    {calculator.icon}
-                  </div>
-                  <h2
-                    className={`${excali.className} text-2xl font-bold mb-3 text-gray-900 group-hover:text-yellow-600 transition-colors`}
-                  >
-                    {calculator.title}
-                  </h2>
+              <div className="flex flex-col items-center mb-4">
+                <div className="text-5xl mb-3" aria-hidden="true">
+                  {calculator.icon}
                 </div>
-                <p className="text-gray-700 mb-4">{calculator.description}</p>
-                <span
-                  className={`${excali.className} text-gray-900 group-hover:text-yellow-600 font-medium transition-colors`}
+                <h2
+                  className={`${excali.className} text-2xl font-bold text-gray-900`}
                 >
-                  Use Calculator →
-                </span>
-              </article>
-            </Link>
+                  {calculator.title}
+                </h2>
+              </div>
+              <p className="text-gray-700 mb-6 flex-grow">
+                {calculator.description}
+              </p>
+              <div className="flex justify-center">
+                <Button href={calculator.href} variant="primary" size="md">
+                  {calculator.buttonText}
+                </Button>
+              </div>
+            </article>
           ))}
         </section>
 
