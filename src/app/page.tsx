@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import { Metadata } from 'next';
 
 import { excali } from '@/fonts';
@@ -179,7 +178,12 @@ export default async function Home() {
       />
 
       {/* Hero Section */}
-      <div className="w-full pt-16 pb-8 px-8">
+      <div
+        className="w-full pt-16 pb-8 px-8"
+        style={{
+          background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
+        }}
+      >
         <div className="text-center mb-12">
           <Image
             src="/RandGuyLogo.png"

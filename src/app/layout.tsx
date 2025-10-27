@@ -30,9 +30,24 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_ZA',
     siteName: 'Rand Guy',
+    title: 'Rand Guy | South African Personal Finance',
+    description:
+      'Making Cents of SA Finance. Practical personal finance advice for everyday South Africans.',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Rand Guy - Making Cents of SA Finance',
+      },
+    ],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
+    title: 'Rand Guy | South African Personal Finance',
+    description:
+      'Making Cents of SA Finance. Free financial calculators & investment guides for South Africans.',
+    images: ['/og-image.png'],
   },
   icons: {
     icon: [

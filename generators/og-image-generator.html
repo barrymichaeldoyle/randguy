@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rand Guy OG Image Generator</title>
+    <style>
+      @font-face {
+        font-family: 'Excalifont';
+        src: url('../src/fonts/Excalifont-Regular.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: #f0f0f0;
+        padding: 20px;
+      }
+
+      .og-image {
+        width: 1200px;
+        height: 630px;
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .og-logo {
+        width: 150px;
+        height: 150px;
+        margin-bottom: 30px;
+      }
+
+      .og-title {
+        font-family: 'Excalifont', cursive;
+        font-size: 100px;
+        color: #1f2937;
+        text-align: center;
+        line-height: 1.2;
+        margin-bottom: 15px;
+      }
+
+      .og-tagline {
+        font-family: 'Excalifont', cursive;
+        font-size: 36px;
+        color: #4b5563;
+        text-align: center;
+      }
+
+      .og-description {
+        font-family: 'Excalifont', cursive;
+        font-size: 24px;
+        color: #6b7280;
+        text-align: center;
+        margin-top: 15px;
+        max-width: 900px;
+        line-height: 1.4;
+      }
+
+      .controls {
+        margin-top: 30px;
+        text-align: center;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+      }
+
+      .controls button {
+        margin: 5px;
+        padding: 12px 24px;
+        font-size: 14px;
+        cursor: pointer;
+        background: #fbbf24;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+      }
+
+      .controls button:hover {
+        background: #f59e0b;
+      }
+
+      .info {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        color: #666;
+        font-size: 14px;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="text-align: center">
+      <div class="og-image" id="ogImage">
+        <img
+          src="../public/RandGuyLogo.png"
+          alt="Rand Guy Logo"
+          class="og-logo"
+        />
+        <div class="og-title">Rand Guy</div>
+        <div class="og-tagline">Making Cents of SA Finance</div>
+        <div class="og-description">
+          Free financial calculators, investment guides & historical data<br />for
+          South Africans
+        </div>
+      </div>
+
+      <div class="controls">
+        <p class="info">
+          Open Graph Image: 1200x630px (recommended for Twitter/Facebook)<br />
+          Click "Download as PNG" or use Cmd+Shift+4 (Mac) / Snipping Tool
+          (Windows) to screenshot
+        </p>
+
+        <div>
+          <label>
+            Logo Size:
+            <input
+              type="number"
+              id="logoSize"
+              value="150"
+              min="80"
+              max="250"
+              step="10"
+            />
+          </label>
+        </div>
+
+        <div style="margin-top: 15px">
+          <button onclick="downloadOGImage()">Download as PNG</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+      function updateLogoSize() {
+        const logo = document.querySelector('.og-logo');
+        const logoSize = document.getElementById('logoSize').value;
+        logo.style.width = logoSize + 'px';
+        logo.style.height = logoSize + 'px';
+      }
+
+      // Convert image to data URL to avoid CORS issues
+      function imageToDataURL(img) {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        return canvas.toDataURL('image/png');
+      }
+
+      async function downloadOGImage() {
+        const button = event.target;
+        button.disabled = true;
+        button.textContent = 'Generating...';
+
+        try {
+          // Convert logo to data URL to avoid CORS
+          const logoImg = document.querySelector('.og-logo');
+          const originalSrc = logoImg.src;
+
+          // Wait for image to load
+          if (!logoImg.complete) {
+            await new Promise((resolve) => {
+              logoImg.onload = resolve;
+            });
+          }
+
+          // Convert to data URL
+          const dataURL = imageToDataURL(logoImg);
+          logoImg.src = dataURL;
+
+          // Wait for fonts and re-render
+          await new Promise((resolve) => setTimeout(resolve, 300));
+
+          const ogImage = document.getElementById('ogImage');
+          const canvas = await html2canvas(ogImage, {
+            width: 1200,
+            height: 630,
+            scale: 2,
+            backgroundColor: '#fef3c7',
+            logging: false,
+          });
+
+          // Restore original src
+          logoImg.src = originalSrc;
+
+          // Convert canvas to blob and download
+          canvas.toBlob((blob) => {
+            if (!blob) {
+              throw new Error('Failed to create image blob');
+            }
+
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'rand-guy-og-image.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            button.disabled = false;
+            button.textContent = 'Download as PNG';
+          }, 'image/png');
+        } catch (error) {
+          console.error('Error downloading OG image:', error);
+          alert(
+            'Unable to auto-download. Please use your browser screenshot tool instead:\n\n' +
+              '• Mac: Cmd+Shift+4, then select the image area\n' +
+              '• Windows: Use Snipping Tool\n' +
+              '• Or right-click the preview and "Save Image As..."'
+          );
+          button.disabled = false;
+          button.textContent = 'Download as PNG';
+        }
+      }
+
+      // Update on input change
+      document
+        .getElementById('logoSize')
+        .addEventListener('input', updateLogoSize);
+    </script>
+  </body>
+</html>

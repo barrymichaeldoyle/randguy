@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rand Guy Twitter Banner</title>
+    <style>
+      @font-face {
+        font-family: 'Excalifont';
+        src: url('../src/fonts/Excalifont-Regular.woff2') format('woff2');
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: #f0f0f0;
+        padding: 20px;
+      }
+
+      .banner {
+        width: 1500px;
+        height: 500px;
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .banner-logo {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 20px;
+      }
+
+      .banner-text {
+        font-family: 'Excalifont', cursive;
+        font-size: 180px;
+        color: #1f2937;
+        text-align: center;
+        line-height: 1;
+      }
+
+      .banner-tagline {
+        font-family: 'Excalifont', cursive;
+        font-size: 48px;
+        color: #4b5563;
+        text-align: center;
+        margin-top: 20px;
+      }
+
+      .controls {
+        margin-top: 30px;
+        text-align: center;
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+      }
+
+      .controls button {
+        margin: 5px;
+        padding: 10px 20px;
+        font-size: 14px;
+        cursor: pointer;
+        background: #fbbf24;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+      }
+
+      .controls button:hover {
+        background: #f59e0b;
+      }
+
+      .controls label {
+        display: block;
+        margin: 10px 0;
+        font-size: 14px;
+      }
+
+      input[type='color'],
+      input[type='number'],
+      input[type='text'] {
+        margin-left: 10px;
+        padding: 5px;
+      }
+
+      .info {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        color: #666;
+        font-size: 14px;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="text-align: center">
+      <div class="banner" id="banner">
+        <img
+          src="../public/RandGuyLogo.png"
+          alt="Rand Guy Logo"
+          class="banner-logo"
+          id="bannerLogo"
+          crossorigin="anonymous"
+        />
+        <div class="banner-text" id="mainText">Rand Guy</div>
+        <div class="banner-tagline" id="tagline">
+          Making Cents of SA Finance
+        </div>
+      </div>
+
+      <div class="controls">
+        <p class="info">
+          Twitter Banner: 1500x500px | Click "Download as PNG" button below or
+          right-click and "Save Image As..."
+        </p>
+
+        <div>
+          <label>
+            Main Text:
+            <input type="text" id="textInput" value="Rand Guy" />
+          </label>
+
+          <label>
+            Tagline:
+            <input
+              type="text"
+              id="taglineInput"
+              value="Making Cents of SA Finance"
+            />
+          </label>
+        </div>
+
+        <div>
+          <label>
+            Logo Size:
+            <input
+              type="number"
+              id="logoSizeBanner"
+              value="120"
+              min="60"
+              max="200"
+              step="10"
+            />
+          </label>
+        </div>
+
+        <div>
+          <label>
+            Main Text Size:
+            <input
+              type="number"
+              id="fontSize"
+              value="180"
+              min="50"
+              max="300"
+              step="10"
+            />
+          </label>
+
+          <label>
+            Tagline Size:
+            <input
+              type="number"
+              id="taglineSize"
+              value="48"
+              min="20"
+              max="100"
+              step="5"
+            />
+          </label>
+        </div>
+
+        <div>
+          <label>
+            Background Color 1:
+            <input type="color" id="bgColor1" value="#fef3c7" />
+          </label>
+
+          <label>
+            Background Color 2:
+            <input type="color" id="bgColor2" value="#fde68a" />
+          </label>
+        </div>
+
+        <div>
+          <label>
+            Text Color:
+            <input type="color" id="textColor" value="#1f2937" />
+          </label>
+
+          <label>
+            Tagline Color:
+            <input type="color" id="taglineColor" value="#4b5563" />
+          </label>
+        </div>
+
+        <div style="margin-top: 15px">
+          <button onclick="updateBanner()">Update Banner</button>
+          <button onclick="resetBanner()">Reset to Default</button>
+          <button onclick="downloadBanner()">Download as PNG</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+      function updateBanner() {
+        const banner = document.getElementById('banner');
+        const mainText = document.getElementById('mainText');
+        const tagline = document.getElementById('tagline');
+        const logo = document.getElementById('bannerLogo');
+
+        const text = document.getElementById('textInput').value;
+        const taglineText = document.getElementById('taglineInput').value;
+        const fontSize = document.getElementById('fontSize').value;
+        const taglineSize = document.getElementById('taglineSize').value;
+        const logoSize = document.getElementById('logoSizeBanner').value;
+        const bgColor1 = document.getElementById('bgColor1').value;
+        const bgColor2 = document.getElementById('bgColor2').value;
+        const textColor = document.getElementById('textColor').value;
+        const taglineColor = document.getElementById('taglineColor').value;
+
+        mainText.textContent = text;
+        tagline.textContent = taglineText;
+        mainText.style.fontSize = fontSize + 'px';
+        tagline.style.fontSize = taglineSize + 'px';
+        logo.style.width = logoSize + 'px';
+        logo.style.height = logoSize + 'px';
+        banner.style.background = `linear-gradient(135deg, ${bgColor1} 0%, ${bgColor2} 100%)`;
+        mainText.style.color = textColor;
+        tagline.style.color = taglineColor;
+      }
+
+      function resetBanner() {
+        document.getElementById('textInput').value = 'Rand Guy';
+        document.getElementById('taglineInput').value =
+          'Making Cents of SA Finance';
+        document.getElementById('fontSize').value = '180';
+        document.getElementById('taglineSize').value = '48';
+        document.getElementById('logoSizeBanner').value = '120';
+        document.getElementById('bgColor1').value = '#fef3c7';
+        document.getElementById('bgColor2').value = '#fde68a';
+        document.getElementById('textColor').value = '#1f2937';
+        document.getElementById('taglineColor').value = '#4b5563';
+        updateBanner();
+      }
+
+      async function downloadBanner() {
+        const banner = document.getElementById('banner');
+        const button = event.target;
+        button.disabled = true;
+        button.textContent = 'Generating...';
+
+        try {
+          // Wait a bit for fonts and images to fully load
+          await new Promise((resolve) => setTimeout(resolve, 500));
+
+          // Use html2canvas to convert the banner to a canvas
+          const canvas = await html2canvas(banner, {
+            width: 1500,
+            height: 500,
+            scale: 2,
+            backgroundColor: '#fef3c7',
+            useCORS: true,
+            allowTaint: false,
+            logging: false,
+          });
+
+          // Convert canvas to blob and download
+          canvas.toBlob((blob) => {
+            if (!blob) {
+              throw new Error('Failed to create image blob');
+            }
+
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'rand-guy-twitter-banner.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            button.disabled = false;
+            button.textContent = 'Download as PNG';
+          }, 'image/png');
+        } catch (error) {
+          console.error('Error downloading banner:', error);
+          alert(
+            'Error downloading banner: ' +
+              error.message +
+              '. Please try taking a screenshot instead.'
+          );
+          button.disabled = false;
+          button.textContent = 'Download as PNG';
+        }
+      }
+
+      // Update on input change
+      document.querySelectorAll('input').forEach((input) => {
+        input.addEventListener('input', updateBanner);
+      });
+    </script>
+  </body>
+</html>
