@@ -188,7 +188,7 @@ export default async function Home() {
 
       {/* Hero Section */}
       <div
-        className="w-full pt-16 pb-8 px-8"
+        className="w-full pt-40 pb-32 px-8"
         style={{
           background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
         }}
