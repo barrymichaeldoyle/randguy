@@ -67,8 +67,8 @@ export default async function Home() {
     '@type': 'Organization',
     name: 'Rand Guy',
     description: 'South African Personal Finance & Investment Guide',
-    url: baseUrl,
-    logo: `${baseUrl}/RandGuyLogo.png`,
+    url: BASE_URL,
+    logo: `${BASE_URL}/RandGuyLogo.png`,
     sameAs: [],
   };
 
@@ -83,7 +83,7 @@ export default async function Home() {
         headline: post.title,
         description: post.description,
         datePublished: post.date,
-        url: `${baseUrl}/blog/${post.slug}`,
+        url: `${BASE_URL}/blog/${post.slug}`,
         author: {
           '@type': 'Person',
           name: 'Rand Guy',
@@ -96,61 +96,61 @@ export default async function Home() {
     '@context': 'https://schema.org',
     '@type': 'SiteNavigationElement',
     name: 'Main Navigation',
-    url: baseUrl,
+    url: BASE_URL,
     hasPart: [
       {
         '@type': 'WebPage',
         name: 'Home',
-        url: baseUrl,
+        url: BASE_URL,
         description:
           'South African personal finance and investment advice, calculators, and guides',
       },
       {
         '@type': 'WebPage',
         name: 'Calculators',
-        url: `${baseUrl}/calculators`,
+        url: `${BASE_URL}/calculators`,
         description:
           'Free financial calculators for South Africans - income tax, UIF, and more',
       },
       {
         '@type': 'WebPage',
         name: 'Historical Data',
-        url: `${baseUrl}/data`,
+        url: `${BASE_URL}/data`,
         description:
           'Historical financial data visualizations for South Africa',
       },
       {
         '@type': 'WebPage',
         name: 'Blog',
-        url: `${baseUrl}/blog`,
+        url: `${BASE_URL}/blog`,
         description:
           'Personal finance articles and investment guides for South Africans',
       },
       {
         '@type': 'WebPage',
         name: 'Income Tax Calculator',
-        url: `${baseUrl}/calculators/income-tax`,
+        url: `${BASE_URL}/calculators/income-tax`,
         description:
           'Calculate your South African income tax with UIF and age-based rebates',
       },
       {
         '@type': 'WebPage',
         name: 'Home Loan Calculator',
-        url: `${baseUrl}/calculators/home-loan`,
+        url: `${BASE_URL}/calculators/home-loan`,
         description:
           'Calculate your home loan repayments and total interest for property purchases',
       },
       {
         '@type': 'WebPage',
         name: 'Loan-to-Value Calculator',
-        url: `${baseUrl}/calculators/ltv`,
+        url: `${BASE_URL}/calculators/ltv`,
         description:
           'Calculate your LTV ratio and understand your equity position for property financing',
       },
       {
         '@type': 'WebPage',
         name: 'TFSA Calculator',
-        url: `${baseUrl}/calculators/tfsa`,
+        url: `${BASE_URL}/calculators/tfsa`,
         description:
           'Calculate how long to max out your Tax-Free Savings Account',
       },
