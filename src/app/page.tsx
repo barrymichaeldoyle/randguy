@@ -158,7 +158,7 @@ export default async function Home() {
   };
 
   return (
-    <main className="flex flex-col items-center pt-16 p-8 flex-1">
+    <main className="flex flex-col items-center flex-1">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
@@ -177,116 +177,113 @@ export default async function Home() {
           __html: JSON.stringify(siteNavigationSchema),
         }}
       />
-      <div className="text-center mb-12">
-        <Image
-          src="/RandGuyLogo.png"
-          alt="Rand Guy - South African Personal Finance"
-          width={80}
-          height={80}
-          className="mx-auto mb-4"
-        />
-        <h1 className={`${excali.className} text-4xl mb-2`}>
-          South African Personal Finance Made Simple
-        </h1>
-        <p className="text-lg text-gray-700 mb-6">
-          Learn how to invest, use TFSAs, buy ETFs, and build wealth in South
-          Africa
-        </p>
+
+      {/* Hero Section */}
+      <div className="w-full pt-16 pb-8 px-8">
+        <div className="text-center mb-12">
+          <Image
+            src="/RandGuyLogo.png"
+            alt="Rand Guy - South African Personal Finance"
+            width={80}
+            height={80}
+            className="mx-auto mb-4"
+          />
+          <h1 className={`${excali.className} text-4xl mb-2`}>
+            South African Personal Finance Made Simple
+          </h1>
+          <p className="text-lg text-gray-700 mb-6">
+            Learn how to invest, use TFSAs, buy ETFs, and build wealth in South
+            Africa
+          </p>
+        </div>
       </div>
 
-      <div className="max-w-3xl w-full">
-        {/* Features Section */}
-        <section className="mb-12 grid md:grid-cols-3 gap-6">
-          <Link
-            href="/calculators"
-            className="group border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all hover:border-yellow-400"
-          >
-            <div className="flex items-center gap-3">
-              <div className="text-3xl mb-3">🧮</div>
-              <h2
-                className={`${excali.className} text-xl font-bold mb-2 group-hover:text-yellow-600 transition-colors`}
-              >
-                Financial Calculators
-              </h2>
-            </div>
-            <p className="text-gray-700 text-sm">
-              Calculate your <strong>income tax</strong>, <strong>UIF</strong>,
-              and more with these SA-specific tools
-            </p>
-          </Link>
+      {/* Features Section */}
+      <div className="w-full bg-gray-50 px-8 py-16">
+        <div className="max-w-3xl mx-auto">
+          <section>
+            <div className="grid md:grid-cols-2 gap-8 mb-8">
+              <div className="border border-gray-200 rounded-lg p-8 hover:shadow-lg transition-all hover:border-yellow-400 flex flex-col text-center bg-white">
+                <div className="text-4xl mb-4">🧮</div>
+                <h2 className={`${excali.className} text-2xl font-bold mb-3`}>
+                  Financial Calculators
+                </h2>
+                <p className="text-gray-700 mb-6 flex-grow leading-relaxed">
+                  Calculate your <strong>income tax</strong>,{' '}
+                  <strong>UIF</strong>, and more with these SA-specific tools
+                </p>
+                <Button href="/calculators">Explore Calculators</Button>
+              </div>
 
-          <Link
-            href="/data"
-            className="group border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all hover:border-yellow-400"
-          >
-            <div className="flex items-center gap-3">
-              <div className="text-3xl mb-3">📊</div>
-              <h2
-                className={`${excali.className} text-xl font-bold mb-2 group-hover:text-yellow-600 transition-colors`}
-              >
-                Historical Data & Trends
-              </h2>
+              <div className="border border-gray-200 rounded-lg p-8 hover:shadow-lg transition-all hover:border-yellow-400 flex flex-col text-center bg-white">
+                <div className="text-4xl mb-4">📊</div>
+                <h2 className={`${excali.className} text-2xl font-bold mb-3`}>
+                  Historical Data & Trends
+                </h2>
+                <p className="text-gray-700 mb-6 flex-grow leading-relaxed">
+                  Check out <strong>prime rates</strong>,{' '}
+                  <strong>tax brackets</strong>, and how SA finances have
+                  evolved
+                </p>
+                <Button href="/data">View Data</Button>
+              </div>
             </div>
-            <p className="text-gray-700 text-sm">
-              Check out <strong>prime rates</strong>,{' '}
-              <strong>tax brackets</strong>, and how SA finances have evolved
-            </p>
-          </Link>
 
-          <Link
-            href="/blog"
-            className="group border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all hover:border-yellow-400"
-          >
-            <div className="flex items-center gap-3">
-              <div className="text-3xl mb-3">📚</div>
-              <h2
-                className={`${excali.className} text-xl font-bold mb-2 group-hover:text-yellow-600 transition-colors`}
-              >
+            <div className="border border-gray-200 rounded-lg p-8 hover:shadow-lg transition-all hover:border-yellow-400 flex flex-col text-center bg-white">
+              <div className="text-4xl mb-4">📚</div>
+              <h2 className={`${excali.className} text-2xl font-bold mb-3`}>
                 Investment Guides & Tips
               </h2>
+              <p className="text-gray-700 mb-6 flex-grow leading-relaxed">
+                Learn how <strong>TFSAs</strong> work, what{' '}
+                <strong>ETFs</strong> are, and how to build wealth in South
+                Africa
+              </p>
+              <Button href="/blog">Read Guides</Button>
             </div>
-            <p className="text-gray-700 text-sm">
-              Learn how <strong>TFSAs</strong> work, what <strong>ETFs</strong>{' '}
-              are, and how to build wealth in South Africa
-            </p>
-          </Link>
-        </section>
+          </section>
+        </div>
+      </div>
 
-        {/* Latest Blog Posts */}
-        <section>
-          <h2 className={`${excali.className} text-3xl mb-6 text-center`}>
-            Latest Posts
-          </h2>
-          <div className="flex flex-col gap-4 mb-8">
-            {posts.map((post) => (
-              <Link key={post.slug} href={`/blog/${post.slug}`}>
-                <article className="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-all group cursor-pointer hover:border-yellow-400">
+      {/* Latest Blog Posts Section */}
+      <div className="w-full py-16 px-8">
+        <div className="max-w-3xl mx-auto">
+          <section>
+            <h2 className={`${excali.className} text-3xl mb-8 text-center`}>
+              Latest Posts
+            </h2>
+            <div className="flex flex-col gap-6 mb-8">
+              {posts.map((post) => (
+                <article
+                  key={post.slug}
+                  className="border border-gray-200 rounded-lg p-8 hover:shadow-lg transition-all hover:border-yellow-400 flex flex-col"
+                >
                   <h3
-                    className={`${excali.className} text-2xl font-bold mb-2 text-gray-900 group-hover:text-yellow-600 transition-colors`}
+                    className={`${excali.className} text-2xl font-bold mb-2 text-gray-900`}
                   >
                     {post.title}
                   </h3>
-                  <time className="text-sm text-gray-500 block mb-3">
+                  <time className="text-sm text-gray-500 block mb-4">
                     {new Date(post.date).toLocaleDateString('en-ZA', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric',
                     })}
                   </time>
-                  <p className="text-gray-700 mb-4">{post.description}</p>
-                  <span
-                    className={`${excali.className} text-gray-900 group-hover:text-yellow-600 font-medium transition-colors`}
-                  >
-                    Read more →
-                  </span>
+                  <p className="text-gray-700 mb-6 leading-relaxed flex-grow">
+                    {post.description}
+                  </p>
+                  <div className="flex justify-end">
+                    <Button href={`/blog/${post.slug}`}>Read Article</Button>
+                  </div>
                 </article>
-              </Link>
-            ))}
-          </div>
-          <div className="text-center">
-            <Button href="/blog">View All Posts</Button>
-          </div>
-        </section>
+              ))}
+            </div>
+            <div className="text-center">
+              <Button href="/blog">View All Posts</Button>
+            </div>
+          </section>
+        </div>
       </div>
     </main>
   );

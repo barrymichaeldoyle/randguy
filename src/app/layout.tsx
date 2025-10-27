@@ -79,6 +79,123 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
           </nav>
         </header>
         {children}
+        <footer className="border-t border-gray-200 py-12 mt-auto bg-gray-50">
+          <div className="max-w-3xl mx-auto px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-32 mb-8">
+              {/* Calculators Section */}
+              <div>
+                <h3 className={`${excali.className} text-lg font-bold mb-4`}>
+                  Calculators
+                </h3>
+                <ul className="space-y-2 text-sm">
+                  <li>
+                    <Link
+                      href="/calculators/income-tax"
+                      className="text-gray-600 hover:text-yellow-600 transition-colors"
+                    >
+                      Income Tax Calculator
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/calculators/home-loan"
+                      className="text-gray-600 hover:text-yellow-600 transition-colors"
+                    >
+                      Home Loan Calculator
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/calculators/ltv"
+                      className="text-gray-600 hover:text-yellow-600 transition-colors"
+                    >
+                      Loan-to-Value Calculator
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/calculators/tfsa"
+                      className="text-gray-600 hover:text-yellow-600 transition-colors"
+                    >
+                      TFSA Calculator
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/calculators/interest"
+                      className="text-gray-600 hover:text-yellow-600 transition-colors"
+                    >
+                      Interest Calculator
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Historical Data Section */}
+              <div>
+                <h3 className={`${excali.className} text-lg font-bold mb-4`}>
+                  Historical Data
+                </h3>
+                <ul className="space-y-2 text-sm">
+                  <li>
+                    <Link
+                      href="/data/prime-rates"
+                      className="text-gray-600 hover:text-yellow-600 transition-colors"
+                    >
+                      Prime Rates
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/data/tax-brackets"
+                      className="text-gray-600 hover:text-yellow-600 transition-colors"
+                    >
+                      Tax Brackets
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Resources Section */}
+              <div>
+                <h3 className={`${excali.className} text-lg font-bold mb-4`}>
+                  Resources
+                </h3>
+                <ul className="space-y-2 text-sm">
+                  <li>
+                    <Link
+                      href="/blog"
+                      className="text-gray-600 hover:text-yellow-600 transition-colors"
+                    >
+                      Blog
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/calculators"
+                      className="text-gray-600 hover:text-yellow-600 transition-colors"
+                    >
+                      All Calculators
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/data"
+                      className="text-gray-600 hover:text-yellow-600 transition-colors"
+                    >
+                      All Data
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="border-t border-gray-200 pt-6 text-center text-sm text-gray-600">
+              © {new Date().getFullYear()} Rand Guy. Making Cents of SA
+              Finance.
+            </div>
+          </div>
+        </footer>
       </body>
     </html>
   );
