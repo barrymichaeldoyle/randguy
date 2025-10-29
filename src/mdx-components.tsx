@@ -28,16 +28,16 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       <p className="mb-4 leading-relaxed text-gray-700">{children}</p>
     ),
     ul: ({ children }) => (
-      <ul className="list-disc list-inside mb-4 space-y-2 text-gray-700">
+      <ul className="list-disc list-outside mb-4 space-y-2 text-gray-700 pl-6">
         {children}
       </ul>
     ),
     ol: ({ children }) => (
-      <ol className="list-decimal list-inside mb-4 space-y-2 text-gray-700">
+      <ol className="list-decimal list-outside mb-4 space-y-2 text-gray-700 pl-6">
         {children}
       </ol>
     ),
-    li: ({ children }) => <li className="ml-4">{children}</li>,
+    li: ({ children }) => <li className="pl-2">{children}</li>,
     a: ({ href, children }) => (
       <a
         href={href}
