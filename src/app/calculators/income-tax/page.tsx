@@ -131,7 +131,13 @@ export default function IncomeTaxCalculatorPage() {
             <>
               • <strong>UIF (Unemployment Insurance Fund)</strong> is calculated
               at 1% for salary income, capped at R177.12/month (R17,712 monthly
-              income ceiling)
+              income ceiling).{' '}
+              <a
+                href="/blog/understanding-uif-unemployment-insurance-fund"
+                className="text-yellow-600 hover:underline font-semibold"
+              >
+                Learn more about UIF
+              </a>
             </>,
             <>
               • Tax brackets remained unchanged from 2024/2025 to 2025/2026,

@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "run-gen-pages": "python3 -m http.server 8000"
+    "gen-pages": "python3 -m http.server 8000"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",

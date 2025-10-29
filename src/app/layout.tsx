@@ -164,8 +164,8 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
                 </a>
               </div>
               <div className="text-sm text-gray-700">
-                © {new Date().getFullYear()} Rand Guy. Making Cents of SA
-                Finance.
+                © {new Date().getFullYear()} Rand Guy. Simple tools. Smart
+                choices. Better money.
               </div>
             </div>
           </div>
