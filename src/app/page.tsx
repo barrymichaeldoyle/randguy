@@ -1,11 +1,12 @@
 import Image from 'next/image';
-import { Metadata } from 'next';
 
-import { excali } from '@/fonts';
-import { Button } from '@/components/Button';
 import { BlogPostCard } from '@/components/BlogPostCard';
-import { getAllPosts } from '@/lib/posts';
+import { Button } from '@/components/Button';
+import { excali } from '@/fonts';
 import { BASE_URL } from '@/lib/constants';
+import { getAllPosts } from '@/lib/posts';
+
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Rand Guy | South African Personal Finance & Investment Guide',
@@ -149,7 +150,7 @@ export default async function Home() {
   };
 
   return (
-    <main className="flex flex-col items-center flex-1">
+    <main className="flex flex-1 flex-col items-center">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
@@ -171,12 +172,12 @@ export default async function Home() {
 
       {/* Hero Section */}
       <div
-        className="w-full pt-40 pb-32 px-8"
+        className="w-full px-8 pt-40 pb-32"
         style={{
           background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 100%)',
         }}
       >
-        <div className="text-center mb-12">
+        <div className="mb-12 text-center">
           <Image
             src="/RandGuyLogo.png"
             alt="Rand Guy - South African Personal Finance"
@@ -184,10 +185,10 @@ export default async function Home() {
             height={80}
             className="mx-auto mb-4"
           />
-          <h1 className={`${excali.className} text-4xl mb-2`}>
+          <h1 className={`${excali.className} mb-2 text-4xl`}>
             South African Personal Finance Made Simple
           </h1>
-          <p className="text-lg text-gray-700 mb-6">
+          <p className="mb-6 text-lg text-gray-700">
             Learn how to invest, use TFSAs, buy ETFs, and build wealth in South
             Africa
           </p>
@@ -196,27 +197,27 @@ export default async function Home() {
 
       {/* Features Section */}
       <div className="w-full bg-gray-50 px-8 py-16">
-        <div className="max-w-3xl mx-auto">
+        <div className="mx-auto max-w-3xl">
           <section>
-            <div className="grid md:grid-cols-2 gap-8 mb-8">
-              <div className="border border-gray-200 rounded-lg p-8 hover:shadow-lg transition-all hover:border-yellow-400 flex flex-col text-center bg-white">
-                <div className="text-4xl mb-4">🧮</div>
-                <h2 className={`${excali.className} text-2xl font-bold mb-3`}>
+            <div className="mb-8 grid gap-8 md:grid-cols-2">
+              <div className="flex flex-col rounded-lg border border-gray-200 bg-white p-8 text-center transition-all hover:border-yellow-400 hover:shadow-lg">
+                <div className="mb-4 text-4xl">🧮</div>
+                <h2 className={`${excali.className} mb-3 text-2xl font-bold`}>
                   Financial Calculators
                 </h2>
-                <p className="text-gray-700 mb-6 flex-grow leading-relaxed">
+                <p className="mb-6 flex-grow leading-relaxed text-gray-700">
                   Calculate your <strong>income tax</strong>,{' '}
                   <strong>UIF</strong>, and more with these SA-specific tools
                 </p>
                 <Button href="/calculators">Explore Calculators</Button>
               </div>
 
-              <div className="border border-gray-200 rounded-lg p-8 hover:shadow-lg transition-all hover:border-yellow-400 flex flex-col text-center bg-white">
-                <div className="text-4xl mb-4">📊</div>
-                <h2 className={`${excali.className} text-2xl font-bold mb-3`}>
+              <div className="flex flex-col rounded-lg border border-gray-200 bg-white p-8 text-center transition-all hover:border-yellow-400 hover:shadow-lg">
+                <div className="mb-4 text-4xl">📊</div>
+                <h2 className={`${excali.className} mb-3 text-2xl font-bold`}>
                   Historical Data & Trends
                 </h2>
-                <p className="text-gray-700 mb-6 flex-grow leading-relaxed">
+                <p className="mb-6 flex-grow leading-relaxed text-gray-700">
                   Check out <strong>prime rates</strong>,{' '}
                   <strong>tax brackets</strong>, and how SA finances have
                   evolved
@@ -225,12 +226,12 @@ export default async function Home() {
               </div>
             </div>
 
-            <div className="border border-gray-200 rounded-lg p-8 hover:shadow-lg transition-all hover:border-yellow-400 flex flex-col text-center bg-white">
-              <div className="text-4xl mb-4">📚</div>
-              <h2 className={`${excali.className} text-2xl font-bold mb-3`}>
+            <div className="flex flex-col rounded-lg border border-gray-200 bg-white p-8 text-center transition-all hover:border-yellow-400 hover:shadow-lg">
+              <div className="mb-4 text-4xl">📚</div>
+              <h2 className={`${excali.className} mb-3 text-2xl font-bold`}>
                 Investment Guides & Tips
               </h2>
-              <p className="text-gray-700 mb-6 flex-grow leading-relaxed">
+              <p className="mb-6 flex-grow leading-relaxed text-gray-700">
                 Learn how <strong>TFSAs</strong> work, what{' '}
                 <strong>ETFs</strong> are, and how to build wealth in South
                 Africa
@@ -242,13 +243,13 @@ export default async function Home() {
       </div>
 
       {/* Latest Blog Posts Section */}
-      <div className="w-full py-16 px-8">
-        <div className="max-w-3xl mx-auto">
+      <div className="w-full px-8 py-16">
+        <div className="mx-auto max-w-3xl">
           <section>
-            <h2 className={`${excali.className} text-3xl mb-8 text-center`}>
+            <h2 className={`${excali.className} mb-8 text-center text-3xl`}>
               Latest Posts
             </h2>
-            <div className="flex flex-col gap-6 mb-8">
+            <div className="mb-8 flex flex-col gap-6">
               {posts.map((post) => (
                 <BlogPostCard key={post.slug} post={post} />
               ))}

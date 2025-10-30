@@ -2,11 +2,12 @@
 
 import { useEffect, useRef } from 'react';
 
-import { excali } from '@/fonts';
 import { Button } from '@/components/Button';
-import { NumericInput } from '@/components/NumericInput';
 import { FormField } from '@/components/FormField';
+import { NumericInput } from '@/components/NumericInput';
 import { Select } from '@/components/Select';
+import { excali } from '@/fonts';
+
 import { useTFSAStore, type DisplayUnit } from './tfsa-store';
 
 const LIFETIME_LIMIT = 500000; // R500,000 lifetime limit
@@ -175,10 +176,10 @@ export default function TFSACalculator() {
   };
 
   return (
-    <div className="grid lg:grid-cols-[400px_1fr] gap-8 items-start">
+    <div className="grid items-start gap-8 lg:grid-cols-[400px_1fr]">
       {/* Input Form - Left Side */}
-      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-8 shadow-sm lg:sticky lg:top-8">
-        <h2 className={`${excali.className} text-2xl mb-6`}>
+      <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-8 lg:sticky lg:top-8">
+        <h2 className={`${excali.className} mb-6 text-2xl`}>
           Your TFSA Details
         </h2>
 
@@ -238,7 +239,7 @@ export default function TFSACalculator() {
             <button
               type="button"
               onClick={handleResetForm}
-              className="w-full px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
+              className="w-full rounded-lg px-4 py-2 text-sm text-gray-600 transition hover:bg-gray-100 hover:text-gray-900"
             >
               Reset Form
             </button>
@@ -249,40 +250,40 @@ export default function TFSACalculator() {
       {/* Results - Right Side */}
       <div ref={resultsRef} className="min-h-[400px]">
         {results && (
-          <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-8 shadow-sm">
-            <h2 className={`${excali.className} text-2xl mb-6`}>
+          <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-8">
+            <h2 className={`${excali.className} mb-6 text-2xl`}>
               Your TFSA Timeline
             </h2>
 
             <div className="space-y-6">
               {/* Primary Result - Time to Max Out */}
-              <div className="bg-green-50 rounded-lg p-6 border-2 border-green-200">
-                <span className="text-sm text-gray-600 block mb-1">
+              <div className="rounded-lg border-2 border-green-200 bg-green-50 p-6">
+                <span className="mb-1 block text-sm text-gray-600">
                   Time to Max Out
                 </span>
-                <span className="text-5xl font-bold text-green-700 block">
+                <span className="block text-5xl font-bold text-green-700">
                   {results.yearsToMaxOut.toFixed(1)} years
                 </span>
-                <span className="text-xs text-gray-600 block mt-2">
+                <span className="mt-2 block text-xs text-gray-600">
                   {results.monthsToMaxOut} months
                 </span>
               </div>
 
               {/* Progress Bar */}
               <div>
-                <div className="flex justify-between items-center mb-2">
+                <div className="mb-2 flex items-center justify-between">
                   <span className="text-sm text-gray-600">Progress</span>
                   <span className="text-sm font-semibold text-gray-900">
                     {results.currentProgress.toFixed(1)}%
                   </span>
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
+                <div className="h-4 w-full overflow-hidden rounded-full bg-gray-200">
                   <div
-                    className="bg-green-600 h-4 rounded-full transition-all duration-500"
+                    className="h-4 rounded-full bg-green-600 transition-all duration-500"
                     style={{ width: `${results.currentProgress}%` }}
                   />
                 </div>
-                <div className="flex justify-between items-center mt-1 text-xs text-gray-500">
+                <div className="mt-1 flex items-center justify-between text-xs text-gray-500">
                   <span>
                     {formatCurrency(parseFloat(currentContributions))}
                   </span>
@@ -291,21 +292,21 @@ export default function TFSACalculator() {
               </div>
 
               {/* Key Metrics */}
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="bg-gray-50 rounded-lg p-5 border border-gray-200">
-                  <span className="text-sm text-gray-600 block mb-1">
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="rounded-lg border border-gray-200 bg-gray-50 p-5">
+                  <span className="mb-1 block text-sm text-gray-600">
                     Remaining Contributions
                   </span>
-                  <span className="text-3xl font-bold text-gray-900 block">
+                  <span className="block text-3xl font-bold text-gray-900">
                     {formatCurrency(results.remainingContributions)}
                   </span>
                 </div>
 
-                <div className="bg-blue-50 rounded-lg p-5 border border-blue-200">
-                  <span className="text-sm text-gray-600 block mb-1">
+                <div className="rounded-lg border border-blue-200 bg-blue-50 p-5">
+                  <span className="mb-1 block text-sm text-gray-600">
                     Projected Max Out Date
                   </span>
-                  <span className="text-3xl font-bold text-gray-900 block">
+                  <span className="block text-3xl font-bold text-gray-900">
                     {formatDate(results.projectedMaxOutDate)}
                   </span>
                 </div>
@@ -313,7 +314,7 @@ export default function TFSACalculator() {
 
               {/* Annual Contribution Warning */}
               {results.annualContribution > ANNUAL_LIMIT && (
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-4">
                   <div className="flex">
                     <div className="flex-shrink-0">
                       <svg
@@ -347,21 +348,21 @@ export default function TFSACalculator() {
               )}
 
               {/* Contribution Summary */}
-              <div className="space-y-3 pt-4 border-t border-gray-200">
+              <div className="space-y-3 border-t border-gray-200 pt-4">
                 <h3
-                  className={`${excali.className} text-xl text-gray-700 mb-3`}
+                  className={`${excali.className} mb-3 text-xl text-gray-700`}
                 >
                   Contribution Summary
                 </h3>
 
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Current Contributions</span>
                   <span className="font-semibold text-gray-900">
                     {formatCurrency(parseFloat(currentContributions))}
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Monthly Contribution</span>
                   <span className="font-semibold text-gray-900">
                     {formatCurrency(
@@ -372,7 +373,7 @@ export default function TFSACalculator() {
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Annual Contribution</span>
                   <span className="font-semibold text-gray-900">
                     {formatCurrency(
@@ -383,7 +384,7 @@ export default function TFSACalculator() {
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center py-3 font-bold text-lg">
+                <div className="flex items-center justify-between py-3 text-lg font-bold">
                   <span className="text-gray-700">Lifetime Limit</span>
                   <span className="text-gray-900">
                     {formatCurrency(LIFETIME_LIMIT)}

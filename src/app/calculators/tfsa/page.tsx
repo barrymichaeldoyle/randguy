@@ -1,12 +1,12 @@
-import type { Metadata } from 'next';
-
-import { excali } from '@/fonts';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { Button } from '@/components/Button';
 import { CalculatorInfo } from '@/components/CalculatorInfo';
-import { Breadcrumb } from '@/components/Breadcrumb';
+import { excali } from '@/fonts';
+import { BASE_URL } from '@/lib/constants';
 
 import TFSACalculator from './_components/TFSACalculator';
-import { BASE_URL } from '@/lib/constants';
+
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'TFSA Calculator | South Africa',
@@ -91,7 +91,7 @@ export default function TFSACalculatorPage() {
   };
 
   return (
-    <main className="flex flex-col items-center pt-8 md:pt-12 px-4 pb-8 md:px-8 flex-1">
+    <main className="flex flex-1 flex-col items-center px-4 pt-8 pb-8 md:px-8 md:pt-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -100,7 +100,7 @@ export default function TFSACalculatorPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
-      <div className="max-w-7xl w-full">
+      <div className="w-full max-w-7xl">
         <Breadcrumb
           items={[
             { name: 'Home', href: '/' },
@@ -109,8 +109,8 @@ export default function TFSACalculatorPage() {
           ]}
         />
 
-        <div className="text-center mb-8">
-          <h1 className={`${excali.className} text-4xl mb-4`}>
+        <div className="mb-8 text-center">
+          <h1 className={`${excali.className} mb-4 text-4xl`}>
             TFSA Calculator
           </h1>
           <p className="text-lg text-gray-700">
@@ -121,8 +121,8 @@ export default function TFSACalculatorPage() {
 
         <TFSACalculator />
 
-        <div className="mt-8 bg-yellow-50 border border-yellow-200 rounded-lg p-6 text-center">
-          <p className="text-gray-800 mb-3">
+        <div className="mt-8 rounded-lg border border-yellow-200 bg-yellow-50 p-6 text-center">
+          <p className="mb-3 text-gray-800">
             Want to learn more about TFSAs and investment strategies?
           </p>
           <Button href="/blog/understanding-tax-free-savings">
@@ -174,7 +174,7 @@ export default function TFSACalculatorPage() {
           ]}
         />
 
-        <div className="text-center mt-8">
+        <div className="mt-8 text-center">
           <Button href="/calculators" variant="secondary">
             View All Calculators
           </Button>

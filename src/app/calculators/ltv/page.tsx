@@ -1,12 +1,13 @@
-import type { Metadata } from 'next';
 
-import { excali } from '@/fonts';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { Button } from '@/components/Button';
 import { CalculatorInfo } from '@/components/CalculatorInfo';
-import { Breadcrumb } from '@/components/Breadcrumb';
+import { excali } from '@/fonts';
+import { BASE_URL } from '@/lib/constants';
 
 import LTVCalculator from './_components/LTVCalculator';
-import { BASE_URL } from '@/lib/constants';
+
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Loan-to-Value (LTV) Calculator | South Africa',

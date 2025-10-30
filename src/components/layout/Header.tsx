@@ -1,10 +1,12 @@
 'use client';
 
-import Link from 'next/link';
 import Image from 'next/image';
-import { useEffect, useState, useRef } from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useEffect, useState, useRef } from 'react';
+
 import { Button } from '@/components/Button';
+
 import { excali } from '../../fonts';
 
 export function Header() {
@@ -16,6 +18,8 @@ export function Header() {
 
   // Close menu when route changes
   useEffect(() => {
+    // This is intentional - we want to sync the menu state with navigation changes
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsMenuOpen(false);
   }, [pathname]);
 

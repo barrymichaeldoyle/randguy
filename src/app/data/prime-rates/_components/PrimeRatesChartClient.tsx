@@ -38,7 +38,7 @@ export default function PrimeRatesChartClient({
           <LineChart
             data={chartData}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+             
             onMouseMove={(e: any) => {
               if (e.activePayload && e.activePayload.length > 0) {
                 setHoveredPoint({

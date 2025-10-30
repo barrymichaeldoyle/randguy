@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect } from 'react';
 
 interface NumericInputProps {
   id?: string;
@@ -16,8 +16,8 @@ export function NumericInput({
   id,
   value,
   onChange,
-  placeholder = "0",
-  className = "",
+  placeholder = '0',
+  className = '',
   prefix,
   suffix,
   allowDecimals = false,
@@ -25,24 +25,24 @@ export function NumericInput({
 }: NumericInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const cursorPositionRef = useRef<number | null>(null);
-  const previousValueRef = useRef<string>("");
+  const previousValueRef = useRef<string>('');
 
   // Handler for decimal inputs (no formatting, allows decimals)
   const handleDecimalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // First, replace commas with periods (for SA keyboard layouts)
-    let rawValue = e.target.value.replace(/,/g, ".");
+    let rawValue = e.target.value.replace(/,/g, '.');
 
     // Then remove all non-numeric characters except periods
-    rawValue = rawValue.replace(/[^0-9.]/g, "");
+    rawValue = rawValue.replace(/[^0-9.]/g, '');
 
     // Handle multiple decimal points (keep only the first one)
-    const parts = rawValue.split(".");
+    const parts = rawValue.split('.');
     if (parts.length > 2) {
-      rawValue = parts[0] + "." + parts.slice(1).join("");
+      rawValue = parts[0] + '.' + parts.slice(1).join('');
     }
 
     // Check max constraint
-    if (max !== undefined && rawValue !== "") {
+    if (max !== undefined && rawValue !== '') {
       const numValue = parseFloat(rawValue);
       if (!isNaN(numValue) && numValue > max) {
         return; // Don't update if exceeds max
@@ -54,10 +54,10 @@ export function NumericInput({
 
   // Format the value for display (only for whole numbers)
   const formatValue = (val: string): string => {
-    if (!val) return "";
+    if (!val) return '';
     const num = parseFloat(val);
-    if (isNaN(num)) return "";
-    return num.toLocaleString("en-ZA");
+    if (isNaN(num)) return '';
+    return num.toLocaleString('en-ZA');
   };
 
   // Set cursor position based on character position in formatted string
@@ -85,12 +85,12 @@ export function NumericInput({
     const newFormattedValue = input.value;
 
     // Remove all non-numeric characters (decimals not allowed for whole numbers)
-    const rawValue = newFormattedValue.replace(/[^0-9]/g, "");
+    const rawValue = newFormattedValue.replace(/[^0-9]/g, '');
 
     // Count digits before cursor in the current input
     const digitsBeforeCursor = newFormattedValue
       .substring(0, cursorPos)
-      .replace(/[^0-9]/g, "").length;
+      .replace(/[^0-9]/g, '').length;
 
     // Format the new value to see where separators will be
     const formatted = formatValue(rawValue);
@@ -113,7 +113,7 @@ export function NumericInput({
     previousValueRef.current = formatted;
 
     // Check max constraint
-    if (max !== undefined && rawValue !== "") {
+    if (max !== undefined && rawValue !== '') {
       const numValue = parseFloat(rawValue);
       if (!isNaN(numValue) && numValue > max) {
         return; // Don't update if exceeds max
@@ -125,12 +125,16 @@ export function NumericInput({
 
   // Use raw value for decimals, formatted value for whole numbers
   const displayValue = allowDecimals ? value : formatValue(value);
-  previousValueRef.current = displayValue;
+
+  // Update previousValueRef after render to avoid updating ref during render
+  useEffect(() => {
+    previousValueRef.current = displayValue;
+  });
 
   return (
     <div className="relative">
       {prefix && (
-        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+        <span className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-500">
           {prefix}
         </span>
       )}
@@ -144,11 +148,11 @@ export function NumericInput({
         placeholder={placeholder}
         className={
           className ||
-          `w-full ${prefix ? "pl-8" : "pl-4"} ${suffix ? "pr-8" : "pr-4"} py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-transparent outline-none transition`
+          `w-full ${prefix ? 'pl-8' : 'pl-4'} ${suffix ? 'pr-8' : 'pr-4'} rounded-lg border border-gray-300 py-3 transition outline-none focus:border-transparent focus:ring-2 focus:ring-yellow-400`
         }
       />
       {suffix && (
-        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500">
+        <span className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-500">
           {suffix}
         </span>
       )}

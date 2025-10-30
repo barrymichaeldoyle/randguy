@@ -1,6 +1,8 @@
-import { ImageResponse } from 'next/og';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+
+import { ImageResponse } from 'next/og';
+
 import { ogConfig, ogStyles } from '@/lib/og-image-utils';
 
 export const alt = 'Rand Guy Blog Post';

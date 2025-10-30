@@ -1,7 +1,9 @@
 import Link from 'next/link';
-import { ReactNode } from 'react';
 
 import { excali } from '@/fonts';
+
+import type { ReactNode } from 'react';
+
 
 type ButtonProps = {
   children: ReactNode;

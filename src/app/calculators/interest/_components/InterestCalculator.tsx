@@ -2,11 +2,12 @@
 
 import { useRef, useEffect } from 'react';
 
-import { excali } from '@/fonts';
 import { Button } from '@/components/Button';
-import { NumericInput } from '@/components/NumericInput';
 import { FormField } from '@/components/FormField';
+import { NumericInput } from '@/components/NumericInput';
 import { Select } from '@/components/Select';
+import { excali } from '@/fonts';
+
 import {
   useInterestStore,
   type InterestPeriod,
@@ -324,10 +325,10 @@ export default function InterestCalculator() {
   };
 
   return (
-    <div className="grid lg:grid-cols-[400px_1fr] gap-8 items-start">
+    <div className="grid items-start gap-8 lg:grid-cols-[400px_1fr]">
       {/* Input Form - Left Side */}
-      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-8 shadow-sm lg:sticky lg:top-8">
-        <h2 className={`${excali.className} text-2xl mb-6`}>
+      <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-8 lg:sticky lg:top-8">
+        <h2 className={`${excali.className} mb-6 text-2xl`}>
           Interest Details
         </h2>
 
@@ -397,7 +398,7 @@ export default function InterestCalculator() {
             <button
               type="button"
               onClick={resetForm}
-              className="w-full px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
+              className="w-full rounded-lg px-4 py-2 text-sm text-gray-600 transition hover:bg-gray-100 hover:text-gray-900"
             >
               Reset Form
             </button>
@@ -408,21 +409,21 @@ export default function InterestCalculator() {
       {/* Results - Right Side */}
       <div ref={resultsRef} className="min-h-[400px]">
         {results && (
-          <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-8 shadow-sm">
-            <h2 className={`${excali.className} text-2xl mb-6`}>
+          <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-8">
+            <h2 className={`${excali.className} mb-6 text-2xl`}>
               Interest Breakdown
             </h2>
 
             <div className="space-y-6">
               {/* Primary Result - Annual Gain */}
-              <div className="bg-green-50 rounded-lg p-6 border-2 border-green-200">
-                <span className="text-sm text-gray-600 block mb-1">
+              <div className="rounded-lg border-2 border-green-200 bg-green-50 p-6">
+                <span className="mb-1 block text-sm text-gray-600">
                   Annual Interest Gain
                 </span>
-                <span className="text-5xl font-bold text-green-700 block">
+                <span className="block text-5xl font-bold text-green-700">
                   {formatCurrency(results.annualGain)}
                 </span>
-                <span className="text-xs text-gray-600 block mt-2">
+                <span className="mt-2 block text-xs text-gray-600">
                   {results.calculatedWith.interestType === 'simple'
                     ? 'Simple'
                     : 'Compound'}{' '}
@@ -449,14 +450,14 @@ export default function InterestCalculator() {
                 )}
 
                 <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-blue-50 rounded-lg p-5 border border-blue-200">
-                    <span className="text-sm text-gray-600 block mb-1">
+                  <div className="rounded-lg border border-blue-200 bg-blue-50 p-5">
+                    <span className="mb-1 block text-sm text-gray-600">
                       Monthly
                     </span>
-                    <span className="text-2xl font-bold text-gray-900 block">
+                    <span className="block text-2xl font-bold text-gray-900">
                       {formatCurrency(results.monthlyGain)}
                     </span>
-                    <span className="text-xs text-gray-600 mt-1 block">
+                    <span className="mt-1 block text-xs text-gray-600">
                       {(
                         (results.monthlyGain /
                           results.calculatedWith.principal) *
@@ -468,14 +469,14 @@ export default function InterestCalculator() {
                     </span>
                   </div>
 
-                  <div className="bg-purple-50 rounded-lg p-5 border border-purple-200">
-                    <span className="text-sm text-gray-600 block mb-1">
+                  <div className="rounded-lg border border-purple-200 bg-purple-50 p-5">
+                    <span className="mb-1 block text-sm text-gray-600">
                       Weekly
                     </span>
-                    <span className="text-2xl font-bold text-gray-900 block">
+                    <span className="block text-2xl font-bold text-gray-900">
                       {formatCurrency(results.weeklyGain)}
                     </span>
-                    <span className="text-xs text-gray-600 mt-1 block">
+                    <span className="mt-1 block text-xs text-gray-600">
                       {(
                         (results.weeklyGain /
                           results.calculatedWith.principal) *
@@ -487,14 +488,14 @@ export default function InterestCalculator() {
                     </span>
                   </div>
 
-                  <div className="bg-orange-50 rounded-lg p-5 border border-orange-200">
-                    <span className="text-sm text-gray-600 block mb-1">
+                  <div className="rounded-lg border border-orange-200 bg-orange-50 p-5">
+                    <span className="mb-1 block text-sm text-gray-600">
                       Daily
                     </span>
-                    <span className="text-2xl font-bold text-gray-900 block">
+                    <span className="block text-2xl font-bold text-gray-900">
                       {formatCurrency(results.dailyGain)}
                     </span>
-                    <span className="text-xs text-gray-600 mt-1 block">
+                    <span className="mt-1 block text-xs text-gray-600">
                       {(
                         (results.dailyGain / results.calculatedWith.principal) *
                         100
@@ -505,14 +506,14 @@ export default function InterestCalculator() {
                     </span>
                   </div>
 
-                  <div className="bg-pink-50 rounded-lg p-5 border border-pink-200">
-                    <span className="text-sm text-gray-600 block mb-1">
+                  <div className="rounded-lg border border-pink-200 bg-pink-50 p-5">
+                    <span className="mb-1 block text-sm text-gray-600">
                       Hourly
                     </span>
-                    <span className="text-2xl font-bold text-gray-900 block">
+                    <span className="block text-2xl font-bold text-gray-900">
                       {formatCurrency(results.hourlyGain)}
                     </span>
-                    <span className="text-xs text-gray-600 mt-1 block">
+                    <span className="mt-1 block text-xs text-gray-600">
                       {(
                         (results.hourlyGain /
                           results.calculatedWith.principal) *
@@ -527,21 +528,21 @@ export default function InterestCalculator() {
               </div>
 
               {/* Summary */}
-              <div className="space-y-3 pt-4 border-t border-gray-200">
+              <div className="space-y-3 border-t border-gray-200 pt-4">
                 <h3
-                  className={`${excali.className} text-xl text-gray-700 mb-3`}
+                  className={`${excali.className} mb-3 text-xl text-gray-700`}
                 >
                   Summary
                 </h3>
 
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Principal Amount</span>
                   <span className="font-semibold text-gray-900">
                     {formatCurrency(results.calculatedWith.principal)}
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Interest Type</span>
                   <span className="font-semibold text-gray-900">
                     {results.calculatedWith.interestType === 'simple'
@@ -551,7 +552,7 @@ export default function InterestCalculator() {
                 </div>
 
                 {results.calculatedWith.interestType !== 'simple' && (
-                  <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                  <div className="flex items-center justify-between border-b border-gray-200 py-3">
                     <span className="text-gray-600">Compounding</span>
                     <span className="font-semibold text-gray-900 capitalize">
                       {results.calculatedWith.compoundingFrequency}
@@ -559,7 +560,7 @@ export default function InterestCalculator() {
                   </div>
                 )}
 
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Interest Rate</span>
                   <span className="font-semibold text-gray-900">
                     {results.calculatedWith.interestRate.toFixed(2)}%{' '}
@@ -567,14 +568,14 @@ export default function InterestCalculator() {
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Effective Annual Rate</span>
                   <span className="font-semibold text-gray-900">
                     {results.effectiveAnnualRate.toFixed(2)}%
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center py-3 font-bold text-lg">
+                <div className="flex items-center justify-between py-3 text-lg font-bold">
                   <span className="text-gray-700">Total After 1 Year</span>
                   <span className="text-gray-900">
                     {formatCurrency(results.totalAfterOneYear)}
@@ -583,20 +584,20 @@ export default function InterestCalculator() {
               </div>
 
               {/* Comparison: Simple vs Compound */}
-              <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-6">
+              <div className="rounded-lg border border-purple-200 bg-gradient-to-r from-purple-50 to-blue-50 p-6">
                 <h3
-                  className={`${excali.className} text-xl text-gray-800 mb-4`}
+                  className={`${excali.className} mb-4 text-xl text-gray-800`}
                 >
                   Simple vs Compound Interest Comparison
                 </h3>
-                <p className="text-xs text-gray-600 mb-3 capitalize">
+                <p className="mb-3 text-xs text-gray-600 capitalize">
                   Comparing simple interest with{' '}
                   {results.calculatedWith.compoundingFrequency} compounding
                 </p>
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <div className="text-sm text-gray-600 mb-1">
+                      <div className="mb-1 text-sm text-gray-600">
                         Simple Interest (1 Year)
                       </div>
                       <div className="text-2xl font-bold text-gray-900">
@@ -608,7 +609,7 @@ export default function InterestCalculator() {
                       </div>
                     </div>
                     <div>
-                      <div className="text-sm text-gray-600 mb-1 capitalize">
+                      <div className="mb-1 text-sm text-gray-600 capitalize">
                         Compound ({results.calculatedWith.compoundingFrequency})
                       </div>
                       <div className="text-2xl font-bold text-green-700">
@@ -623,8 +624,8 @@ export default function InterestCalculator() {
                       </div>
                     </div>
                   </div>
-                  <div className="pt-3 border-t border-purple-200">
-                    <div className="text-sm text-gray-600 mb-1">
+                  <div className="border-t border-purple-200 pt-3">
+                    <div className="mb-1 text-sm text-gray-600">
                       Extra Earnings with Compound (
                       {results.calculatedWith.compoundingFrequency})
                     </div>
@@ -642,7 +643,7 @@ export default function InterestCalculator() {
                             100
                       )}
                     </div>
-                    <p className="text-xs text-gray-600 mt-2">
+                    <p className="mt-2 text-xs text-gray-600">
                       Compound interest (
                       {results.calculatedWith.compoundingFrequency}) earns{' '}
                       {(
@@ -666,7 +667,7 @@ export default function InterestCalculator() {
               </div>
 
               {/* Info Box */}
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
                 <div className="flex">
                   <div className="flex-shrink-0">
                     <svg
@@ -714,8 +715,8 @@ export default function InterestCalculator() {
         )}
 
         {!results && (
-          <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
-            <p className="text-gray-500 text-lg">
+          <div className="rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-12 text-center">
+            <p className="text-lg text-gray-500">
               Enter your principal amount and interest rate, then click
               Calculate to see your results
             </p>

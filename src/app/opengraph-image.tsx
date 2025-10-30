@@ -1,8 +1,10 @@
-import { ImageResponse } from 'next/og';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { ogStyles, ogConfig } from '@/lib/og-image-utils';
+
+import { ImageResponse } from 'next/og';
+
 import { TAGLINE } from '@/lib/constants';
+import { ogStyles, ogConfig } from '@/lib/og-image-utils';
 
 export const alt = `Rand Guy - ${TAGLINE}`;
 export const size = ogConfig.size;

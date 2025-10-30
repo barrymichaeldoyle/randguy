@@ -1,4 +1,3 @@
-import { Metadata } from 'next';
 import Link from 'next/link';
 
 import { Breadcrumb } from '@/components/Breadcrumb';
@@ -10,6 +9,8 @@ import {
 } from '@/lib/historical-data';
 
 import PrimeRatesChartClient from './_components/PrimeRatesChartClient';
+
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Historical Prime Lending & Repo Rates in South Africa',

@@ -1,6 +1,8 @@
 import Link from 'next/link';
-import { excali } from '../../fonts';
+
 import { LINKS, TAGLINE, TWITTER_HANDLE } from '@/lib/constants';
+
+import { excali } from '../../fonts';
 
 interface FooterLink {
   href: string;
@@ -42,13 +44,13 @@ const footerGroups: FooterGroup[] = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-gray-200 py-8 sm:py-12 mt-auto bg-gray-50">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:justify-between gap-8 md:gap-12 mb-8">
+    <footer className="mt-auto border-t border-gray-200 bg-gray-50 py-8 sm:py-12">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 flex flex-col gap-8 md:flex-row md:justify-between md:gap-12">
           {footerGroups.map((group) => (
             <div key={group.title} className="text-center md:text-left">
               <h3
-                className={`${excali.className} text-base sm:text-lg font-bold mb-3 sm:mb-4`}
+                className={`${excali.className} mb-3 text-base font-bold sm:mb-4 sm:text-lg`}
               >
                 {group.title}
               </h3>
@@ -63,17 +65,17 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="border-t border-gray-200 pt-4 sm:pt-6 text-center">
+        <div className="border-t border-gray-200 pt-4 text-center sm:pt-6">
           <div className="mb-3 sm:mb-4">
             <a
               href={LINKS.twitter}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm sm:text-base hover:text-yellow-600 transition-colors"
+              className="inline-flex items-center gap-2 text-sm transition-colors hover:text-yellow-600 sm:text-base"
               aria-label="Follow Rand Guy on X (Twitter)"
             >
               <svg
-                className="w-4 h-4 sm:w-5 sm:h-5"
+                className="h-4 w-4 sm:h-5 sm:w-5"
                 fill="currentColor"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
@@ -83,7 +85,7 @@ export function Footer() {
               Follow {TWITTER_HANDLE}
             </a>
           </div>
-          <div className="text-xs sm:text-sm text-gray-700">
+          <div className="text-xs text-gray-700 sm:text-sm">
             © {new Date().getFullYear()} Rand Guy. {TAGLINE}
           </div>
         </div>

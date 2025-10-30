@@ -2,10 +2,10 @@
 
 import { useRef } from 'react';
 
-import { excali } from '@/fonts';
 import { Button } from '@/components/Button';
-import { NumericInput } from '@/components/NumericInput';
 import { FormField } from '@/components/FormField';
+import { NumericInput } from '@/components/NumericInput';
+import { excali } from '@/fonts';
 import { formatCurrency } from '@/lib/calculator-utils';
 
 import { useLTVStore } from './ltv-store';
@@ -134,10 +134,10 @@ export default function LTVCalculator() {
   };
 
   return (
-    <div className="grid lg:grid-cols-[400px_1fr] gap-8 items-start">
+    <div className="grid items-start gap-8 lg:grid-cols-[400px_1fr]">
       {/* Input Form - Left Side */}
-      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-8 shadow-sm lg:sticky lg:top-8">
-        <h2 className={`${excali.className} text-2xl mb-6`}>
+      <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-8 lg:sticky lg:top-8">
+        <h2 className={`${excali.className} mb-6 text-2xl`}>
           Property Details
         </h2>
 
@@ -153,30 +153,30 @@ export default function LTVCalculator() {
           </FormField>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="mb-3 block text-sm font-medium text-gray-700">
               I want to enter
             </label>
             <div className="flex gap-4">
-              <label className="flex items-center cursor-pointer">
+              <label className="flex cursor-pointer items-center">
                 <input
                   type="radio"
                   name="inputMode"
                   value="deposit"
                   checked={inputMode === 'deposit'}
                   onChange={() => setInputMode('deposit')}
-                  className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
+                  className="h-4 w-4 text-yellow-400 focus:ring-yellow-400"
                 />
                 <span className="ml-2 text-sm text-gray-900">Deposit</span>
               </label>
 
-              <label className="flex items-center cursor-pointer">
+              <label className="flex cursor-pointer items-center">
                 <input
                   type="radio"
                   name="inputMode"
                   value="loan"
                   checked={inputMode === 'loan'}
                   onChange={() => setInputMode('loan')}
-                  className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
+                  className="h-4 w-4 text-yellow-400 focus:ring-yellow-400"
                 />
                 <span className="ml-2 text-sm text-gray-900">Loan Amount</span>
               </label>
@@ -221,7 +221,7 @@ export default function LTVCalculator() {
             <button
               type="button"
               onClick={resetForm}
-              className="w-full px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
+              className="w-full rounded-lg px-4 py-2 text-sm text-gray-600 transition hover:bg-gray-100 hover:text-gray-900"
             >
               Reset Form
             </button>
@@ -232,52 +232,52 @@ export default function LTVCalculator() {
       {/* Results - Right Side */}
       <div ref={resultsRef} className="min-h-[400px]">
         {results && (
-          <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-8 shadow-sm">
-            <h2 className={`${excali.className} text-2xl mb-6`}>
+          <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-8">
+            <h2 className={`${excali.className} mb-6 text-2xl`}>
               LTV Breakdown
             </h2>
 
             <div className="space-y-6">
               {/* Primary Result - LTV Percentage */}
               <div
-                className={`rounded-lg p-6 border-2 ${getLTVStatus(results.ltvPercentage).bgColor}`}
+                className={`rounded-lg border-2 p-6 ${getLTVStatus(results.ltvPercentage).bgColor}`}
               >
-                <span className="text-sm text-gray-600 block mb-1">
+                <span className="mb-1 block text-sm text-gray-600">
                   Loan-to-Value (LTV) Ratio
                 </span>
                 <span
-                  className={`text-5xl font-bold block ${getLTVStatus(results.ltvPercentage).color}`}
+                  className={`block text-5xl font-bold ${getLTVStatus(results.ltvPercentage).color}`}
                 >
                   {results.ltvPercentage.toFixed(1)}%
                 </span>
-                <div className="mt-3 pt-3 border-t border-gray-300">
+                <div className="mt-3 border-t border-gray-300 pt-3">
                   <span
-                    className={`text-sm font-semibold block ${getLTVStatus(results.ltvPercentage).color}`}
+                    className={`block text-sm font-semibold ${getLTVStatus(results.ltvPercentage).color}`}
                   >
                     {getLTVStatus(results.ltvPercentage).label}
                   </span>
-                  <span className="text-xs text-gray-700 block mt-1">
+                  <span className="mt-1 block text-xs text-gray-700">
                     {getLTVStatus(results.ltvPercentage).description}
                   </span>
                 </div>
               </div>
 
               {/* Summary Cards */}
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="bg-blue-50 rounded-lg p-5 border border-blue-200">
-                  <span className="text-sm text-gray-600 block mb-1">
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="rounded-lg border border-blue-200 bg-blue-50 p-5">
+                  <span className="mb-1 block text-sm text-gray-600">
                     Loan Amount
                   </span>
-                  <span className="text-3xl font-bold text-gray-900 block">
+                  <span className="block text-3xl font-bold text-gray-900">
                     {formatCurrency(results.loanAmount)}
                   </span>
                 </div>
 
-                <div className="bg-green-50 rounded-lg p-5 border border-green-200">
-                  <span className="text-sm text-gray-600 block mb-1">
+                <div className="rounded-lg border border-green-200 bg-green-50 p-5">
+                  <span className="mb-1 block text-sm text-gray-600">
                     Your Equity (Deposit)
                   </span>
-                  <span className="text-3xl font-bold text-gray-900 block">
+                  <span className="block text-3xl font-bold text-gray-900">
                     {formatCurrency(results.deposit)}
                   </span>
                 </div>
@@ -286,20 +286,20 @@ export default function LTVCalculator() {
               {/* Visual Representation - Stacked Bar */}
               <div className="pt-4">
                 <h3
-                  className={`${excali.className} text-lg text-gray-700 mb-3`}
+                  className={`${excali.className} mb-3 text-lg text-gray-700`}
                 >
                   Property Composition
                 </h3>
 
                 {/* Stacked Bar */}
-                <div className="w-full bg-gray-200 rounded-lg h-16 overflow-hidden flex">
+                <div className="flex h-16 w-full overflow-hidden rounded-lg bg-gray-200">
                   {/* Loan Amount (Blue) */}
                   <div
-                    className="bg-blue-500 flex items-center justify-center transition-all duration-300"
+                    className="flex items-center justify-center bg-blue-500 transition-all duration-300"
                     style={{ width: `${results.ltvPercentage}%` }}
                   >
                     {results.ltvPercentage >= 15 && (
-                      <span className="text-sm text-white font-semibold px-2 text-center">
+                      <span className="px-2 text-center text-sm font-semibold text-white">
                         {results.ltvPercentage >= 25
                           ? `Loan ${results.ltvPercentage.toFixed(1)}%`
                           : `${results.ltvPercentage.toFixed(1)}%`}
@@ -309,11 +309,11 @@ export default function LTVCalculator() {
 
                   {/* Equity (Green) */}
                   <div
-                    className="bg-green-500 flex items-center justify-center transition-all duration-300"
+                    className="flex items-center justify-center bg-green-500 transition-all duration-300"
                     style={{ width: `${results.equityPercentage}%` }}
                   >
                     {results.equityPercentage >= 15 && (
-                      <span className="text-sm text-white font-semibold px-2 text-center">
+                      <span className="px-2 text-center text-sm font-semibold text-white">
                         {results.equityPercentage >= 25
                           ? `Equity ${results.equityPercentage.toFixed(1)}%`
                           : `${results.equityPercentage.toFixed(1)}%`}
@@ -323,16 +323,16 @@ export default function LTVCalculator() {
                 </div>
 
                 {/* Legend */}
-                <div className="flex gap-6 mt-4 justify-center text-sm">
+                <div className="mt-4 flex justify-center gap-6 text-sm">
                   <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 bg-blue-500 rounded"></div>
+                    <div className="h-4 w-4 rounded bg-blue-500"></div>
                     <span className="text-gray-700">
                       Bank Loan: {results.ltvPercentage.toFixed(1)}% (
                       {formatCurrency(results.loanAmount)})
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 bg-green-500 rounded"></div>
+                    <div className="h-4 w-4 rounded bg-green-500"></div>
                     <span className="text-gray-700">
                       Your Equity: {results.equityPercentage.toFixed(1)}% (
                       {formatCurrency(results.deposit)})
@@ -342,30 +342,30 @@ export default function LTVCalculator() {
               </div>
 
               {/* Detailed Breakdown */}
-              <div className="space-y-3 pt-4 border-t border-gray-200">
+              <div className="space-y-3 border-t border-gray-200 pt-4">
                 <h3
-                  className={`${excali.className} text-xl text-gray-700 mb-3`}
+                  className={`${excali.className} mb-3 text-xl text-gray-700`}
                 >
                   Property Breakdown
                 </h3>
 
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Property Value</span>
                   <span className="font-semibold text-gray-900">
                     {formatCurrency(results.propertyValue)}
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Loan Amount</span>
-                  <span className="text-blue-600 font-semibold">
+                  <span className="font-semibold text-blue-600">
                     {formatCurrency(results.loanAmount)}
                   </span>
                 </div>
 
-                <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Your Deposit</span>
-                  <span className="text-green-600 font-semibold">
+                  <span className="font-semibold text-green-600">
                     {formatCurrency(results.deposit)}
                   </span>
                 </div>
@@ -375,8 +375,8 @@ export default function LTVCalculator() {
         )}
 
         {!results && (
-          <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
-            <p className="text-gray-500 text-lg">
+          <div className="rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-12 text-center">
+            <p className="text-lg text-gray-500">
               Enter your property value and deposit (or loan amount) to
               calculate your LTV ratio
             </p>

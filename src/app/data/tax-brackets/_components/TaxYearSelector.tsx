@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { excali } from '@/fonts';
-import { taxBracketsHistory } from '@/lib/historical-data';
+
 import { Button } from '@/components/Button';
 import { Select } from '@/components/Select';
+import { excali } from '@/fonts';
+import { taxBracketsHistory } from '@/lib/historical-data';
 
 type Period = 'yearly' | 'monthly';
 

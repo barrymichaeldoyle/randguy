@@ -1,11 +1,12 @@
-import { notFound } from 'next/navigation';
 import fs from 'fs';
 import path from 'path';
 
-import { excali } from '@/fonts';
-import { getAllPosts } from '@/lib/posts';
+import { notFound } from 'next/navigation';
+
 import { Breadcrumb } from '@/components/Breadcrumb';
+import { excali } from '@/fonts';
 import { BASE_URL } from '@/lib/constants';
+import { getAllPosts } from '@/lib/posts';
 
 interface BlogPostMetadata {
   title: string;

@@ -1,10 +1,11 @@
-import { Metadata } from 'next';
 
-import { getAllPosts } from '@/lib/posts';
-import { Breadcrumb } from '@/components/Breadcrumb';
 import { BlogPostCard } from '@/components/BlogPostCard';
+import { Breadcrumb } from '@/components/Breadcrumb';
+import { getAllPosts } from '@/lib/posts';
 
 import { excali } from '../../fonts';
+
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Blog | Rand Guy',

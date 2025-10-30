@@ -1,13 +1,15 @@
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import type { Metadata } from 'next';
-import { PropsWithChildren } from 'react';
 
 import './globals.css';
-import { assistant, excali } from '../fonts';
-import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { Header } from '@/components/layout/Header';
 import { BASE_URL } from '@/lib/constants';
+
+import { assistant, excali } from '../fonts';
+
+import type { Metadata } from 'next';
+import type { PropsWithChildren } from 'react';
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
@@ -55,7 +57,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
   return (
     <html lang="en">
       <body
-        className={`${excali.variable} ${assistant.variable} ${assistant.className} antialiased min-h-screen flex flex-col`}
+        className={`${excali.variable} ${assistant.variable} ${assistant.className} flex min-h-screen flex-col antialiased`}
       >
         <Header />
         {children}

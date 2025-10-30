@@ -1,6 +1,7 @@
 import { Button } from '@/components/Button';
 import { excali } from '@/fonts';
-import { BlogPost } from '@/lib/posts';
+
+import type { BlogPost } from '@/lib/posts';
 
 interface BlogPostCardProps {
   post: BlogPost;

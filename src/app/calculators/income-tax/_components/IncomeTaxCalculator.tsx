@@ -2,12 +2,12 @@
 
 import { useEffect, useRef } from 'react';
 
-import { excali } from '@/fonts';
 import { Button } from '@/components/Button';
-import { NumericInput } from '@/components/NumericInput';
 import { FormField } from '@/components/FormField';
+import { NumericInput } from '@/components/NumericInput';
 import { ResultCard, ResultCardItem } from '@/components/ResultCard';
 import { Select } from '@/components/Select';
+import { excali } from '@/fonts';
 import { formatCurrency, formatPercentage } from '@/lib/calculator-utils';
 
 import { useIncomeTaxStore } from './income-tax-store';
@@ -427,10 +427,10 @@ export default function IncomeTaxCalculator() {
   };
 
   return (
-    <div className="grid lg:grid-cols-[400px_1fr] gap-8 items-start">
+    <div className="grid items-start gap-8 lg:grid-cols-[400px_1fr]">
       {/* Input Form - Left Side */}
-      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-8 shadow-sm lg:sticky lg:top-8">
-        <div className="flex items-center justify-between mb-6">
+      <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-8 lg:sticky lg:top-8">
+        <div className="mb-6 flex items-center justify-between">
           <h2 className={`${excali.className} text-2xl`}>Your Information</h2>
           <Button onClick={toggleMode} variant="text" size="sm">
             {isAdvancedMode ? 'Switch to Basic' : 'Advanced Options'}
@@ -483,42 +483,42 @@ export default function IncomeTaxCalculator() {
           {isAdvancedMode && (
             <>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-gray-700">
                   Age Group
                 </label>
                 <div className="flex gap-4">
-                  <label className="flex items-center cursor-pointer">
+                  <label className="flex cursor-pointer items-center">
                     <input
                       type="radio"
                       name="ageGroup"
                       value="under65"
                       checked={ageGroup === 'under65'}
                       onChange={(e) => setAgeGroup(e.target.value as AgeGroup)}
-                      className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
+                      className="h-4 w-4 text-yellow-400 focus:ring-yellow-400"
                     />
                     <span className="ml-2 text-sm text-gray-900">Under 65</span>
                   </label>
 
-                  <label className="flex items-center cursor-pointer">
+                  <label className="flex cursor-pointer items-center">
                     <input
                       type="radio"
                       name="ageGroup"
                       value="65to74"
                       checked={ageGroup === '65to74'}
                       onChange={(e) => setAgeGroup(e.target.value as AgeGroup)}
-                      className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
+                      className="h-4 w-4 text-yellow-400 focus:ring-yellow-400"
                     />
                     <span className="ml-2 text-sm text-gray-900">65-74</span>
                   </label>
 
-                  <label className="flex items-center cursor-pointer">
+                  <label className="flex cursor-pointer items-center">
                     <input
                       type="radio"
                       name="ageGroup"
                       value="75plus"
                       checked={ageGroup === '75plus'}
                       onChange={(e) => setAgeGroup(e.target.value as AgeGroup)}
-                      className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
+                      className="h-4 w-4 text-yellow-400 focus:ring-yellow-400"
                     />
                     <span className="ml-2 text-sm text-gray-900">75+</span>
                   </label>
@@ -526,32 +526,32 @@ export default function IncomeTaxCalculator() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="mb-2 block text-sm font-medium text-gray-700">
                   Income Type
                 </label>
                 <div className="flex gap-4">
-                  <label className="flex items-center cursor-pointer">
+                  <label className="flex cursor-pointer items-center">
                     <input
                       type="radio"
                       name="incomeType"
                       value="salary"
                       checked={isSalary}
                       onChange={() => setIsSalary(true)}
-                      className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
+                      className="h-4 w-4 text-yellow-400 focus:ring-yellow-400"
                     />
                     <span className="ml-2 text-sm text-gray-900">
                       Salary (includes UIF)
                     </span>
                   </label>
 
-                  <label className="flex items-center cursor-pointer">
+                  <label className="flex cursor-pointer items-center">
                     <input
                       type="radio"
                       name="incomeType"
                       value="other"
                       checked={!isSalary}
                       onChange={() => setIsSalary(false)}
-                      className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
+                      className="h-4 w-4 text-yellow-400 focus:ring-yellow-400"
                     />
                     <span className="ml-2 text-sm text-gray-900">Other</span>
                   </label>
@@ -572,7 +572,7 @@ export default function IncomeTaxCalculator() {
             <button
               type="button"
               onClick={handleResetForm}
-              className="w-full px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition"
+              className="w-full rounded-lg px-4 py-2 text-sm text-gray-600 transition hover:bg-gray-100 hover:text-gray-900"
             >
               Reset Form
             </button>
@@ -583,16 +583,16 @@ export default function IncomeTaxCalculator() {
       {/* Results - Right Side */}
       <div ref={resultsRef} className="min-h-[400px]">
         {results && (
-          <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-8 shadow-sm">
-            <h2 className={`${excali.className} text-2xl mb-6`}>
+          <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-8">
+            <h2 className={`${excali.className} mb-6 text-2xl`}>
               Your Tax Breakdown
             </h2>
 
-            <div className="grid lg:grid-cols-2 gap-8">
+            <div className="grid gap-8 lg:grid-cols-2">
               {/* Left Column: Primary Monthly Results */}
               <div className="space-y-4">
                 <h3
-                  className={`${excali.className} text-xl text-gray-700 mb-4`}
+                  className={`${excali.className} mb-4 text-xl text-gray-700`}
                 >
                   Monthly Summary
                 </h3>
@@ -602,7 +602,7 @@ export default function IncomeTaxCalculator() {
                     <ResultCardItem
                       label="Take-Home Pay"
                       value={
-                        <span className="text-4xl font-bold text-green-700 block">
+                        <span className="block text-4xl font-bold text-green-700">
                           {formatCurrency(results.monthlyTakeHome)}
                         </span>
                       }
@@ -613,7 +613,7 @@ export default function IncomeTaxCalculator() {
                     <ResultCardItem
                       label="Tax Deducted"
                       value={
-                        <span className="text-3xl font-bold text-gray-900 block">
+                        <span className="block text-3xl font-bold text-gray-900">
                           {formatCurrency(results.monthlyTax)}
                         </span>
                       }
@@ -625,7 +625,7 @@ export default function IncomeTaxCalculator() {
                       <ResultCardItem
                         label="UIF Contribution"
                         value={
-                          <span className="text-3xl font-bold text-gray-900 block">
+                          <span className="block text-3xl font-bold text-gray-900">
                             {formatCurrency(results.uifMonthly)}
                           </span>
                         }
@@ -637,7 +637,7 @@ export default function IncomeTaxCalculator() {
                     <ResultCardItem
                       label="Gross Income"
                       value={
-                        <span className="text-3xl font-bold text-gray-900 block">
+                        <span className="block text-3xl font-bold text-gray-900">
                           {formatCurrency(results.taxableIncome / 12)}
                         </span>
                       }
@@ -645,16 +645,16 @@ export default function IncomeTaxCalculator() {
                   </ResultCard>
                 </div>
 
-                <div className="grid grid-cols-2 gap-3 mt-6">
-                  <div className="text-center p-4 bg-gray-50 rounded-lg border border-gray-200">
-                    <p className="text-xs text-gray-600 mb-1">Effective Rate</p>
-                    <p className="font-bold text-xl text-gray-900">
+                <div className="mt-6 grid grid-cols-2 gap-3">
+                  <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-center">
+                    <p className="mb-1 text-xs text-gray-600">Effective Rate</p>
+                    <p className="text-xl font-bold text-gray-900">
                       {formatPercentage(results.effectiveRate)}
                     </p>
                   </div>
-                  <div className="text-center p-4 bg-gray-50 rounded-lg border border-gray-200">
-                    <p className="text-xs text-gray-600 mb-1">Marginal Rate</p>
-                    <p className="font-bold text-xl text-gray-900">
+                  <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-center">
+                    <p className="mb-1 text-xs text-gray-600">Marginal Rate</p>
+                    <p className="text-xl font-bold text-gray-900">
                       {formatPercentage(results.marginalRate)}
                     </p>
                   </div>
@@ -664,35 +664,35 @@ export default function IncomeTaxCalculator() {
               {/* Right Column: Annual Details */}
               <div className="space-y-4">
                 <h3
-                  className={`${excali.className} text-xl text-gray-700 mb-4`}
+                  className={`${excali.className} mb-4 text-xl text-gray-700`}
                 >
                   Annual Breakdown
                 </h3>
 
                 <div className="space-y-3">
-                  <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                  <div className="flex items-center justify-between border-b border-gray-200 py-3">
                     <span className="text-gray-600">Gross Income</span>
                     <span className="font-semibold text-gray-900">
                       {formatCurrency(results.taxableIncome)}
                     </span>
                   </div>
 
-                  <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                  <div className="flex items-center justify-between border-b border-gray-200 py-3">
                     <span className="text-gray-600">Tax Before Rebates</span>
                     <span className="text-gray-700">
                       {formatCurrency(results.taxBeforeRebates)}
                     </span>
                   </div>
 
-                  <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                  <div className="flex items-center justify-between border-b border-gray-200 py-3">
                     <span className="text-gray-600">Tax Rebates</span>
-                    <span className="text-green-600 font-medium">
+                    <span className="font-medium text-green-600">
                       -{formatCurrency(results.rebates)}
                     </span>
                   </div>
 
                   {results.uifAnnual > 0 && (
-                    <div className="flex justify-between items-center py-3 border-b border-gray-200">
+                    <div className="flex items-center justify-between border-b border-gray-200 py-3">
                       <span className="text-gray-600">UIF Contribution</span>
                       <span className="text-gray-700">
                         {formatCurrency(results.uifAnnual)}
@@ -729,9 +729,9 @@ export default function IncomeTaxCalculator() {
 
             {/* Year-over-Year Comparison */}
             {results.previousYear && results.previousYearResults && (
-              <div className="mt-8 pt-6 border-t-2 border-gray-300">
+              <div className="mt-8 border-t-2 border-gray-300 pt-6">
                 <h3
-                  className={`${excali.className} text-xl text-gray-700 mb-4`}
+                  className={`${excali.className} mb-4 text-xl text-gray-700`}
                 >
                   Comparison vs {results.previousYear}
                 </h3>
@@ -745,9 +745,9 @@ export default function IncomeTaxCalculator() {
                     results.previousYearResults.monthlyTakeHome;
 
                   return (
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div className="bg-gray-50 rounded-lg p-4">
-                        <p className="text-xs text-gray-600 mb-1">
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <div className="rounded-lg bg-gray-50 p-4">
+                        <p className="mb-1 text-xs text-gray-600">
                           Annual Take-Home Change
                         </p>
                         <p
@@ -764,8 +764,8 @@ export default function IncomeTaxCalculator() {
                         </p>
                       </div>
 
-                      <div className="bg-gray-50 rounded-lg p-4">
-                        <p className="text-xs text-gray-600 mb-1">
+                      <div className="rounded-lg bg-gray-50 p-4">
+                        <p className="mb-1 text-xs text-gray-600">
                           Monthly Take-Home Change
                         </p>
                         <p
@@ -790,8 +790,8 @@ export default function IncomeTaxCalculator() {
         )}
 
         {!results && (
-          <div className="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
-            <p className="text-gray-500 text-lg">
+          <div className="rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 p-12 text-center">
+            <p className="text-lg text-gray-500">
               Enter your monthly income and age group, then click Calculate Tax
               to see your results
             </p>

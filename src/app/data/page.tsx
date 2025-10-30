@@ -1,10 +1,11 @@
-import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { Button } from '@/components/Button';
 import { excali } from '@/fonts';
 import { BASE_URL } from '@/lib/constants';
-import { Button } from '@/components/Button';
+
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Historical Financial Data for South Africa',

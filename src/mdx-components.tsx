@@ -1,5 +1,6 @@
-import type { MDXComponents } from 'mdx/types';
 import { excali } from '@/fonts';
+
+import type { MDXComponents } from 'mdx/types';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {

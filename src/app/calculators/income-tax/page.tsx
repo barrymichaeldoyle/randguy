@@ -1,12 +1,14 @@
-import type { Metadata } from 'next';
+import Link from 'next/link';
 
-import { excali } from '@/fonts';
+import { Breadcrumb } from '@/components/Breadcrumb';
 import { Button } from '@/components/Button';
 import { CalculatorInfo } from '@/components/CalculatorInfo';
-import { Breadcrumb } from '@/components/Breadcrumb';
+import { excali } from '@/fonts';
+import { BASE_URL } from '@/lib/constants';
 
 import IncomeTaxCalculator from './_components/IncomeTaxCalculator';
-import { BASE_URL } from '@/lib/constants';
+
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Income Tax Calculator | South Africa 2025/2026',
@@ -91,7 +93,7 @@ const breadcrumbData = {
 
 export default function IncomeTaxCalculatorPage() {
   return (
-    <main className="flex flex-col items-center pt-8 md:pt-12 px-4 pb-8 md:px-8 flex-1">
+    <main className="flex flex-1 flex-col items-center px-4 pt-8 pb-8 md:px-8 md:pt-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -100,7 +102,7 @@ export default function IncomeTaxCalculatorPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
-      <div className="max-w-7xl w-full">
+      <div className="w-full max-w-7xl">
         <Breadcrumb
           items={[
             { name: 'Home', href: '/' },
@@ -109,8 +111,8 @@ export default function IncomeTaxCalculatorPage() {
           ]}
         />
 
-        <div className="text-center mb-8">
-          <h1 className={`${excali.className} text-4xl mb-4`}>
+        <div className="mb-8 text-center">
+          <h1 className={`${excali.className} mb-4 text-4xl`}>
             South African Income Tax Calculator 2025/2026
           </h1>
           <p className="text-lg text-gray-700">
@@ -132,12 +134,9 @@ export default function IncomeTaxCalculatorPage() {
               • <strong>UIF (Unemployment Insurance Fund)</strong> is calculated
               at 1% for salary income, capped at R177.12/month (R17,712 monthly
               income ceiling).{' '}
-              <a
-                href="/blog/understanding-uif-unemployment-insurance-fund"
-                className="text-yellow-600 hover:underline font-semibold"
-              >
+              <Link href="/blog/understanding-uif-unemployment-insurance-fund">
                 Learn more about UIF
-              </a>
+              </Link>
             </>,
             <>
               • Tax brackets remained unchanged from 2024/2025 to 2025/2026,
@@ -163,7 +162,7 @@ export default function IncomeTaxCalculatorPage() {
           ]}
         />
 
-        <div className="text-center mt-8">
+        <div className="mt-8 text-center">
           <Button href="/" variant="secondary">
             Back to Home
           </Button>

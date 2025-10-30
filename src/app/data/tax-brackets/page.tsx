@@ -1,4 +1,3 @@
-import { Metadata } from 'next';
 import Link from 'next/link';
 
 import { Breadcrumb } from '@/components/Breadcrumb';
@@ -6,6 +5,8 @@ import { excali } from '@/fonts';
 import { taxBracketsHistory } from '@/lib/historical-data';
 
 import TaxYearSelector from './_components/TaxYearSelector';
+
+import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Historical Tax Brackets & Rates - South Africa',

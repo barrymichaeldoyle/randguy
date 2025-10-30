@@ -1,6 +1,8 @@
-import { ImageResponse } from 'next/og';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+
+import { ImageResponse } from 'next/og';
+
 import { PRIME_LENDING_RATE_ZA } from '@/lib/historical-data';
 import { ogStyles, ogConfig } from '@/lib/og-image-utils';
 
