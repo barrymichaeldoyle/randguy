@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Button } from '@/components/Button';
 import { excali } from '@/fonts';
 import { BASE_URL } from '@/lib/constants';
+import { DATASETS } from '@/lib/site-data';
 
 import type { Metadata } from 'next';
 
@@ -38,24 +39,6 @@ export const metadata: Metadata = {
   },
 };
 
-const datasets = [
-  {
-    title: 'Prime & Repo Rates',
-    description:
-      'Historical South African prime lending & repo rates from major banks. Track how interest rates have changed over the decades and understand their impact on loans and mortgages.',
-    href: '/data/prime-rates',
-    icon: '📈',
-  },
-  {
-    title: 'Tax Brackets History',
-    description:
-      'See how SARS income tax brackets and rates have evolved over time. Compare historical tax thresholds and understand how tax policy has changed.',
-    href: '/data/tax-brackets',
-    icon: '📊',
-  },
-  // Add more datasets here in the future
-];
-
 export default function DataPage() {
   const structuredData = {
     '@context': 'https://schema.org',
@@ -87,7 +70,7 @@ export default function DataPage() {
   };
 
   return (
-    <main className="flex flex-col items-center pt-8 md:pt-12 px-4 pb-8 md:px-8 flex-1">
+    <main className="flex flex-1 flex-col items-center px-4 pt-8 pb-8 md:px-8 md:pt-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -96,23 +79,23 @@ export default function DataPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
-      <div className="max-w-4xl w-full">
+      <div className="w-full max-w-4xl">
         {/* Breadcrumb Navigation */}
         <nav className="mb-6 text-sm" aria-label="Breadcrumb">
           <ol className="flex items-center space-x-2 text-gray-600">
             <li>
-              <Link href="/" className="hover:text-yellow-600 transition">
+              <Link href="/" className="transition hover:text-yellow-600">
                 Home
               </Link>
             </li>
             <li>/</li>
-            <li className="text-gray-900 font-medium" aria-current="page">
+            <li className="font-medium text-gray-900" aria-current="page">
               Historical Data
             </li>
           </ol>
         </nav>
 
-        <div className="text-center mb-12">
+        <div className="mb-12 text-center">
           <Image
             src="/RandGuyLogo.png"
             alt="Rand Guy logo"
@@ -120,7 +103,7 @@ export default function DataPage() {
             height={80}
             className="mx-auto mb-4"
           />
-          <h1 className={`${excali.className} text-4xl mb-4`}>
+          <h1 className={`${excali.className} mb-4 text-4xl`}>
             Historical Financial Data
           </h1>
           <p className="text-lg text-gray-700">
@@ -130,13 +113,13 @@ export default function DataPage() {
         </div>
 
         <section className="grid gap-6 md:grid-cols-2">
-          {datasets.map((dataset) => (
+          {DATASETS.map((dataset) => (
             <article
               key={dataset.href}
-              className="border border-gray-200 rounded-lg p-6 shadow-sm transition-shadow h-full flex flex-col text-center"
+              className="flex h-full flex-col rounded-lg border border-gray-200 p-6 text-center shadow-sm transition-shadow"
             >
-              <div className="flex flex-col items-center mb-4">
-                <div className="text-5xl mb-3" aria-hidden="true">
+              <div className="mb-4 flex flex-col items-center">
+                <div className="mb-3 text-5xl" aria-hidden="true">
                   {dataset.icon}
                 </div>
                 <h2
@@ -145,7 +128,7 @@ export default function DataPage() {
                   {dataset.title}
                 </h2>
               </div>
-              <p className="text-gray-700 mb-6 flex-grow">
+              <p className="mb-6 flex-grow text-gray-700">
                 {dataset.description}
               </p>
               <div className="flex justify-center">
@@ -157,29 +140,29 @@ export default function DataPage() {
           ))}
         </section>
 
-        <section className="mt-12 bg-gray-50 border border-gray-200 rounded-lg p-8">
-          <h2 className={`${excali.className} text-2xl mb-4 text-center`}>
+        <section className="mt-12 rounded-lg border border-gray-200 bg-gray-50 p-8">
+          <h2 className={`${excali.className} mb-4 text-center text-2xl`}>
             Why Historical Data Matters
           </h2>
-          <div className="grid md:grid-cols-3 gap-6 text-center">
+          <div className="grid gap-6 text-center md:grid-cols-3">
             <div>
-              <div className="text-3xl mb-2">🔍</div>
-              <h3 className="font-semibold mb-2">Understand Trends</h3>
+              <div className="mb-2 text-3xl">🔍</div>
+              <h3 className="mb-2 font-semibold">Understand Trends</h3>
               <p className="text-sm text-gray-700">
                 See how financial metrics have evolved and spot long-term
                 patterns
               </p>
             </div>
             <div>
-              <div className="text-3xl mb-2">📚</div>
-              <h3 className="font-semibold mb-2">Learn from History</h3>
+              <div className="mb-2 text-3xl">📚</div>
+              <h3 className="mb-2 font-semibold">Learn from History</h3>
               <p className="text-sm text-gray-700">
                 Context helps you make better financial decisions for the future
               </p>
             </div>
             <div>
-              <div className="text-3xl mb-2">💡</div>
-              <h3 className="font-semibold mb-2">Plan Ahead</h3>
+              <div className="mb-2 text-3xl">💡</div>
+              <h3 className="mb-2 font-semibold">Plan Ahead</h3>
               <p className="text-sm text-gray-700">
                 Historical data helps you understand what&apos;s normal and
                 what&apos;s not

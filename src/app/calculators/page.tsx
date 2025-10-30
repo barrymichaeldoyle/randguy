@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Button } from '@/components/Button';
 import { excali } from '@/fonts';
 import { BASE_URL } from '@/lib/constants';
+import { CALCULATORS } from '@/lib/site-data';
 
 import type { Metadata } from 'next';
 
@@ -38,50 +39,6 @@ export const metadata: Metadata = {
   },
 };
 
-const calculators = [
-  {
-    title: 'Income Tax Calculator',
-    description:
-      'Calculate your South African income tax based on the latest tax brackets and rebates for the 2025/2026 tax year. Includes UIF and year-over-year comparisons.',
-    href: '/calculators/income-tax',
-    icon: '💰',
-    buttonText: 'Calculate My Tax →',
-  },
-  {
-    title: 'Home Loan Calculator',
-    description:
-      'Calculate your monthly bond repayments and see total interest, repayment breakdown, and plan your property purchase.',
-    href: '/calculators/home-loan',
-    icon: '🏠',
-    buttonText: 'Calculate Repayments →',
-  },
-  {
-    title: 'Loan-to-Value (LTV) Calculator',
-    description:
-      'Calculate your LTV ratio to understand your equity position and loan terms. Essential tool for property buyers to assess their financing situation.',
-    href: '/calculators/ltv',
-    icon: '📊',
-    buttonText: 'Calculate LTV →',
-  },
-  {
-    title: 'TFSA Calculator',
-    description:
-      'Calculate how long it will take to max out your Tax-Free Savings Account. Track your contributions and plan your timeline to reach the R500,000 lifetime limit.',
-    href: '/calculators/tfsa',
-    icon: '🎯',
-    buttonText: 'Plan My TFSA →',
-  },
-  {
-    title: 'Interest Calculator',
-    description:
-      'Calculate interest gains across different time periods. Convert between annual, monthly, weekly, daily, and hourly interest rates for investments and loans.',
-    href: '/calculators/interest',
-    icon: '💹',
-    buttonText: 'Calculate Interest →',
-  },
-  // Add more calculators here in the future
-];
-
 export default function CalculatorsPage() {
   const structuredData = {
     '@context': 'https://schema.org',
@@ -93,7 +50,7 @@ export default function CalculatorsPage() {
     inLanguage: 'en-ZA',
     mainEntity: {
       '@type': 'ItemList',
-      itemListElement: calculators.map((calc, index) => ({
+      itemListElement: CALCULATORS.map((calc, index) => ({
         '@type': 'ListItem',
         position: index + 1,
         item: {
@@ -132,7 +89,7 @@ export default function CalculatorsPage() {
   };
 
   return (
-    <main className="flex flex-col items-center pt-8 md:pt-12 px-4 pb-8 md:px-8 flex-1">
+    <main className="flex flex-1 flex-col items-center px-4 pt-8 pb-8 md:px-8 md:pt-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -141,23 +98,23 @@ export default function CalculatorsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
-      <div className="max-w-4xl w-full">
+      <div className="w-full max-w-4xl">
         {/* Breadcrumb Navigation */}
         <nav className="mb-6 text-sm" aria-label="Breadcrumb">
           <ol className="flex items-center space-x-2 text-gray-600">
             <li>
-              <Link href="/" className="hover:text-yellow-600 transition">
+              <Link href="/" className="transition hover:text-yellow-600">
                 Home
               </Link>
             </li>
             <li>/</li>
-            <li className="text-gray-900 font-medium" aria-current="page">
+            <li className="font-medium text-gray-900" aria-current="page">
               Calculators
             </li>
           </ol>
         </nav>
 
-        <div className="text-center mb-12">
+        <div className="mb-12 text-center">
           <Image
             src="/RandGuyLogo.png"
             alt="Rand Guy logo"
@@ -165,7 +122,7 @@ export default function CalculatorsPage() {
             height={80}
             className="mx-auto mb-4"
           />
-          <h1 className={`${excali.className} text-4xl mb-4`}>
+          <h1 className={`${excali.className} mb-4 text-4xl`}>
             South African Financial Calculators
           </h1>
           <p className="text-lg text-gray-700">
@@ -174,13 +131,13 @@ export default function CalculatorsPage() {
         </div>
 
         <section className="grid gap-6 md:grid-cols-2">
-          {calculators.map((calculator) => (
+          {CALCULATORS.map((calculator) => (
             <article
               key={calculator.href}
-              className="border border-gray-200 rounded-lg p-6 shadow-sm transition-shadow h-full flex flex-col text-center"
+              className="flex h-full flex-col rounded-lg border border-gray-200 p-6 text-center shadow-sm transition-shadow"
             >
-              <div className="flex flex-col items-center mb-4">
-                <div className="text-5xl mb-3" aria-hidden="true">
+              <div className="mb-4 flex flex-col items-center">
+                <div className="mb-3 text-5xl" aria-hidden="true">
                   {calculator.icon}
                 </div>
                 <h2
@@ -189,7 +146,7 @@ export default function CalculatorsPage() {
                   {calculator.title}
                 </h2>
               </div>
-              <p className="text-gray-700 mb-6 flex-grow">
+              <p className="mb-6 flex-grow text-gray-700">
                 {calculator.description}
               </p>
               <div className="flex justify-center">
@@ -201,29 +158,29 @@ export default function CalculatorsPage() {
           ))}
         </section>
 
-        <section className="mt-12 bg-gray-50 border border-gray-200 rounded-lg p-8">
-          <h2 className={`${excali.className} text-2xl mb-4 text-center`}>
+        <section className="mt-12 rounded-lg border border-gray-200 bg-gray-50 p-8">
+          <h2 className={`${excali.className} mb-4 text-center text-2xl`}>
             Why Use These Calculators?
           </h2>
-          <div className="grid md:grid-cols-3 gap-6 text-center">
+          <div className="grid gap-6 text-center md:grid-cols-3">
             <div>
-              <div className="text-3xl mb-2">🇿🇦</div>
-              <h3 className="font-semibold mb-2">Built for South Africans</h3>
+              <div className="mb-2 text-3xl">🇿🇦</div>
+              <h3 className="mb-2 font-semibold">Built for South Africans</h3>
               <p className="text-sm text-gray-700">
                 All calculators use <strong>official SARS data</strong> and SA
                 tax regulations
               </p>
             </div>
             <div>
-              <div className="text-3xl mb-2">💯</div>
-              <h3 className="font-semibold mb-2">Always Free</h3>
+              <div className="mb-2 text-3xl">💯</div>
+              <h3 className="mb-2 font-semibold">Always Free</h3>
               <p className="text-sm text-gray-700">
                 No hidden fees, no sign-ups required. Just simple, free tools
               </p>
             </div>
             <div>
-              <div className="text-3xl mb-2">🔒</div>
-              <h3 className="font-semibold mb-2">Privacy First</h3>
+              <div className="mb-2 text-3xl">🔒</div>
+              <h3 className="mb-2 font-semibold">Privacy First</h3>
               <p className="text-sm text-gray-700">
                 Your data stays on your device. I don&apos;t track or store your
                 information
