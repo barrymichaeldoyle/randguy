@@ -2,8 +2,9 @@ import { ImageResponse } from 'next/og';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { ogStyles, ogConfig } from '@/lib/og-image-utils';
+import { TAGLINE } from '@/lib/constants';
 
-export const alt = 'Rand Guy - Making Cents of SA Finance';
+export const alt = `Rand Guy - ${TAGLINE}`;
 export const size = ogConfig.size;
 export const contentType = ogConfig.contentType;
 
@@ -37,7 +38,7 @@ export default async function Image() {
             marginBottom: 50,
           }}
         >
-          Making Cents of SA Finance
+          {TAGLINE}
         </div>
 
         {/* Feature Cards */}
