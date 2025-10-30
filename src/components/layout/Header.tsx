@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/Button';
 import { excali } from '../../fonts';
@@ -10,6 +10,9 @@ import { excali } from '../../fonts';
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   // Close menu when route changes
   useEffect(() => {
@@ -21,6 +24,7 @@ export function Header() {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isMenuOpen) {
         setIsMenuOpen(false);
+        menuButtonRef.current?.focus();
       }
     };
 
@@ -31,18 +35,63 @@ export function Header() {
   // Prevent body scroll when menu is open
   useEffect(() => {
     if (isMenuOpen) {
+      // Store original values
+      const originalStyle = window.getComputedStyle(document.body).overflow;
+      const scrollY = window.scrollY;
+
+      // Lock scroll
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
       document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+
+      // Move focus to close button when menu opens
+      setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 100);
+
+      return () => {
+        // Restore scroll
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.overflow = originalStyle;
+        window.scrollTo(0, scrollY);
+      };
     }
-    return () => {
-      document.body.style.overflow = '';
+  }, [isMenuOpen]);
+
+  // Focus trap
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const handleTab = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab' || !menuRef.current) return;
+
+      const focusableElements = menuRef.current.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstElement = focusableElements[0] as HTMLElement;
+      const lastElement = focusableElements[
+        focusableElements.length - 1
+      ] as HTMLElement;
+
+      if (e.shiftKey && document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement?.focus();
+      } else if (!e.shiftKey && document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement?.focus();
+      }
     };
+
+    document.addEventListener('keydown', handleTab);
+    return () => document.removeEventListener('keydown', handleTab);
   }, [isMenuOpen]);
 
   return (
     <header className="sticky top-0 z-50 bg-white flex items-center justify-between px-4 py-2 border-b border-gray-200">
-      <Link href="/" className="flex items-center gap-2">
+      <Link href="/" className="group flex items-center gap-2">
         <Image
           src="/RandGuyLogo.png"
           alt="Rand Guy logo"
@@ -51,7 +100,7 @@ export function Header() {
           className="h-10 w-auto"
         />
         <h1
-          className={`${excali.className} text-2xl leading-none text-gray-900 hover:text-yellow-600 transition-colors`}
+          className={`${excali.className} text-2xl leading-none text-gray-900 group-hover:text-yellow-600 transition-colors`}
         >
           Rand Guy
         </h1>
@@ -72,8 +121,9 @@ export function Header() {
 
       {/* Mobile Menu Button */}
       <button
+        ref={menuButtonRef}
         onClick={() => setIsMenuOpen(true)}
-        className="sm:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
+        className="sm:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-400"
         aria-label="Open menu"
         aria-expanded={isMenuOpen}
         aria-controls="mobile-menu"
@@ -98,25 +148,34 @@ export function Header() {
       {isMenuOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-50 sm:hidden"
-          onClick={() => setIsMenuOpen(false)}
+          onClick={() => {
+            setIsMenuOpen(false);
+            menuButtonRef.current?.focus();
+          }}
           aria-hidden="true"
         />
       )}
 
       {/* Mobile Menu Drawer */}
       <nav
+        ref={menuRef}
         id="mobile-menu"
         className={`fixed top-0 right-0 h-full w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out sm:hidden ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         aria-label="Mobile navigation"
+        aria-hidden={!isMenuOpen}
       >
         <div className="flex flex-col h-full">
           {/* Close Button */}
           <div className="flex justify-end p-4 border-b border-gray-200">
             <button
-              onClick={() => setIsMenuOpen(false)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              ref={closeButtonRef}
+              onClick={() => {
+                setIsMenuOpen(false);
+                menuButtonRef.current?.focus();
+              }}
+              className="p-2 hover:bg-gray-100 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-400"
               aria-label="Close menu"
             >
               <svg
