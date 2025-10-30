@@ -58,4 +58,11 @@ export const DATASETS = [
     href: '/data/tax-brackets',
     icon: '📊',
   },
+  {
+    title: 'Consumer Price Index (CPI)',
+    description:
+      'Track South African inflation trends through historical CPI data. Understand how the cost of living has changed over time and its impact on your purchasing power.',
+    href: '/data/cpi',
+    icon: '📉',
+  },
 ] as const;

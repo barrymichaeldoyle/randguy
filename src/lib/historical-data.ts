@@ -340,3 +340,43 @@ export const taxBracketsHistory: TaxBracketData[] = [
     },
   },
 ];
+
+// Consumer Price Index (CPI) - Annual Inflation Rate for South Africa
+export interface CPIData {
+  year: number;
+  inflationRate: number; // Annual percentage change
+  cpiIndex: number; // Base index value
+}
+
+/**
+ * South African CPI and Inflation Data
+ * Source: Stats SA
+ * Base: December 2016 = 100
+ */
+export const CPI_DATA_ZA: CPIData[] = [
+  { year: 2024, inflationRate: 4.4, cpiIndex: 129.1 },
+  { year: 2023, inflationRate: 6.0, cpiIndex: 123.7 },
+  { year: 2022, inflationRate: 6.9, cpiIndex: 116.7 },
+  { year: 2021, inflationRate: 4.5, cpiIndex: 109.2 },
+  { year: 2020, inflationRate: 3.3, cpiIndex: 104.5 },
+  { year: 2019, inflationRate: 4.1, cpiIndex: 101.2 },
+  { year: 2018, inflationRate: 4.6, cpiIndex: 97.2 },
+  { year: 2017, inflationRate: 5.3, cpiIndex: 92.9 },
+  { year: 2016, inflationRate: 6.3, cpiIndex: 88.2 },
+  { year: 2015, inflationRate: 4.6, cpiIndex: 83.0 },
+  { year: 2014, inflationRate: 6.1, cpiIndex: 79.3 },
+  { year: 2013, inflationRate: 5.7, cpiIndex: 74.8 },
+  { year: 2012, inflationRate: 5.6, cpiIndex: 70.8 },
+  { year: 2011, inflationRate: 5.0, cpiIndex: 67.0 },
+  { year: 2010, inflationRate: 4.3, cpiIndex: 63.8 },
+  { year: 2009, inflationRate: 7.1, cpiIndex: 61.2 },
+  { year: 2008, inflationRate: 11.5, cpiIndex: 57.1 },
+  { year: 2007, inflationRate: 7.1, cpiIndex: 51.2 },
+  { year: 2006, inflationRate: 4.7, cpiIndex: 47.8 },
+  { year: 2005, inflationRate: 3.4, cpiIndex: 45.7 },
+  { year: 2004, inflationRate: 1.4, cpiIndex: 44.2 },
+  { year: 2003, inflationRate: 5.8, cpiIndex: 43.6 },
+  { year: 2002, inflationRate: 9.2, cpiIndex: 41.2 },
+  { year: 2001, inflationRate: 5.7, cpiIndex: 37.7 },
+  { year: 2000, inflationRate: 5.4, cpiIndex: 35.7 },
+];
