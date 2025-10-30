@@ -278,7 +278,7 @@ export default function HomeLoanCalculator() {
   return (
     <div className="grid lg:grid-cols-[400px_1fr] gap-8 items-start">
       {/* Input Form - Left Side */}
-      <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm lg:sticky lg:top-8">
+      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-8 shadow-sm lg:sticky lg:top-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className={`${excali.className} text-2xl`}>Loan Details</h2>
           <Button variant="text" size="md" onClick={toggleMode}>
@@ -418,7 +418,7 @@ export default function HomeLoanCalculator() {
       {/* Results - Right Side */}
       <div ref={resultsRef} className="min-h-[400px]">
         {results && (
-          <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
+          <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-8 shadow-sm">
             <h2 className={`${excali.className} text-2xl mb-6`}>
               Repayment Breakdown
             </h2>
@@ -595,16 +595,16 @@ export default function HomeLoanCalculator() {
                       Hover over rows to see how rate changes affect your
                       monthly payment
                     </p>
-                    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                      <div className="grid grid-cols-[1fr_auto_auto] gap-px bg-gray-200">
+                    <div className="bg-white rounded-lg border border-gray-200 overflow-x-auto">
+                      <div className="grid grid-cols-[minmax(100px,1fr)_minmax(100px,auto)_minmax(90px,auto)] gap-px bg-gray-200 min-w-[300px]">
                         {/* Header */}
-                        <div className="bg-gray-100 py-2 px-4 font-semibold text-gray-700 text-sm">
+                        <div className="bg-gray-100 py-2 px-2 sm:px-4 font-semibold text-gray-700 text-xs sm:text-sm">
                           Rate Change
                         </div>
-                        <div className="bg-gray-100 py-2 px-4 font-semibold text-gray-700 text-sm text-right">
-                          Monthly Payment
+                        <div className="bg-gray-100 py-2 px-2 sm:px-4 font-semibold text-gray-700 text-xs sm:text-sm text-right">
+                          Monthly
                         </div>
-                        <div className="bg-gray-100 py-2 px-4 font-semibold text-gray-700 text-sm text-right min-w-[120px]">
+                        <div className="bg-gray-100 py-2 px-2 sm:px-4 font-semibold text-gray-700 text-xs sm:text-sm text-right">
                           Difference
                         </div>
 
@@ -623,36 +623,36 @@ export default function HomeLoanCalculator() {
                           return (
                             <Fragment key={scenario.label}>
                               <div
-                                className={`py-3 px-4 hover:bg-gray-50 transition-colors ${
+                                className={`py-2 sm:py-3 px-2 sm:px-4 hover:bg-gray-50 transition-colors ${
                                   scenario.highlight
                                     ? 'bg-yellow-50 font-semibold'
                                     : 'bg-white'
                                 }`}
                               >
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-1 sm:gap-2 flex-wrap">
                                   <span
-                                    className={
+                                    className={`text-xs sm:text-sm ${
                                       scenario.change < 0
                                         ? 'text-green-600'
                                         : scenario.change > 0
                                           ? 'text-red-600'
                                           : 'text-gray-900'
-                                    }
+                                    }`}
                                   >
                                     {scenario.label}
                                   </span>
                                   {scenario.highlight && (
-                                    <span className="text-xs px-2 py-0.5 bg-yellow-200 text-yellow-800 rounded-full">
-                                      Current
+                                    <span className="text-[10px] sm:text-xs px-1.5 py-0.5 bg-yellow-200 text-yellow-800 rounded-full">
+                                      Now
                                     </span>
                                   )}
                                 </div>
-                                <div className="text-xs text-gray-500 mt-0.5">
+                                <div className="text-[10px] sm:text-xs text-gray-500 mt-0.5">
                                   {scenario.rate.toFixed(2)}%
                                 </div>
                               </div>
                               <div
-                                className={`py-3 px-4 text-right font-semibold hover:bg-gray-50 transition-colors ${
+                                className={`py-2 sm:py-3 px-2 sm:px-4 text-right text-xs sm:text-sm font-semibold hover:bg-gray-50 transition-colors ${
                                   scenario.highlight
                                     ? 'bg-yellow-50'
                                     : 'bg-white'
@@ -661,7 +661,7 @@ export default function HomeLoanCalculator() {
                                 {formatCurrency(totalPayment)}
                               </div>
                               <div
-                                className={`py-3 px-4 text-right font-semibold hover:bg-gray-50 transition-colors ${
+                                className={`py-2 sm:py-3 px-2 sm:px-4 text-right text-xs sm:text-sm font-semibold hover:bg-gray-50 transition-colors ${
                                   scenario.highlight
                                     ? 'bg-yellow-50'
                                     : 'bg-white'

@@ -326,7 +326,7 @@ export default function InterestCalculator() {
   return (
     <div className="grid lg:grid-cols-[400px_1fr] gap-8 items-start">
       {/* Input Form - Left Side */}
-      <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm lg:sticky lg:top-8">
+      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-8 shadow-sm lg:sticky lg:top-8">
         <h2 className={`${excali.className} text-2xl mb-6`}>
           Interest Details
         </h2>
@@ -408,7 +408,7 @@ export default function InterestCalculator() {
       {/* Results - Right Side */}
       <div ref={resultsRef} className="min-h-[400px]">
         {results && (
-          <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
+          <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-8 shadow-sm">
             <h2 className={`${excali.className} text-2xl mb-6`}>
               Interest Breakdown
             </h2>

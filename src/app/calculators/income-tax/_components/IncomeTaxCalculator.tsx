@@ -429,7 +429,7 @@ export default function IncomeTaxCalculator() {
   return (
     <div className="grid lg:grid-cols-[400px_1fr] gap-8 items-start">
       {/* Input Form - Left Side */}
-      <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm lg:sticky lg:top-8">
+      <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-8 shadow-sm lg:sticky lg:top-8">
         <div className="flex items-center justify-between mb-6">
           <h2 className={`${excali.className} text-2xl`}>Your Information</h2>
           <Button onClick={toggleMode} variant="text" size="sm">
@@ -583,7 +583,7 @@ export default function IncomeTaxCalculator() {
       {/* Results - Right Side */}
       <div ref={resultsRef} className="min-h-[400px]">
         {results && (
-          <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
+          <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-8 shadow-sm">
             <h2 className={`${excali.className} text-2xl mb-6`}>
               Your Tax Breakdown
             </h2>
