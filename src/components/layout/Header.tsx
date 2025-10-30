@@ -90,7 +90,7 @@ export function Header() {
   }, [isMenuOpen]);
 
   return (
-    <header className="sticky top-0 z-50 bg-white flex items-center justify-between px-4 py-2 border-b border-gray-200">
+    <header className="sticky top-0 z-50 flex items-center justify-between border-b border-gray-200 bg-white px-4 py-2">
       <Link href="/" className="group flex items-center gap-2">
         <Image
           src="/RandGuyLogo.png"
@@ -100,14 +100,14 @@ export function Header() {
           className="h-10 w-auto"
         />
         <h1
-          className={`${excali.className} text-2xl leading-none text-gray-900 group-hover:text-yellow-600 transition-colors`}
+          className={`${excali.className} text-2xl leading-none text-gray-900 transition-colors group-hover:text-yellow-600`}
         >
           Rand Guy
         </h1>
       </Link>
 
       {/* Desktop Navigation */}
-      <nav className="hidden sm:flex items-center gap-2">
+      <nav className="hidden items-center gap-2 sm:flex">
         <Button href="/calculators" size="sm">
           Calculators
         </Button>
@@ -123,13 +123,13 @@ export function Header() {
       <button
         ref={menuButtonRef}
         onClick={() => setIsMenuOpen(true)}
-        className="sm:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-400"
+        className="rounded-lg p-2 transition-colors hover:bg-gray-100 focus:ring-2 focus:ring-yellow-400 focus:outline-none sm:hidden"
         aria-label="Open menu"
         aria-expanded={isMenuOpen}
         aria-controls="mobile-menu"
       >
         <svg
-          className="w-6 h-6"
+          className="h-6 w-6"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -147,7 +147,7 @@ export function Header() {
       {/* Mobile Menu Overlay */}
       {isMenuOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-50 sm:hidden"
+          className="fixed inset-0 z-50 bg-black/50 sm:hidden"
           onClick={() => {
             setIsMenuOpen(false);
             menuButtonRef.current?.focus();
@@ -160,26 +160,26 @@ export function Header() {
       <nav
         ref={menuRef}
         id="mobile-menu"
-        className={`fixed top-0 right-0 h-full w-64 bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out sm:hidden ${
+        className={`fixed top-0 right-0 z-50 h-full w-64 transform bg-white shadow-xl transition-transform duration-300 ease-in-out sm:hidden ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
         aria-label="Mobile navigation"
         aria-hidden={!isMenuOpen}
       >
-        <div className="flex flex-col h-full">
+        <div className="flex h-full flex-col">
           {/* Close Button */}
-          <div className="flex justify-end p-4 border-b border-gray-200">
+          <div className="flex justify-end border-b border-gray-200 p-4">
             <button
               ref={closeButtonRef}
               onClick={() => {
                 setIsMenuOpen(false);
                 menuButtonRef.current?.focus();
               }}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              className="rounded-lg p-2 transition-colors hover:bg-gray-100 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
               aria-label="Close menu"
             >
               <svg
-                className="w-6 h-6"
+                className="h-6 w-6"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
