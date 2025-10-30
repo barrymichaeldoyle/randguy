@@ -1,31 +1,31 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
-import { excali } from "@/fonts";
-import { Button } from "@/components/Button";
-import { NumericInput } from "@/components/NumericInput";
-import { FormField } from "@/components/FormField";
-import { Select } from "@/components/Select";
-import { useTFSAStore, type DisplayUnit } from "./tfsa-store";
+import { excali } from '@/fonts';
+import { Button } from '@/components/Button';
+import { NumericInput } from '@/components/NumericInput';
+import { FormField } from '@/components/FormField';
+import { Select } from '@/components/Select';
+import { useTFSAStore, type DisplayUnit } from './tfsa-store';
 
 const LIFETIME_LIMIT = 500000; // R500,000 lifetime limit
 const ANNUAL_LIMIT = 36000; // R36,000 annual limit
 
 function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat("en-ZA", {
-    style: "currency",
-    currency: "ZAR",
+  return new Intl.NumberFormat('en-ZA', {
+    style: 'currency',
+    currency: 'ZAR',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   }).format(amount);
 }
 
 function formatDate(date: Date | string): string {
-  const dateObj = typeof date === "string" ? new Date(date) : date;
-  return dateObj.toLocaleDateString("en-ZA", {
-    year: "numeric",
-    month: "long",
+  const dateObj = typeof date === 'string' ? new Date(date) : date;
+  return dateObj.toLocaleDateString('en-ZA', {
+    year: 'numeric',
+    month: 'long',
   });
 }
 
@@ -44,10 +44,10 @@ export default function TFSACalculator() {
     resetForm,
   } = useTFSAStore();
 
-  const previousUnit = useRef<DisplayUnit>("years");
+  const previousUnit = useRef<DisplayUnit>('years');
   const contributionByUnit = useRef<Record<DisplayUnit, string>>({
-    months: "",
-    years: "",
+    months: '',
+    years: '',
   });
 
   // Convert contribution when display unit changes
@@ -59,13 +59,13 @@ export default function TFSACalculator() {
       } else if (monthlyContribution) {
         // Convert from previous unit
         const contributionValue = parseFloat(
-          monthlyContribution.replace(/,/g, ""),
+          monthlyContribution.replace(/,/g, '')
         );
 
         if (!isNaN(contributionValue) && contributionValue > 0) {
           let convertedValue: string;
 
-          if (displayUnit === "years" && previousUnit.current === "months") {
+          if (displayUnit === 'years' && previousUnit.current === 'months') {
             // Converting from monthly to annual
             const annualAmount = contributionValue * 12;
             convertedValue = Math.round(annualAmount).toString();
@@ -89,8 +89,8 @@ export default function TFSACalculator() {
     // Clear all saved values except the current unit
     // This ensures conversions are based on the latest edited value
     contributionByUnit.current = {
-      months: "",
-      years: "",
+      months: '',
+      years: '',
     };
     contributionByUnit.current[displayUnit] = value;
   };
@@ -98,33 +98,35 @@ export default function TFSACalculator() {
   const handleResetForm = () => {
     resetForm();
     // Reset refs
-    previousUnit.current = "years";
+    previousUnit.current = 'years';
     contributionByUnit.current = {
-      months: "",
-      years: "",
+      months: '',
+      years: '',
     };
   };
 
+  const resultsRef = useRef<HTMLDivElement>(null);
+
   const handleCalculate = () => {
-    const current = parseFloat(currentContributions.replace(/,/g, ""));
+    const current = parseFloat(currentContributions.replace(/,/g, ''));
     const contributionAmount = parseFloat(
-      monthlyContribution.replace(/,/g, ""),
+      monthlyContribution.replace(/,/g, '')
     );
 
     // Validation
     if (isNaN(current) || current < 0) {
-      alert("Please enter a valid current contribution amount.");
+      alert('Please enter a valid current contribution amount.');
       return;
     }
 
     if (isNaN(contributionAmount) || contributionAmount <= 0) {
-      alert("Please enter a valid contribution amount.");
+      alert('Please enter a valid contribution amount.');
       return;
     }
 
     if (current > LIFETIME_LIMIT) {
       alert(
-        `Current contributions cannot exceed the lifetime limit of ${formatCurrency(LIFETIME_LIMIT)}.`,
+        `Current contributions cannot exceed the lifetime limit of ${formatCurrency(LIFETIME_LIMIT)}.`
       );
       return;
     }
@@ -136,7 +138,7 @@ export default function TFSACalculator() {
 
     // Convert to monthly contribution
     const monthly =
-      displayUnit === "years" ? contributionAmount / 12 : contributionAmount;
+      displayUnit === 'years' ? contributionAmount / 12 : contributionAmount;
 
     // Calculate remaining contributions
     const remaining = LIFETIME_LIMIT - current;
@@ -162,6 +164,14 @@ export default function TFSACalculator() {
       annualContribution,
     });
     setIsDirty(false);
+
+    // Scroll to results on mobile
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 100);
   };
 
   return (
@@ -191,9 +201,9 @@ export default function TFSACalculator() {
             label="Contribution Amount"
             htmlFor="monthlyContribution"
             helperText={
-              displayUnit === "months"
-                ? "Annual limit: R36,000 (R3,000/month)"
-                : "Annual limit: R36,000"
+              displayUnit === 'months'
+                ? 'Annual limit: R36,000 (R3,000/month)'
+                : 'Annual limit: R36,000'
             }
           >
             <div className="flex gap-2">
@@ -201,15 +211,15 @@ export default function TFSACalculator() {
                 id="monthlyContribution"
                 value={monthlyContribution}
                 onChange={handleContributionChange}
-                placeholder={displayUnit === "months" ? "3000" : "36000"}
+                placeholder={displayUnit === 'months' ? '3000' : '36000'}
                 prefix="R"
               />
               <Select
                 value={displayUnit}
                 onChange={setDisplayUnit}
                 options={[
-                  { value: "months", label: "Monthly" },
-                  { value: "years", label: "Annual" },
+                  { value: 'months', label: 'Monthly' },
+                  { value: 'years', label: 'Annual' },
                 ]}
                 className="w-30"
               />
@@ -223,7 +233,7 @@ export default function TFSACalculator() {
               size="lg"
               disabled={!isDirty && results !== null}
             >
-              {!isDirty && results !== null ? "Calculated" : "Calculate"}
+              {!isDirty && results !== null ? 'Calculated' : 'Calculate'}
             </Button>
             <button
               type="button"
@@ -237,7 +247,7 @@ export default function TFSACalculator() {
       </div>
 
       {/* Results - Right Side */}
-      <div className="min-h-[400px]">
+      <div ref={resultsRef} className="min-h-[400px]">
         {results && (
           <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
             <h2 className={`${excali.className} text-2xl mb-6`}>
@@ -324,7 +334,7 @@ export default function TFSACalculator() {
                       </h3>
                       <div className="mt-2 text-sm text-yellow-700">
                         <p>
-                          Your planned annual contribution of{" "}
+                          Your planned annual contribution of{' '}
                           {formatCurrency(results.annualContribution)} exceeds
                           the annual limit of {formatCurrency(ANNUAL_LIMIT)}.
                           Consider reducing to R3,000/month to stay within
@@ -355,9 +365,9 @@ export default function TFSACalculator() {
                   <span className="text-gray-600">Monthly Contribution</span>
                   <span className="font-semibold text-gray-900">
                     {formatCurrency(
-                      displayUnit === "months"
+                      displayUnit === 'months'
                         ? parseFloat(monthlyContribution)
-                        : parseFloat(monthlyContribution) / 12,
+                        : parseFloat(monthlyContribution) / 12
                     )}
                   </span>
                 </div>
@@ -366,9 +376,9 @@ export default function TFSACalculator() {
                   <span className="text-gray-600">Annual Contribution</span>
                   <span className="font-semibold text-gray-900">
                     {formatCurrency(
-                      displayUnit === "years"
+                      displayUnit === 'years'
                         ? parseFloat(monthlyContribution)
-                        : parseFloat(monthlyContribution) * 12,
+                        : parseFloat(monthlyContribution) * 12
                     )}
                   </span>
                 </div>

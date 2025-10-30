@@ -202,6 +202,8 @@ export default function InterestCalculator() {
     rateByPeriod.current[inputPeriod] = value;
   };
 
+  const resultsRef = useRef<HTMLDivElement>(null);
+
   const handleCalculate = () => {
     const principalAmount = parseFloat(principal.replace(/,/g, ''));
     const rate = parseFloat(interestRate.replace(/,/g, ''));
@@ -311,6 +313,14 @@ export default function InterestCalculator() {
       },
     });
     setIsDirty(false);
+
+    // Scroll to results on mobile
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 100);
   };
 
   return (
@@ -396,7 +406,7 @@ export default function InterestCalculator() {
       </div>
 
       {/* Results - Right Side */}
-      <div className="min-h-[400px]">
+      <div ref={resultsRef} className="min-h-[400px]">
         {results && (
           <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
             <h2 className={`${excali.className} text-2xl mb-6`}>

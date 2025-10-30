@@ -1,16 +1,18 @@
-"use client";
+'use client';
 
-import { excali } from "@/fonts";
-import { Button } from "@/components/Button";
-import { NumericInput } from "@/components/NumericInput";
-import { FormField } from "@/components/FormField";
-import { formatCurrency } from "@/lib/calculator-utils";
+import { useRef } from 'react';
 
-import { useLTVStore } from "./ltv-store";
+import { excali } from '@/fonts';
+import { Button } from '@/components/Button';
+import { NumericInput } from '@/components/NumericInput';
+import { FormField } from '@/components/FormField';
+import { formatCurrency } from '@/lib/calculator-utils';
+
+import { useLTVStore } from './ltv-store';
 
 function calculateLTV(
   propertyValue: number,
-  loanAmount: number,
+  loanAmount: number
 ): {
   propertyValue: number;
   loanAmount: number;
@@ -41,31 +43,31 @@ function getLTVStatus(ltv: number): {
 } {
   if (ltv <= 80) {
     return {
-      color: "text-green-700",
-      bgColor: "bg-green-50 border-green-200",
-      label: "Excellent",
-      description: "Best interest rates and loan terms available",
+      color: 'text-green-700',
+      bgColor: 'bg-green-50 border-green-200',
+      label: 'Excellent',
+      description: 'Best interest rates and loan terms available',
     };
   } else if (ltv <= 90) {
     return {
-      color: "text-blue-700",
-      bgColor: "bg-blue-50 border-blue-200",
-      label: "Good",
-      description: "Competitive rates, good approval chances",
+      color: 'text-blue-700',
+      bgColor: 'bg-blue-50 border-blue-200',
+      label: 'Good',
+      description: 'Competitive rates, good approval chances',
     };
   } else if (ltv < 100) {
     return {
-      color: "text-yellow-700",
-      bgColor: "bg-yellow-50 border-yellow-200",
-      label: "Fair",
-      description: "Higher rates possible, limited options",
+      color: 'text-yellow-700',
+      bgColor: 'bg-yellow-50 border-yellow-200',
+      label: 'Fair',
+      description: 'Higher rates possible, limited options',
     };
   } else {
     return {
-      color: "text-red-700",
-      bgColor: "bg-red-50 border-red-200",
-      label: "100% Loan",
-      description: "Available for qualifying first-time buyers",
+      color: 'text-red-700',
+      bgColor: 'bg-red-50 border-red-200',
+      label: '100% Loan',
+      description: 'Available for qualifying first-time buyers',
     };
   }
 }
@@ -87,31 +89,33 @@ export default function LTVCalculator() {
     resetForm,
   } = useLTVStore();
 
+  const resultsRef = useRef<HTMLDivElement>(null);
+
   const handleCalculate = () => {
-    const propValue = parseFloat(propertyValue.replace(/,/g, ""));
+    const propValue = parseFloat(propertyValue.replace(/,/g, ''));
 
     if (isNaN(propValue) || propValue <= 0) {
-      alert("Please enter a valid property value");
+      alert('Please enter a valid property value');
       return;
     }
 
     let calculatedLoanAmount: number;
 
-    if (inputMode === "deposit") {
-      const depositValue = parseFloat(deposit.replace(/,/g, "")) || 0;
+    if (inputMode === 'deposit') {
+      const depositValue = parseFloat(deposit.replace(/,/g, '')) || 0;
       if (depositValue > propValue) {
-        alert("Deposit cannot be greater than property value");
+        alert('Deposit cannot be greater than property value');
         return;
       }
       calculatedLoanAmount = propValue - depositValue;
     } else {
-      calculatedLoanAmount = parseFloat(loanAmount.replace(/,/g, ""));
+      calculatedLoanAmount = parseFloat(loanAmount.replace(/,/g, ''));
       if (isNaN(calculatedLoanAmount) || calculatedLoanAmount < 0) {
-        alert("Please enter a valid loan amount");
+        alert('Please enter a valid loan amount');
         return;
       }
       if (calculatedLoanAmount > propValue) {
-        alert("Loan amount cannot exceed property value");
+        alert('Loan amount cannot exceed property value');
         return;
       }
     }
@@ -119,6 +123,14 @@ export default function LTVCalculator() {
     const calculatedResults = calculateLTV(propValue, calculatedLoanAmount);
     setResults(calculatedResults);
     setIsDirty(false); // Mark as clean after successful calculation
+
+    // Scroll to results on mobile
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 100);
   };
 
   return (
@@ -150,8 +162,8 @@ export default function LTVCalculator() {
                   type="radio"
                   name="inputMode"
                   value="deposit"
-                  checked={inputMode === "deposit"}
-                  onChange={() => setInputMode("deposit")}
+                  checked={inputMode === 'deposit'}
+                  onChange={() => setInputMode('deposit')}
                   className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
                 />
                 <span className="ml-2 text-sm text-gray-900">Deposit</span>
@@ -162,8 +174,8 @@ export default function LTVCalculator() {
                   type="radio"
                   name="inputMode"
                   value="loan"
-                  checked={inputMode === "loan"}
-                  onChange={() => setInputMode("loan")}
+                  checked={inputMode === 'loan'}
+                  onChange={() => setInputMode('loan')}
                   className="w-4 h-4 text-yellow-400 focus:ring-yellow-400"
                 />
                 <span className="ml-2 text-sm text-gray-900">Loan Amount</span>
@@ -171,7 +183,7 @@ export default function LTVCalculator() {
             </div>
           </div>
 
-          {inputMode === "deposit" ? (
+          {inputMode === 'deposit' ? (
             <FormField
               label="Deposit Amount"
               htmlFor="deposit"
@@ -204,7 +216,7 @@ export default function LTVCalculator() {
               size="lg"
               disabled={!isDirty && results !== null}
             >
-              {!isDirty && results !== null ? "Calculated" : "Calculate LTV"}
+              {!isDirty && results !== null ? 'Calculated' : 'Calculate LTV'}
             </Button>
             <button
               type="button"
@@ -218,7 +230,7 @@ export default function LTVCalculator() {
       </div>
 
       {/* Results - Right Side */}
-      <div className="min-h-[400px]">
+      <div ref={resultsRef} className="min-h-[400px]">
         {results && (
           <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
             <h2 className={`${excali.className} text-2xl mb-6`}>

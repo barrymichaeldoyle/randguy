@@ -132,6 +132,8 @@ export default function HomeLoanCalculator() {
     return termValue;
   };
 
+  const resultsRef = useRef<HTMLDivElement>(null);
+
   const handleCalculate = () => {
     const priceValue = parseFloat(propertyPrice.replace(/,/g, ''));
     const depositValue = parseFloat(deposit.replace(/,/g, '')) || 0;
@@ -178,6 +180,14 @@ export default function HomeLoanCalculator() {
       serviceFee: serviceFeeValue,
     });
     setIsDirty(false); // Mark as clean after successful calculation
+
+    // Scroll to results on mobile
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 100);
   };
 
   const depositPercentage =
@@ -406,7 +416,7 @@ export default function HomeLoanCalculator() {
       </div>
 
       {/* Results - Right Side */}
-      <div className="min-h-[400px]">
+      <div ref={resultsRef} className="min-h-[400px]">
         {results && (
           <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
             <h2 className={`${excali.className} text-2xl mb-6`}>

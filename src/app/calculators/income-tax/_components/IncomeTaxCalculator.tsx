@@ -323,6 +323,8 @@ export default function IncomeTaxCalculator() {
     }
   }, [payFrequency, income, setIncome]);
 
+  const resultsRef = useRef<HTMLDivElement>(null);
+
   const handleCalculate = () => {
     const incomeValue = parseFloat(income.replace(/,/g, ''));
 
@@ -366,6 +368,14 @@ export default function IncomeTaxCalculator() {
       previousYearResults: prevYearResults,
     });
     setIsDirty(false); // Mark as clean after successful calculation
+
+    // Scroll to results on mobile
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }, 100);
   };
 
   const handleIncomeChange = (value: string) => {
@@ -571,7 +581,7 @@ export default function IncomeTaxCalculator() {
       </div>
 
       {/* Results - Right Side */}
-      <div className="min-h-[400px]">
+      <div ref={resultsRef} className="min-h-[400px]">
         {results && (
           <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
             <h2 className={`${excali.className} text-2xl mb-6`}>
