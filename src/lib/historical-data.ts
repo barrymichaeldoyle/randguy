@@ -8,7 +8,7 @@ export interface PrimeRateData {
  * The last date for which we checked for the prime lending rate.
  * Useful for displaying the last updated date in the UI.
  */
-export const PRIME_LENDING_RATE_LAST_UPDATED = '2025-10-27';
+export const PRIME_LENDING_RATE_LAST_UPDATED = '2025-10-31';
 
 // The repo rate (SARB policy rate) is typically 3.5% below the prime lending rate (since 2000). This has been consistent since then.
 export const REPO_RATE_SPREAD = 3.5;
