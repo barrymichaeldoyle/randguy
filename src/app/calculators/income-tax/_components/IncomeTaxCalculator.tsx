@@ -714,6 +714,7 @@ export default function IncomeTaxCalculator() {
                   id="taxYear"
                   value={taxYear}
                   onChange={setTaxYear}
+                  aria-label="Tax Year"
                   options={[
                     { value: '2026', label: '2026 (Mar 2025 - Feb 2026)' },
                     { value: '2025', label: '2025 (Mar 2024 - Feb 2025)' },
@@ -969,7 +970,7 @@ export default function IncomeTaxCalculator() {
 
                     <div className="flex items-center justify-between border-b border-gray-200 py-3">
                       <span className="text-gray-600">Tax Rebates</span>
-                      <span className="font-medium text-green-600">
+                      <span className="font-medium text-green-700">
                         -{formatZAR(results.rebates)}
                       </span>
                     </div>
