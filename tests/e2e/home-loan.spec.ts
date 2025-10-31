@@ -129,9 +129,10 @@ test.describe('Home Loan Calculator', () => {
     // Wait a bit for React state to settle after filling
     await page.waitForTimeout(100);
 
-    // Ensure inputs reflect the filled values (formatting may add commas)
-    await expect(page.getByLabel('Property Price')).toHaveValue(/500[, ]?000/);
-    await expect(page.getByLabel('Deposit')).toHaveValue(/500[, ]?000/);
+    // Ensure inputs reflect the filled values (formatting may add commas or spaces)
+    // Accept any whitespace or comma separator (browsers format differently)
+    await expect(page.getByLabel('Property Price')).toHaveValue(/500[\s,]?000/);
+    await expect(page.getByLabel('Deposit')).toHaveValue(/500[\s,]?000/);
 
     // Wait for button to be ready and ensure it's not covered
     const calcBtn = page.getByRole('button', { name: 'Calculate Repayment' });
