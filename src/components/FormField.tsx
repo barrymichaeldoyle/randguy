@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 interface FormFieldProps {
   label: ReactNode;
@@ -13,16 +13,19 @@ export function FormField({
   helperText,
   children,
 }: FormFieldProps) {
+  const labelId = htmlFor ? `${htmlFor}-label` : undefined;
+
   return (
     <div>
       <label
+        id={labelId}
         htmlFor={htmlFor}
-        className="block text-sm font-medium text-gray-700 mb-2"
+        className="mb-2 block text-sm font-medium text-gray-700"
       >
         {label}
       </label>
       {children}
-      {helperText && <p className="text-xs text-gray-500 mt-1">{helperText}</p>}
+      {helperText && <p className="mt-1 text-xs text-gray-500">{helperText}</p>}
     </div>
   );
 }

@@ -33,13 +33,6 @@ export function Select<T extends string>({
         id={id}
         value={value}
         onChange={(e) => onChange(e.target.value as T)}
-        aria-invalid={rest['aria-invalid']}
-        aria-describedby={rest['aria-describedby']}
-        aria-label={rest['aria-label']}
-        aria-labelledby={rest['aria-labelledby']}
-        disabled={rest.disabled}
-        required={rest.required}
-        name={rest.name}
         className={
           'w-full appearance-none rounded-lg border border-gray-300 bg-white py-3 pr-10 pl-4 transition outline-none focus:border-transparent focus:ring-2 focus:ring-yellow-400'
         }

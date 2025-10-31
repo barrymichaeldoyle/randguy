@@ -714,7 +714,7 @@ export default function IncomeTaxCalculator() {
                   id="taxYear"
                   value={taxYear}
                   onChange={setTaxYear}
-                  aria-label="Tax Year"
+                  aria-labelledby="taxYear-label"
                   options={[
                     { value: '2026', label: '2026 (Mar 2025 - Feb 2026)' },
                     { value: '2025', label: '2025 (Mar 2024 - Feb 2025)' },
