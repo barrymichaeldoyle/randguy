@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Button } from '@/components/Button';
@@ -121,7 +122,13 @@ export default function IncomeTaxCalculatorPage() {
           </p>
         </div>
 
-        <IncomeTaxCalculator />
+        <Suspense
+          fallback={
+            <div className="py-8 text-center">Loading calculator...</div>
+          }
+        >
+          <IncomeTaxCalculator />
+        </Suspense>
 
         <CalculatorInfo
           title="About This Income Tax Calculator"

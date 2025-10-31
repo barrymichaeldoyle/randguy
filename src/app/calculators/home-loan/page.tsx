@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Suspense } from 'react';
 
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Button } from '@/components/Button';
@@ -133,7 +134,13 @@ export default function HomeLoanCalculatorPage() {
           </p>
         </div>
 
-        <HomeLoanCalculator />
+        <Suspense
+          fallback={
+            <div className="py-8 text-center">Loading calculator...</div>
+          }
+        >
+          <HomeLoanCalculator />
+        </Suspense>
 
         <CalculatorInfo
           title="About This Home Loan Calculator"
