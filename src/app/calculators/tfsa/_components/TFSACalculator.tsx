@@ -96,6 +96,11 @@ export default function TFSACalculator() {
     contributionByUnit.current[displayUnit] = value;
   };
 
+  const handleSetMaxContribution = () => {
+    const maxValue = displayUnit === 'months' ? '3000' : '36000';
+    handleContributionChange(maxValue);
+  };
+
   const handleResetForm = () => {
     resetForm();
     // Reset refs
@@ -108,14 +113,23 @@ export default function TFSACalculator() {
 
   const resultsRef = useRef<HTMLDivElement>(null);
 
+  // Derived UI state for the Max button
+  const maxPerUnit = displayUnit === 'months' ? 3000 : 36000;
+  const currentContributionNumeric = monthlyContribution.trim()
+    ? parseFloat(monthlyContribution.replace(/,/g, ''))
+    : 0;
+  const isAtOrAboveMax = currentContributionNumeric >= maxPerUnit;
+
   const handleCalculate = () => {
-    const current = parseFloat(currentContributions.replace(/,/g, ''));
+    const current = currentContributions.trim()
+      ? parseFloat(currentContributions.replace(/,/g, ''))
+      : 0;
     const contributionAmount = parseFloat(
       monthlyContribution.replace(/,/g, '')
     );
 
     // Validation
-    if (isNaN(current) || current < 0) {
+    if (current < 0) {
       alert('Please enter a valid current contribution amount.');
       return;
     }
@@ -208,13 +222,26 @@ export default function TFSACalculator() {
             }
           >
             <div className="flex gap-2">
-              <NumericInput
-                id="monthlyContribution"
-                value={monthlyContribution}
-                onChange={handleContributionChange}
-                placeholder={displayUnit === 'months' ? '3000' : '36000'}
-                prefix="R"
-              />
+              <div className="relative flex-1">
+                <NumericInput
+                  id="monthlyContribution"
+                  value={monthlyContribution}
+                  onChange={handleContributionChange}
+                  placeholder={displayUnit === 'months' ? '3000' : '36000'}
+                  prefix="R"
+                  max={maxPerUnit}
+                  className="w-full rounded-lg border border-gray-300 py-3 pr-16 pl-8 transition outline-none focus:border-transparent focus:ring-2 focus:ring-yellow-400"
+                />
+                {!isAtOrAboveMax && (
+                  <button
+                    type="button"
+                    onClick={handleSetMaxContribution}
+                    className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-sm font-medium text-yellow-600 transition-colors hover:text-yellow-700"
+                  >
+                    Max
+                  </button>
+                )}
+              </div>
               <Select
                 value={displayUnit}
                 onChange={setDisplayUnit}
@@ -285,7 +312,11 @@ export default function TFSACalculator() {
                 </div>
                 <div className="mt-1 flex items-center justify-between text-xs text-gray-500">
                   <span>
-                    {formatCurrency(parseFloat(currentContributions))}
+                    {formatCurrency(
+                      currentContributions.trim()
+                        ? parseFloat(currentContributions.replace(/,/g, ''))
+                        : 0
+                    )}
                   </span>
                   <span>{formatCurrency(LIFETIME_LIMIT)}</span>
                 </div>
@@ -358,7 +389,11 @@ export default function TFSACalculator() {
                 <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Current Contributions</span>
                   <span className="font-semibold text-gray-900">
-                    {formatCurrency(parseFloat(currentContributions))}
+                    {formatCurrency(
+                      currentContributions.trim()
+                        ? parseFloat(currentContributions.replace(/,/g, ''))
+                        : 0
+                    )}
                   </span>
                 </div>
 

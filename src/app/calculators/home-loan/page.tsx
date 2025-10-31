@@ -1,11 +1,9 @@
-
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Button } from '@/components/Button';
 import { CalculatorInfo } from '@/components/CalculatorInfo';
 import { excali } from '@/fonts';
 import { BASE_URL } from '@/lib/constants';
 import {
-  PRIME_LENDING_RATE_ZA,
   PRIME_LENDING_RATE_LAST_UPDATED,
   CURRENT_PRIME_LENDING_RATE,
 } from '@/lib/historical-data';
@@ -106,7 +104,7 @@ export default function HomeLoanCalculatorPage() {
   });
 
   return (
-    <main className="flex flex-col items-center pt-8 md:pt-12 px-4 pb-8 md:px-8 flex-1">
+    <main className="flex flex-1 flex-col items-center px-4 pt-8 pb-8 md:px-8 md:pt-12">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -115,7 +113,7 @@ export default function HomeLoanCalculatorPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
-      <div className="max-w-7xl w-full">
+      <div className="w-full max-w-7xl">
         <Breadcrumb
           items={[
             { name: 'Home', href: '/' },
@@ -124,8 +122,8 @@ export default function HomeLoanCalculatorPage() {
           ]}
         />
 
-        <div className="text-center mb-8">
-          <h1 className={`${excali.className} text-4xl mb-4`}>
+        <div className="mb-8 text-center">
+          <h1 className={`${excali.className} mb-4 text-4xl`}>
             Home Loan Calculator
           </h1>
           <p className="text-lg text-gray-700">
@@ -151,7 +149,7 @@ export default function HomeLoanCalculatorPage() {
               {CURRENT_PRIME_LENDING_RATE}% (as of {lastUpdated}).{' '}
               <a
                 href="/data/prime-rates"
-                className="text-yellow-600 hover:underline font-semibold"
+                className="font-semibold text-yellow-600 hover:underline"
               >
                 View historical rates
               </a>
@@ -185,7 +183,7 @@ export default function HomeLoanCalculatorPage() {
           ]}
         />
 
-        <div className="text-center mt-8">
+        <div className="mt-8 text-center">
           <Button href="/calculators" variant="secondary">
             View All Calculators
           </Button>
