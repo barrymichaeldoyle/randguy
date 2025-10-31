@@ -1,14 +1,9 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-type AgeGroup = "under65" | "65to74" | "75plus";
-type PayFrequency = "monthly" | "annual" | "biweekly" | "weekly";
-type TaxYear =
-  | "2021/2022"
-  | "2022/2023"
-  | "2023/2024"
-  | "2024/2025"
-  | "2025/2026";
+type AgeGroup = 'under65' | '65to74' | '75plus';
+type PayFrequency = 'monthly' | 'annual' | 'biweekly' | 'weekly';
+type TaxYear = '2021' | '2022' | '2023' | '2024' | '2025' | '2026';
 
 interface TaxResults {
   taxableIncome: number;
@@ -22,7 +17,7 @@ interface TaxResults {
   uifAnnual: number;
   takeHomePay: number;
   monthlyTakeHome: number;
-  previousYear: (TaxYear | "2020/2021") | null;
+  previousYear: (TaxYear | '2020') | null;
   previousYearResults: {
     taxableIncome: number;
     taxBeforeRebates: number;
@@ -64,10 +59,10 @@ interface IncomeTaxState {
 }
 
 const initialState = {
-  income: "",
-  payFrequency: "monthly" as PayFrequency,
-  ageGroup: "under65" as AgeGroup,
-  taxYear: "2025/2026" as TaxYear,
+  income: '',
+  payFrequency: 'monthly' as PayFrequency,
+  ageGroup: 'under65' as AgeGroup,
+  taxYear: '2026' as TaxYear,
   isSalary: true,
   isAdvancedMode: false,
   results: null as TaxResults | null,
@@ -91,7 +86,7 @@ export const useIncomeTaxStore = create<IncomeTaxState>()(
       resetForm: () => set(initialState),
     }),
     {
-      name: "income-tax-calculator",
+      name: 'income-tax-calculator',
       partialize: (state) => ({
         income: state.income,
         payFrequency: state.payFrequency,
@@ -102,6 +97,6 @@ export const useIncomeTaxStore = create<IncomeTaxState>()(
         results: state.results,
         isDirty: state.isDirty,
       }),
-    },
-  ),
+    }
+  )
 );
