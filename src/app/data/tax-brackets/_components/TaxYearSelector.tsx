@@ -5,23 +5,10 @@ import { useState } from 'react';
 import { Button } from '@/components/Button';
 import { Select } from '@/components/Select';
 import { excali } from '@/fonts';
+import { formatZAR } from '@/lib/calculator-utils';
 import { taxBracketsHistory } from '@/lib/historical-data';
 
 type Period = 'yearly' | 'monthly';
-
-/**
- * Format a number as currency
- * @param value - The value to format as currency
- * @returns The formatted currency value
- */
-const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat('en-ZA', {
-    style: 'currency',
-    currency: 'ZAR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(value);
-};
 
 /**
  * Format the label based on period
@@ -60,15 +47,15 @@ export default function TaxYearSelector() {
   }));
 
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-6 mb-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+    <div className="mb-8 rounded-lg border border-gray-200 bg-white p-6">
+      <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <h2 className={`${excali.className} text-2xl`}>Tax Brackets</h2>
         <div className="flex items-center gap-4">
           {/* Period Toggle */}
-          <div className="flex items-center gap-2 bg-gray-100 rounded-lg p-1">
+          <div className="flex items-center gap-2 rounded-lg bg-gray-100 p-1">
             <button
               onClick={() => setPeriod('yearly')}
-              className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+              className={`rounded px-3 py-1 text-sm font-medium transition-colors ${
                 period === 'yearly'
                   ? 'bg-white text-gray-900 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900'
@@ -78,7 +65,7 @@ export default function TaxYearSelector() {
             </button>
             <button
               onClick={() => setPeriod('monthly')}
-              className={`px-3 py-1 rounded text-sm font-medium transition-colors ${
+              className={`rounded px-3 py-1 text-sm font-medium transition-colors ${
                 period === 'monthly'
                   ? 'bg-white text-gray-900 shadow-sm'
                   : 'text-gray-600 hover:text-gray-900'
@@ -107,15 +94,15 @@ export default function TaxYearSelector() {
         </div>
       </div>
 
-      <div className="overflow-x-auto mb-6">
+      <div className="mb-6 overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-gray-200">
-              <th className="text-left py-3 px-4">
+              <th className="px-4 py-3 text-left">
                 Taxable Income ({isMonthly ? 'Monthly' : 'Annual'})
               </th>
-              <th className="text-center py-3 px-4 w-20">Rate</th>
-              <th className="text-right py-3 px-4 w-32">Tax on Bracket</th>
+              <th className="w-20 px-4 py-3 text-center">Rate</th>
+              <th className="w-32 px-4 py-3 text-right">Tax on Bracket</th>
             </tr>
           </thead>
           <tbody>
@@ -127,22 +114,22 @@ export default function TaxYearSelector() {
 
               return (
                 <tr key={index} className="border-b border-gray-100">
-                  <td className="py-3 px-4">
+                  <td className="px-4 py-3">
                     {formatLabel(bracket.label, period)}
                   </td>
-                  <td className="text-center py-3 px-4 font-semibold w-20">
+                  <td className="w-20 px-4 py-3 text-center font-semibold">
                     {bracket.rate}%
                   </td>
-                  <td className="text-right py-3 px-4 w-32">
+                  <td className="w-32 px-4 py-3 text-right">
                     {bracket.max !== null
-                      ? formatCurrency(taxOnBracket)
+                      ? formatZAR(taxOnBracket)
                       : 'Variable'}
                   </td>
                 </tr>
               );
             }) ?? (
               <tr>
-                <td colSpan={3} className="text-center py-3 px-4">
+                <td colSpan={3} className="px-4 py-3 text-center">
                   No data available
                 </td>
               </tr>
@@ -153,7 +140,7 @@ export default function TaxYearSelector() {
 
       {/* Rebates */}
       <div>
-        <div className="flex items-center justify-between mb-2">
+        <div className="mb-2 flex items-center justify-between">
           <h3 className={`${excali.className} text-lg`}>
             Annual Tax Rebates (Tax Credits)
           </h3>
@@ -164,36 +151,36 @@ export default function TaxYearSelector() {
             Learn how rebates work →
           </Button>
         </div>
-        <p className="text-xs text-gray-600 mb-4">
+        <p className="mb-4 text-xs text-gray-600">
           Rebates are tax credits that reduce your total tax liability. Everyone
           gets the primary rebate. Additional rebates apply based on age.
         </p>
-        <div className="grid md:grid-cols-3 gap-4">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <div className="text-xs text-gray-500 mb-1">Primary Rebate</div>
-            <div className="text-sm font-medium text-gray-700 mb-2">
+        <div className="grid gap-4 md:grid-cols-3">
+          <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
+            <div className="mb-1 text-xs text-gray-500">Primary Rebate</div>
+            <div className="mb-2 text-sm font-medium text-gray-700">
               Under 65
             </div>
             <div className="text-2xl font-bold text-gray-900">
-              {formatCurrency(selectedYearData?.rebates.primary ?? 0)}
+              {formatZAR(selectedYearData?.rebates.primary ?? 0)}
             </div>
           </div>
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-            <div className="text-xs text-gray-500 mb-1">+ Secondary Rebate</div>
-            <div className="text-sm font-medium text-gray-700 mb-2">
+          <div className="rounded-lg border border-green-200 bg-green-50 p-4">
+            <div className="mb-1 text-xs text-gray-500">+ Secondary Rebate</div>
+            <div className="mb-2 text-sm font-medium text-gray-700">
               Age 65-74
             </div>
             <div className="text-2xl font-bold text-gray-900">
-              {formatCurrency(selectedYearData?.rebates.secondary ?? 0)}
+              {formatZAR(selectedYearData?.rebates.secondary ?? 0)}
             </div>
           </div>
-          <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
-            <div className="text-xs text-gray-500 mb-1">+ Tertiary Rebate</div>
-            <div className="text-sm font-medium text-gray-700 mb-2">
+          <div className="rounded-lg border border-purple-200 bg-purple-50 p-4">
+            <div className="mb-1 text-xs text-gray-500">+ Tertiary Rebate</div>
+            <div className="mb-2 text-sm font-medium text-gray-700">
               Age 75+
             </div>
             <div className="text-2xl font-bold text-gray-900">
-              {formatCurrency(selectedYearData?.rebates.tertiary ?? 0)}
+              {formatZAR(selectedYearData?.rebates.tertiary ?? 0)}
             </div>
           </div>
         </div>

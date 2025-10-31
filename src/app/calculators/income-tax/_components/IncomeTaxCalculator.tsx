@@ -8,7 +8,7 @@ import { NumericInput } from '@/components/NumericInput';
 import { ResultCard, ResultCardItem } from '@/components/ResultCard';
 import { Select } from '@/components/Select';
 import { excali } from '@/fonts';
-import { formatCurrency, formatPercentage } from '@/lib/calculator-utils';
+import { formatZAR, formatPercentage } from '@/lib/calculator-utils';
 
 import { useIncomeTaxStore } from './income-tax-store';
 
@@ -603,7 +603,7 @@ export default function IncomeTaxCalculator() {
                       label="Take-Home Pay"
                       value={
                         <span className="block text-4xl font-bold text-green-700">
-                          {formatCurrency(results.monthlyTakeHome)}
+                          {formatZAR(results.monthlyTakeHome)}
                         </span>
                       }
                     />
@@ -614,7 +614,7 @@ export default function IncomeTaxCalculator() {
                       label="Tax Deducted"
                       value={
                         <span className="block text-3xl font-bold text-gray-900">
-                          {formatCurrency(results.monthlyTax)}
+                          {formatZAR(results.monthlyTax)}
                         </span>
                       }
                     />
@@ -626,7 +626,7 @@ export default function IncomeTaxCalculator() {
                         label="UIF Contribution"
                         value={
                           <span className="block text-3xl font-bold text-gray-900">
-                            {formatCurrency(results.uifMonthly)}
+                            {formatZAR(results.uifMonthly)}
                           </span>
                         }
                       />
@@ -638,7 +638,7 @@ export default function IncomeTaxCalculator() {
                       label="Gross Income"
                       value={
                         <span className="block text-3xl font-bold text-gray-900">
-                          {formatCurrency(results.taxableIncome / 12)}
+                          {formatZAR(results.taxableIncome / 12)}
                         </span>
                       }
                     />
@@ -673,21 +673,21 @@ export default function IncomeTaxCalculator() {
                   <div className="flex items-center justify-between border-b border-gray-200 py-3">
                     <span className="text-gray-600">Gross Income</span>
                     <span className="font-semibold text-gray-900">
-                      {formatCurrency(results.taxableIncome)}
+                      {formatZAR(results.taxableIncome)}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between border-b border-gray-200 py-3">
                     <span className="text-gray-600">Tax Before Rebates</span>
                     <span className="text-gray-700">
-                      {formatCurrency(results.taxBeforeRebates)}
+                      {formatZAR(results.taxBeforeRebates)}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between border-b border-gray-200 py-3">
                     <span className="text-gray-600">Tax Rebates</span>
                     <span className="font-medium text-green-600">
-                      -{formatCurrency(results.rebates)}
+                      -{formatZAR(results.rebates)}
                     </span>
                   </div>
 
@@ -695,7 +695,7 @@ export default function IncomeTaxCalculator() {
                     <div className="flex items-center justify-between border-b border-gray-200 py-3">
                       <span className="text-gray-600">UIF Contribution</span>
                       <span className="text-gray-700">
-                        {formatCurrency(results.uifAnnual)}
+                        {formatZAR(results.uifAnnual)}
                       </span>
                     </div>
                   )}
@@ -705,7 +705,7 @@ export default function IncomeTaxCalculator() {
                       label="Tax Payable"
                       value={
                         <span className="text-2xl font-bold text-gray-900">
-                          {formatCurrency(results.taxPayable)}
+                          {formatZAR(results.taxPayable)}
                         </span>
                       }
                       layout="horizontal"
@@ -717,7 +717,7 @@ export default function IncomeTaxCalculator() {
                       label="Take-Home Pay"
                       value={
                         <span className="text-2xl font-bold text-green-700">
-                          {formatCurrency(results.takeHomePay)}
+                          {formatZAR(results.takeHomePay)}
                         </span>
                       }
                       layout="horizontal"
@@ -760,7 +760,7 @@ export default function IncomeTaxCalculator() {
                           }`}
                         >
                           {annualTakeHomeDiff > 0 ? '+' : ''}
-                          {formatCurrency(annualTakeHomeDiff)}
+                          {formatZAR(annualTakeHomeDiff)}
                         </p>
                       </div>
 
@@ -778,7 +778,7 @@ export default function IncomeTaxCalculator() {
                           }`}
                         >
                           {monthlyTakeHomeDiff > 0 ? '+' : ''}
-                          {formatCurrency(monthlyTakeHomeDiff)}
+                          {formatZAR(monthlyTakeHomeDiff)}
                         </p>
                       </div>
                     </div>

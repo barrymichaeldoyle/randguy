@@ -7,20 +7,12 @@ import { FormField } from '@/components/FormField';
 import { NumericInput } from '@/components/NumericInput';
 import { Select } from '@/components/Select';
 import { excali } from '@/fonts';
+import { formatZAR } from '@/lib/calculator-utils';
 
 import { useTFSAStore, type DisplayUnit } from './tfsa-store';
 
 const LIFETIME_LIMIT = 500000; // R500,000 lifetime limit
 const ANNUAL_LIMIT = 36000; // R36,000 annual limit
-
-function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('en-ZA', {
-    style: 'currency',
-    currency: 'ZAR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(amount);
-}
 
 function formatDate(date: Date | string): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
@@ -141,7 +133,7 @@ export default function TFSACalculator() {
 
     if (current > LIFETIME_LIMIT) {
       alert(
-        `Current contributions cannot exceed the lifetime limit of ${formatCurrency(LIFETIME_LIMIT)}.`
+        `Current contributions cannot exceed the lifetime limit of ${formatZAR(LIFETIME_LIMIT)}.`
       );
       return;
     }
@@ -312,13 +304,13 @@ export default function TFSACalculator() {
                 </div>
                 <div className="mt-1 flex items-center justify-between text-xs text-gray-500">
                   <span>
-                    {formatCurrency(
+                    {formatZAR(
                       currentContributions.trim()
                         ? parseFloat(currentContributions.replace(/,/g, ''))
                         : 0
                     )}
                   </span>
-                  <span>{formatCurrency(LIFETIME_LIMIT)}</span>
+                  <span>{formatZAR(LIFETIME_LIMIT)}</span>
                 </div>
               </div>
 
@@ -329,7 +321,7 @@ export default function TFSACalculator() {
                     Remaining Contributions
                   </span>
                   <span className="block text-3xl font-bold text-gray-900">
-                    {formatCurrency(results.remainingContributions)}
+                    {formatZAR(results.remainingContributions)}
                   </span>
                 </div>
 
@@ -367,10 +359,9 @@ export default function TFSACalculator() {
                       <div className="mt-2 text-sm text-yellow-700">
                         <p>
                           Your planned annual contribution of{' '}
-                          {formatCurrency(results.annualContribution)} exceeds
-                          the annual limit of {formatCurrency(ANNUAL_LIMIT)}.
-                          Consider reducing to R3,000/month to stay within
-                          limits.
+                          {formatZAR(results.annualContribution)} exceeds the
+                          annual limit of {formatZAR(ANNUAL_LIMIT)}. Consider
+                          reducing to R3,000/month to stay within limits.
                         </p>
                       </div>
                     </div>
@@ -389,7 +380,7 @@ export default function TFSACalculator() {
                 <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Current Contributions</span>
                   <span className="font-semibold text-gray-900">
-                    {formatCurrency(
+                    {formatZAR(
                       currentContributions.trim()
                         ? parseFloat(currentContributions.replace(/,/g, ''))
                         : 0
@@ -400,7 +391,7 @@ export default function TFSACalculator() {
                 <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Monthly Contribution</span>
                   <span className="font-semibold text-gray-900">
-                    {formatCurrency(
+                    {formatZAR(
                       displayUnit === 'months'
                         ? parseFloat(monthlyContribution)
                         : parseFloat(monthlyContribution) / 12
@@ -411,7 +402,7 @@ export default function TFSACalculator() {
                 <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Annual Contribution</span>
                   <span className="font-semibold text-gray-900">
-                    {formatCurrency(
+                    {formatZAR(
                       displayUnit === 'years'
                         ? parseFloat(monthlyContribution)
                         : parseFloat(monthlyContribution) * 12
@@ -422,7 +413,7 @@ export default function TFSACalculator() {
                 <div className="flex items-center justify-between py-3 text-lg font-bold">
                   <span className="text-gray-700">Lifetime Limit</span>
                   <span className="text-gray-900">
-                    {formatCurrency(LIFETIME_LIMIT)}
+                    {formatZAR(LIFETIME_LIMIT)}
                   </span>
                 </div>
               </div>

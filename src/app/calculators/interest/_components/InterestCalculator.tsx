@@ -7,6 +7,7 @@ import { FormField } from '@/components/FormField';
 import { NumericInput } from '@/components/NumericInput';
 import { Select } from '@/components/Select';
 import { excali } from '@/fonts';
+import { formatZAR } from '@/lib/calculator-utils';
 
 import {
   useInterestStore,
@@ -14,15 +15,6 @@ import {
   type InterestType,
   type CompoundingFrequency,
 } from './interest-store';
-
-function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('en-ZA', {
-    style: 'currency',
-    currency: 'ZAR',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(amount);
-}
 
 // Convert any period rate to annual rate
 function convertToAnnualRate(rate: number, period: InterestPeriod): number {
@@ -421,7 +413,7 @@ export default function InterestCalculator() {
                   Annual Interest Gain
                 </span>
                 <span className="block text-5xl font-bold text-green-700">
-                  {formatCurrency(results.annualGain)}
+                  {formatZAR(results.annualGain)}
                 </span>
                 <span className="mt-2 block text-xs text-gray-600">
                   {results.calculatedWith.interestType === 'simple'
@@ -455,7 +447,7 @@ export default function InterestCalculator() {
                       Monthly
                     </span>
                     <span className="block text-2xl font-bold text-gray-900">
-                      {formatCurrency(results.monthlyGain)}
+                      {formatZAR(results.monthlyGain)}
                     </span>
                     <span className="mt-1 block text-xs text-gray-600">
                       {(
@@ -474,7 +466,7 @@ export default function InterestCalculator() {
                       Weekly
                     </span>
                     <span className="block text-2xl font-bold text-gray-900">
-                      {formatCurrency(results.weeklyGain)}
+                      {formatZAR(results.weeklyGain)}
                     </span>
                     <span className="mt-1 block text-xs text-gray-600">
                       {(
@@ -493,7 +485,7 @@ export default function InterestCalculator() {
                       Daily
                     </span>
                     <span className="block text-2xl font-bold text-gray-900">
-                      {formatCurrency(results.dailyGain)}
+                      {formatZAR(results.dailyGain)}
                     </span>
                     <span className="mt-1 block text-xs text-gray-600">
                       {(
@@ -511,7 +503,7 @@ export default function InterestCalculator() {
                       Hourly
                     </span>
                     <span className="block text-2xl font-bold text-gray-900">
-                      {formatCurrency(results.hourlyGain)}
+                      {formatZAR(results.hourlyGain)}
                     </span>
                     <span className="mt-1 block text-xs text-gray-600">
                       {(
@@ -538,7 +530,7 @@ export default function InterestCalculator() {
                 <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Principal Amount</span>
                   <span className="font-semibold text-gray-900">
-                    {formatCurrency(results.calculatedWith.principal)}
+                    {formatZAR(results.calculatedWith.principal)}
                   </span>
                 </div>
 
@@ -578,7 +570,7 @@ export default function InterestCalculator() {
                 <div className="flex items-center justify-between py-3 text-lg font-bold">
                   <span className="text-gray-700">Total After 1 Year</span>
                   <span className="text-gray-900">
-                    {formatCurrency(results.totalAfterOneYear)}
+                    {formatZAR(results.totalAfterOneYear)}
                   </span>
                 </div>
               </div>
@@ -601,7 +593,7 @@ export default function InterestCalculator() {
                         Simple Interest (1 Year)
                       </div>
                       <div className="text-2xl font-bold text-gray-900">
-                        {formatCurrency(
+                        {formatZAR(
                           (results.calculatedWith.principal *
                             results.effectiveAnnualRate) /
                             100
@@ -613,7 +605,7 @@ export default function InterestCalculator() {
                         Compound ({results.calculatedWith.compoundingFrequency})
                       </div>
                       <div className="text-2xl font-bold text-green-700">
-                        {formatCurrency(
+                        {formatZAR(
                           calculateCompoundInterest(
                             results.calculatedWith.principal,
                             results.effectiveAnnualRate,
@@ -630,7 +622,7 @@ export default function InterestCalculator() {
                       {results.calculatedWith.compoundingFrequency})
                     </div>
                     <div className="text-xl font-bold text-purple-700">
-                      {formatCurrency(
+                      {formatZAR(
                         calculateCompoundInterest(
                           results.calculatedWith.principal,
                           results.effectiveAnnualRate,

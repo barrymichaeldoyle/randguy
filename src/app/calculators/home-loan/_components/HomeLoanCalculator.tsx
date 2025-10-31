@@ -1,15 +1,17 @@
 'use client';
 
+import clsx from 'clsx';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useRef, useEffect, Fragment, useState } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 import { Button } from '@/components/Button';
 import { FormField } from '@/components/FormField';
 import { NumericInput } from '@/components/NumericInput';
 import { Select } from '@/components/Select';
 import { excali } from '@/fonts';
-import { formatCurrency } from '@/lib/calculator-utils';
+import { formatZAR } from '@/lib/calculator-utils';
 import { PRIME_LENDING_RATE_ZA } from '@/lib/historical-data';
 import { useURLParams } from '@/lib/use-url-params';
 
@@ -171,9 +173,28 @@ export default function HomeLoanCalculator() {
   };
 
   const resultsRef = useRef<HTMLDivElement>(null);
+  const didScrollFromURL = useRef(false);
 
   // Get effective service fee - use default if not in advanced mode
   const effectiveServiceFee = isAdvancedMode ? monthlyServiceFee : '69';
+
+  // Auto-scroll to results on mobile when results are set from URL params
+  useEffect(() => {
+    if (!results) return;
+    // Only auto-scroll after URL-driven initialization to avoid surprising desktop
+    if (!hasInitializedFromURL.current || didScrollFromURL.current) return;
+    // Consider mobile if viewport width is small
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+      // Delay slightly to ensure DOM is painted before smooth scroll
+      setTimeout(() => {
+        resultsRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+        didScrollFromURL.current = true;
+      }, 100);
+    }
+  }, [results]);
 
   const handleCalculate = () => {
     const priceValue = parseFloat(propertyPrice.replace(/,/g, ''));
@@ -641,17 +662,15 @@ export default function HomeLoanCalculator() {
                     Total Monthly Payment
                   </span>
                   <span className="block text-5xl font-bold text-green-700">
-                    {formatCurrency(
-                      results.monthlyPayment + results.serviceFee
-                    )}
+                    {formatZAR(results.monthlyPayment + results.serviceFee)}
                   </span>
                   <span className="mt-2 block text-xs text-gray-600">
                     for {results.loanTermYears.toFixed(1)} years
                   </span>
                   {results.serviceFee > 0 && (
                     <div className="mt-2 border-t border-green-200 pt-2 text-xs text-gray-600">
-                      Bond: {formatCurrency(results.monthlyPayment)} + Service
-                      Fee: {formatCurrency(results.serviceFee)}
+                      Bond: {formatZAR(results.monthlyPayment)} + Service Fee:{' '}
+                      {formatZAR(results.serviceFee)}
                     </div>
                   )}
                 </div>
@@ -663,7 +682,7 @@ export default function HomeLoanCalculator() {
                       Loan Amount
                     </span>
                     <span className="block text-3xl font-bold text-gray-900">
-                      {formatCurrency(results.loanAmount)}
+                      {formatZAR(results.loanAmount)}
                     </span>
                   </div>
 
@@ -672,7 +691,7 @@ export default function HomeLoanCalculator() {
                       Total Interest
                     </span>
                     <span className="block text-3xl font-bold text-gray-900">
-                      {formatCurrency(results.totalInterest)}
+                      {formatZAR(results.totalInterest)}
                     </span>
                   </div>
                 </div>
@@ -688,14 +707,14 @@ export default function HomeLoanCalculator() {
                   <div className="flex items-center justify-between border-b border-gray-200 py-3">
                     <span className="text-gray-600">Loan Amount</span>
                     <span className="font-semibold text-gray-900">
-                      {formatCurrency(results.loanAmount)}
+                      {formatZAR(results.loanAmount)}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between border-b border-gray-200 py-3">
                     <span className="text-gray-600">Total Interest Paid</span>
                     <span className="font-semibold text-yellow-600">
-                      {formatCurrency(results.totalInterest)}
+                      {formatZAR(results.totalInterest)}
                     </span>
                   </div>
 
@@ -705,7 +724,7 @@ export default function HomeLoanCalculator() {
                         Total Amount to Repay
                       </span>
                       <span className="text-2xl font-bold text-gray-900">
-                        {formatCurrency(results.totalPayment)}
+                        {formatZAR(results.totalPayment)}
                       </span>
                     </div>
                   </div>
@@ -809,15 +828,15 @@ export default function HomeLoanCalculator() {
                         monthly payment
                       </p>
                       <div className="overflow-x-auto rounded-lg border border-gray-200 bg-white">
-                        <div className="grid min-w-[300px] grid-cols-[minmax(100px,1fr)_minmax(100px,auto)_minmax(90px,auto)] gap-px bg-gray-200">
+                        <div className="grid min-w-[300px] grid-cols-[minmax(100px,1fr)_minmax(100px,auto)_minmax(90px,auto)] items-center gap-px bg-gray-200">
                           {/* Header */}
-                          <div className="bg-gray-100 px-2 py-2 text-xs font-semibold text-gray-700 sm:px-4 sm:text-sm">
+                          <div className="flex items-center bg-gray-100 px-2 py-2 text-xs font-semibold text-gray-700 sm:px-4 sm:text-sm">
                             Rate Change
                           </div>
-                          <div className="bg-gray-100 px-2 py-2 text-right text-xs font-semibold text-gray-700 sm:px-4 sm:text-sm">
+                          <div className="flex items-center justify-end bg-gray-100 px-2 py-2 text-right text-xs font-semibold text-gray-700 sm:px-4 sm:text-sm">
                             Monthly
                           </div>
-                          <div className="bg-gray-100 px-2 py-2 text-right text-xs font-semibold text-gray-700 sm:px-4 sm:text-sm">
+                          <div className="flex items-center justify-end bg-gray-100 px-2 py-2 text-right text-xs font-semibold text-gray-700 sm:px-4 sm:text-sm">
                             Difference
                           </div>
 
@@ -836,11 +855,12 @@ export default function HomeLoanCalculator() {
                             return (
                               <Fragment key={scenario.label}>
                                 <div
-                                  className={`px-2 py-2 transition-colors hover:bg-gray-50 sm:px-4 sm:py-3 ${
+                                  className={twMerge(
+                                    'flex items-center gap-2 px-2 py-2 transition-colors hover:bg-gray-50 sm:px-4 sm:py-3',
                                     scenario.highlight
                                       ? 'bg-yellow-50 font-semibold'
                                       : 'bg-white'
-                                  }`}
+                                  )}
                                 >
                                   <div className="flex flex-wrap items-center gap-1 sm:gap-2">
                                     <span
@@ -860,21 +880,21 @@ export default function HomeLoanCalculator() {
                                       </span>
                                     )}
                                   </div>
-                                  <div className="mt-0.5 text-[10px] text-gray-500 sm:text-xs">
+                                  <div className="text-[10px] text-gray-500 sm:text-xs">
                                     {scenario.rate.toFixed(2)}%
                                   </div>
                                 </div>
                                 <div
-                                  className={`px-2 py-2 text-right text-xs font-semibold transition-colors hover:bg-gray-50 sm:px-4 sm:py-3 sm:text-sm ${
+                                  className={`flex items-center justify-end px-2 py-2 text-right text-xs font-semibold transition-colors hover:bg-gray-50 sm:px-4 sm:py-3 sm:text-sm ${
                                     scenario.highlight
                                       ? 'bg-yellow-50'
                                       : 'bg-white'
                                   }`}
                                 >
-                                  {formatCurrency(totalPayment)}
+                                  {formatZAR(totalPayment)}
                                 </div>
                                 <div
-                                  className={`px-2 py-2 text-right text-xs font-semibold transition-colors hover:bg-gray-50 sm:px-4 sm:py-3 sm:text-sm ${
+                                  className={`flex items-center justify-end px-2 py-2 text-right text-xs font-semibold transition-colors hover:bg-gray-50 sm:px-4 sm:py-3 sm:text-sm ${
                                     scenario.highlight
                                       ? 'bg-yellow-50'
                                       : 'bg-white'
@@ -888,7 +908,7 @@ export default function HomeLoanCalculator() {
                                 >
                                   {Math.abs(difference) < 0.01
                                     ? '-'
-                                    : `${difference > 0 ? '+' : ''}${formatCurrency(difference)}`}
+                                    : `${difference > 0 ? '+' : ''}${formatZAR(difference)}`}
                                 </div>
                               </Fragment>
                             );
@@ -940,7 +960,7 @@ export default function HomeLoanCalculator() {
                                 {historic.description}
                               </div>
                               <div className="mb-1 text-2xl font-bold text-gray-900">
-                                {formatCurrency(totalPayment)}
+                                {formatZAR(totalPayment)}
                                 <span className="text-sm font-normal text-gray-600">
                                   /month
                                 </span>
@@ -953,7 +973,7 @@ export default function HomeLoanCalculator() {
                                 }`}
                               >
                                 {difference > 0 ? '+' : ''}
-                                {formatCurrency(difference)} vs current rate
+                                {formatZAR(difference)} vs current rate
                               </div>
                             </div>
                           );

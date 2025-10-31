@@ -6,7 +6,7 @@ import { Button } from '@/components/Button';
 import { FormField } from '@/components/FormField';
 import { NumericInput } from '@/components/NumericInput';
 import { excali } from '@/fonts';
-import { formatCurrency } from '@/lib/calculator-utils';
+import { formatZAR } from '@/lib/calculator-utils';
 
 import { useLTVStore } from './ltv-store';
 
@@ -269,7 +269,7 @@ export default function LTVCalculator() {
                     Loan Amount
                   </span>
                   <span className="block text-3xl font-bold text-gray-900">
-                    {formatCurrency(results.loanAmount)}
+                    {formatZAR(results.loanAmount)}
                   </span>
                 </div>
 
@@ -278,7 +278,7 @@ export default function LTVCalculator() {
                     Your Equity (Deposit)
                   </span>
                   <span className="block text-3xl font-bold text-gray-900">
-                    {formatCurrency(results.deposit)}
+                    {formatZAR(results.deposit)}
                   </span>
                 </div>
               </div>
@@ -328,14 +328,14 @@ export default function LTVCalculator() {
                     <div className="h-4 w-4 rounded bg-blue-500"></div>
                     <span className="text-gray-700">
                       Bank Loan: {results.ltvPercentage.toFixed(1)}% (
-                      {formatCurrency(results.loanAmount)})
+                      {formatZAR(results.loanAmount)})
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <div className="h-4 w-4 rounded bg-green-500"></div>
                     <span className="text-gray-700">
                       Your Equity: {results.equityPercentage.toFixed(1)}% (
-                      {formatCurrency(results.deposit)})
+                      {formatZAR(results.deposit)})
                     </span>
                   </div>
                 </div>
@@ -352,21 +352,21 @@ export default function LTVCalculator() {
                 <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Property Value</span>
                   <span className="font-semibold text-gray-900">
-                    {formatCurrency(results.propertyValue)}
+                    {formatZAR(results.propertyValue)}
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Loan Amount</span>
                   <span className="font-semibold text-blue-600">
-                    {formatCurrency(results.loanAmount)}
+                    {formatZAR(results.loanAmount)}
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between border-b border-gray-200 py-3">
                   <span className="text-gray-600">Your Deposit</span>
                   <span className="font-semibold text-green-600">
-                    {formatCurrency(results.deposit)}
+                    {formatZAR(results.deposit)}
                   </span>
                 </div>
               </div>
