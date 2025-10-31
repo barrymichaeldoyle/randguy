@@ -157,40 +157,38 @@ export default async function BlogPost({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
-      <main className="flex flex-col items-center p-8 flex-1">
-        <article className="max-w-3xl w-full">
-          <Breadcrumb
-            items={[
-              { name: 'Home', href: '/' },
-              { name: 'Blog', href: '/blog' },
-              { name: post.metadata.title },
-            ]}
-          />
+      <article className="w-full max-w-3xl p-8">
+        <Breadcrumb
+          items={[
+            { name: 'Home', href: '/' },
+            { name: 'Blog', href: '/blog' },
+            { name: post.metadata.title },
+          ]}
+        />
 
-          <header className="mb-8 pb-6 border-b border-gray-200">
-            <h1
-              className={`${excali.className} text-4xl font-bold mb-3 text-gray-900`}
-            >
-              {post.metadata.title}
-            </h1>
-            <div className="flex items-center gap-3 text-gray-600">
-              <time>
-                {new Date(post.metadata.date).toLocaleDateString('en-ZA', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </time>
-              <span className="text-gray-300">•</span>
-              <span>{post.readingTime} min read</span>
-            </div>
-          </header>
-
-          <div className="prose prose-lg max-w-none">
-            <Content />
+        <header className="mb-8 border-b border-gray-200 pb-6">
+          <h1
+            className={`${excali.className} mb-3 text-4xl font-bold text-gray-900`}
+          >
+            {post.metadata.title}
+          </h1>
+          <div className="flex items-center gap-3 text-gray-600">
+            <time>
+              {new Date(post.metadata.date).toLocaleDateString('en-ZA', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </time>
+            <span className="text-gray-300">•</span>
+            <span>{post.readingTime} min read</span>
           </div>
-        </article>
-      </main>
+        </header>
+
+        <div className="prose prose-lg max-w-none">
+          <Content />
+        </div>
+      </article>
     </>
   );
 }

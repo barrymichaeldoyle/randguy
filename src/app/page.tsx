@@ -150,7 +150,7 @@ export default async function Home() {
   };
 
   return (
-    <main className="flex flex-1 flex-col items-center">
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
@@ -260,6 +260,6 @@ export default async function Home() {
           </section>
         </div>
       </div>
-    </main>
+    </>
   );
 }

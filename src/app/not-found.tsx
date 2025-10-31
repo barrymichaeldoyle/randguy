@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <main className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-16 text-center sm:px-6 lg:px-8">
+    <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 py-16 text-center sm:px-6 lg:px-8">
       <div className="mx-auto max-w-2xl">
         {/* 404 Number */}
         <h1
@@ -46,7 +46,7 @@ export default function NotFound() {
 
         {/* Helpful Links */}
         <div className="mt-12">
-          <p className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-500">
+          <p className="mb-4 text-sm font-semibold tracking-wider text-gray-500 uppercase">
             Popular Pages
           </p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
@@ -80,7 +80,6 @@ export default function NotFound() {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
-

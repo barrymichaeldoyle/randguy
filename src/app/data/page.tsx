@@ -70,7 +70,7 @@ export default function DataPage() {
   };
 
   return (
-    <main className="flex flex-1 flex-col items-center px-4 pt-8 pb-8 md:px-8 md:pt-12">
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -79,7 +79,7 @@ export default function DataPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
-      <div className="w-full max-w-4xl">
+      <div className="w-full max-w-4xl px-4 pt-8 pb-8 md:px-8 md:pt-12">
         {/* Breadcrumb Navigation */}
         <nav className="mb-6 text-sm" aria-label="Breadcrumb">
           <ol className="flex items-center space-x-2 text-gray-600">
@@ -175,6 +175,6 @@ export default function DataPage() {
           <p className="text-gray-600">More datasets coming soon!</p>
         </div>
       </div>
-    </main>
+    </>
   );
 }

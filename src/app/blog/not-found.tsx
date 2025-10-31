@@ -10,7 +10,7 @@ export default async function BlogNotFound() {
   const posts = await getAllPosts();
 
   return (
-    <main className="flex flex-1 flex-col items-center">
+    <>
       <div className="mb-8 w-full bg-gray-50 px-8 py-8">
         <div className="mx-auto max-w-3xl">
           <Breadcrumb items={[{ name: 'Home', href: '/' }, { name: 'Blog' }]} />
@@ -55,6 +55,6 @@ export default async function BlogNotFound() {
           </div>
         )}
       </div>
-    </main>
+    </>
   );
 }

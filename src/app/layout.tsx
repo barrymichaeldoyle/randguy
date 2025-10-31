@@ -60,7 +60,9 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
         className={`${excali.variable} ${assistant.variable} ${assistant.className} flex min-h-screen flex-col antialiased`}
       >
         <Header />
-        {children}
+        <main className="flex flex-1 flex-col items-center" role="main">
+          {children}
+        </main>
         <Footer />
         <Analytics mode="auto" />
         <SpeedInsights />

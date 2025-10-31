@@ -1,4 +1,3 @@
-
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Button } from '@/components/Button';
 import { CalculatorInfo } from '@/components/CalculatorInfo';
@@ -92,7 +91,7 @@ export default function LTVCalculatorPage() {
   };
 
   return (
-    <main className="flex flex-col items-center pt-8 md:pt-12 px-4 pb-8 md:px-8 flex-1">
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -101,7 +100,7 @@ export default function LTVCalculatorPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
-      <div className="max-w-7xl w-full">
+      <div className="w-full max-w-7xl px-4 pt-8 pb-8 md:px-8 md:pt-12">
         <Breadcrumb
           items={[
             { name: 'Home', href: '/' },
@@ -110,8 +109,8 @@ export default function LTVCalculatorPage() {
           ]}
         />
 
-        <div className="text-center mb-8">
-          <h1 className={`${excali.className} text-4xl mb-4`}>
+        <div className="mb-8 text-center">
+          <h1 className={`${excali.className} mb-4 text-4xl`}>
             Loan-to-Value (LTV) Calculator
           </h1>
           <p className="text-lg text-gray-700">
@@ -163,12 +162,12 @@ export default function LTVCalculatorPage() {
           ]}
         />
 
-        <div className="text-center mt-8">
+        <div className="mt-8 text-center">
           <Button href="/calculators" variant="secondary">
             View All Calculators
           </Button>
         </div>
       </div>
-    </main>
+    </>
   );
 }

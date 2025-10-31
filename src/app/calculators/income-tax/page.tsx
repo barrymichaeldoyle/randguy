@@ -94,7 +94,7 @@ const breadcrumbData = {
 
 export default function IncomeTaxCalculatorPage() {
   return (
-    <main className="flex flex-1 flex-col items-center px-4 pt-8 pb-8 md:px-8 md:pt-12">
+    <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
@@ -103,7 +103,7 @@ export default function IncomeTaxCalculatorPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbData) }}
       />
-      <div className="w-full max-w-7xl">
+      <div className="w-full max-w-7xl px-4 pt-8 pb-8 md:px-8 md:pt-12">
         <Breadcrumb
           items={[
             { name: 'Home', href: '/' },
@@ -175,6 +175,6 @@ export default function IncomeTaxCalculatorPage() {
           </Button>
         </div>
       </div>
-    </main>
+    </>
   );
 }

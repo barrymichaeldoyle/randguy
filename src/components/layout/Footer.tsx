@@ -44,7 +44,10 @@ const footerGroups: FooterGroup[] = [
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-gray-200 bg-gray-50 py-8 sm:py-12">
+    <footer
+      className="mt-auto border-t border-gray-200 bg-gray-50 py-8 sm:py-12"
+      role="contentinfo"
+    >
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex flex-col gap-8 md:flex-row md:justify-between md:gap-12">
           {footerGroups.map((group) => (
