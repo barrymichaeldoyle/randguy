@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Button } from '@/components/Button';
 import { CalculatorInfo } from '@/components/CalculatorInfo';
@@ -147,13 +149,8 @@ export default function HomeLoanCalculatorPage() {
             <>
               • Current <strong>SA prime rate</strong> is{' '}
               {CURRENT_PRIME_LENDING_RATE}% (as of {lastUpdated}).{' '}
-              <a
-                href="/data/prime-rates"
-                className="font-semibold text-yellow-600 hover:underline"
-              >
-                View historical rates
-              </a>
-              . Interest rates vary by bank and are negotiable
+              <Link href="/data/prime-rates">View historical rates</Link>.
+              Interest rates vary by bank and are negotiable
             </>,
             <>
               • <strong>100% home loans</strong> are available from many banks,
