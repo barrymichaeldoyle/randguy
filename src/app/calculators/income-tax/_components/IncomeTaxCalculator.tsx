@@ -739,8 +739,10 @@ export default function IncomeTaxCalculator() {
                   />
                 </div>
                 <Select
+                  id="payFrequency"
                   value={payFrequency}
                   onChange={setPayFrequency}
+                  aria-label="Pay frequency"
                   options={[
                     { value: 'monthly', label: 'Monthly' },
                     { value: 'annual', label: 'Annual' },
