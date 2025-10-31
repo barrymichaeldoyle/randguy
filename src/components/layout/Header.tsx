@@ -98,11 +98,7 @@ export function Header() {
       className="sticky top-0 z-50 flex items-center justify-between border-b border-gray-200 bg-white px-4 py-2"
       role="banner"
     >
-      <Link
-        href="/"
-        className="group flex items-center gap-2"
-        aria-label="Rand Guy - Home"
-      >
+      <Link href="/" className="group flex items-center gap-2">
         <Image
           src="/RandGuyLogo.png"
           alt="Rand Guy logo"
@@ -114,6 +110,7 @@ export function Header() {
           className={`${excali.className} text-2xl leading-none text-gray-900 transition-colors group-hover:text-yellow-600`}
         >
           Rand Guy
+          <span className="sr-only"> - Home</span>
         </h1>
       </Link>
 
