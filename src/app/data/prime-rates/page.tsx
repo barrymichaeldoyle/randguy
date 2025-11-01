@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { Breadcrumb } from '@/components/Breadcrumb';
+import { Button } from '@/components/Button';
 import { excali } from '@/fonts';
 import {
   PRIME_LENDING_RATE_ZA,
@@ -202,18 +203,12 @@ export default function PrimeRatesPage() {
           your monthly repayments and overall costs.
         </p>
         <div className="flex flex-wrap justify-center gap-4">
-          <Link
-            href="/calculators/home-loan"
-            className="inline-block rounded-lg bg-yellow-500 px-6 py-3 font-semibold text-white transition-colors hover:bg-yellow-600"
-          >
+          <Button href="/calculators/home-loan" variant="primary">
             Home Loan Calculator →
-          </Link>
-          <Link
-            href="/calculators"
-            className="inline-block rounded-lg border border-gray-300 bg-white px-6 py-3 font-semibold text-gray-900 transition-colors hover:bg-gray-50"
-          >
+          </Button>
+          <Button href="/calculators" variant="secondary">
             View All Calculators
-          </Link>
+          </Button>
         </div>
       </div>
 
@@ -281,7 +276,7 @@ export default function PrimeRatesPage() {
                       ) : change > 0 ? (
                         <span className="text-red-600">+{change}%</span>
                       ) : (
-                        <span className="text-green-600">{change}%</span>
+                        <span className="text-green-700">{change}%</span>
                       )}
                     </td>
                     <td className="px-4 py-2 text-right text-gray-600">
