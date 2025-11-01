@@ -70,11 +70,11 @@ export function Footer() {
 
         <div className="border-t border-gray-200 pt-4 text-center sm:pt-6">
           <div className="mb-3 sm:mb-4">
-            <a
+            <Link
               href={LINKS.twitter}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 rounded-md text-sm outline-2 outline-offset-2 transition-colors hover:text-yellow-600 focus-visible:outline focus-visible:outline-blue-600 sm:text-base"
+              className="inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm outline-2 transition-colors hover:text-yellow-600 focus-visible:outline focus-visible:outline-blue-600 sm:text-base"
             >
               <svg
                 className="h-4 w-4 shrink-0 sm:h-5 sm:w-5"
@@ -86,7 +86,7 @@ export function Footer() {
                 <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
               </svg>
               <span>Follow {TWITTER_HANDLE}</span>
-            </a>
+            </Link>
           </div>
           <div className="text-xs text-gray-700 sm:text-sm">
             © {new Date().getFullYear()} Rand Guy. {TAGLINE}
