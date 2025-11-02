@@ -39,12 +39,6 @@
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
       }
 
-      .banner-logo {
-        width: 200px;
-        height: 200px;
-        margin-bottom: 30px;
-      }
-
       .banner-text {
         font-family: 'Excalifont', cursive;
         font-size: 320px;
@@ -120,13 +114,6 @@
   <body>
     <div style="text-align: center">
       <div class="banner" id="banner">
-        <img
-          src="../public/RandGuyLogo.png"
-          alt="Rand Guy Logo"
-          class="banner-logo"
-          id="bannerLogo"
-          crossorigin="anonymous"
-        />
         <div class="banner-text" id="mainText">Rand Guy</div>
         <div class="banner-tagline" id="tagline">
           Simple tools. Smart choices. Better money.
@@ -152,20 +139,6 @@
                 type="text"
                 id="taglineInput"
                 value="Simple tools. Smart choices. Better money."
-              />
-            </label>
-          </div>
-
-          <div>
-            <label>
-              Logo Size:
-              <input
-                type="number"
-                id="logoSizeBanner"
-                value="200"
-                min="100"
-                max="400"
-                step="10"
               />
             </label>
           </div>
@@ -235,13 +208,11 @@
         const banner = document.getElementById('banner');
         const mainText = document.getElementById('mainText');
         const tagline = document.getElementById('tagline');
-        const logo = document.getElementById('bannerLogo');
 
         const text = document.getElementById('textInput').value;
         const taglineText = document.getElementById('taglineInput').value;
         const fontSize = document.getElementById('fontSize').value;
         const taglineSize = document.getElementById('taglineSize').value;
-        const logoSize = document.getElementById('logoSizeBanner').value;
         const bgColor1 = document.getElementById('bgColor1').value;
         const bgColor2 = document.getElementById('bgColor2').value;
         const textColor = document.getElementById('textColor').value;
@@ -251,8 +222,6 @@
         tagline.textContent = taglineText;
         mainText.style.fontSize = fontSize + 'px';
         tagline.style.fontSize = taglineSize + 'px';
-        logo.style.width = logoSize + 'px';
-        logo.style.height = logoSize + 'px';
         banner.style.background = `linear-gradient(135deg, ${bgColor1} 0%, ${bgColor2} 100%)`;
         mainText.style.color = textColor;
         tagline.style.color = taglineColor;
@@ -262,9 +231,8 @@
         document.getElementById('textInput').value = 'Rand Guy';
         document.getElementById('taglineInput').value =
           'Simple tools. Smart choices. Better money.';
-        document.getElementById('fontSize').value = '320';
-        document.getElementById('taglineSize').value = '80';
-        document.getElementById('logoSizeBanner').value = '200';
+        document.getElementById('fontSize').value = '80';
+        document.getElementById('taglineSize').value = '30';
         document.getElementById('bgColor1').value = '#fef3c7';
         document.getElementById('bgColor2').value = '#fde68a';
         document.getElementById('textColor').value = '#1f2937';
@@ -288,25 +256,23 @@
           banner.style.width = '2560px';
           banner.style.height = '1440px';
 
-          // Scale up the logo and text proportionally
-          const logo = document.getElementById('bannerLogo');
+          // Scale up text proportionally
           const mainText = document.getElementById('mainText');
           const tagline = document.getElementById('tagline');
 
-          const originalLogoSize = logo.style.width;
           const originalMainTextSize = mainText.style.fontSize;
           const originalTaglineSize = tagline.style.fontSize;
 
           // Scale everything up by 2x (from 1280px to 2560px)
           const scaleFactor = 2;
-          logo.style.width =
-            parseInt(originalLogoSize || '200') * scaleFactor + 'px';
-          logo.style.height =
-            parseInt(originalLogoSize || '200') * scaleFactor + 'px';
           mainText.style.fontSize =
             parseInt(originalMainTextSize || '320') * scaleFactor + 'px';
           tagline.style.fontSize =
             parseInt(originalTaglineSize || '80') * scaleFactor + 'px';
+
+          // Get the computed background to use as backgroundColor
+          const computedStyle = window.getComputedStyle(banner);
+          const bgColor = computedStyle.backgroundColor || '#fef3c7';
 
           // Wait for resize
           await new Promise((resolve) => setTimeout(resolve, 300));
@@ -316,19 +282,19 @@
             width: 2560,
             height: 1440,
             scale: 1,
-            backgroundColor: '#fef3c7',
+            backgroundColor: null, // Use null to let the actual background show through
             useCORS: true,
             allowTaint: false,
             logging: false,
+            windowWidth: 2560,
+            windowHeight: 1440,
           });
 
           // Restore original sizes
           banner.style.width = originalWidth || '1280px';
           banner.style.height = originalHeight || '720px';
-          logo.style.width = originalLogoSize || '200px';
-          logo.style.height = originalLogoSize || '200px';
-          mainText.style.fontSize = originalMainTextSize || '320px';
-          tagline.style.fontSize = originalTaglineSize || '80px';
+          mainText.style.fontSize = originalMainTextSize || '80px';
+          tagline.style.fontSize = originalTaglineSize || '30px';
 
           // Convert canvas to blob and download
           canvas.toBlob((blob) => {
