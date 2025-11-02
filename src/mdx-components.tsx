@@ -1,3 +1,4 @@
+import { YouTubeEmbed } from '@/components/YouTubeEmbed';
 import { excali } from '@/fonts';
 
 import type { MDXComponents } from 'mdx/types';
@@ -6,21 +7,21 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     h1: ({ children }) => (
       <h1
-        className={`${excali.className} text-4xl font-bold mt-8 mb-4 text-gray-900`}
+        className={`${excali.className} mt-8 mb-4 text-4xl font-bold text-gray-900`}
       >
         {children}
       </h1>
     ),
     h2: ({ children }) => (
       <h2
-        className={`${excali.className} text-3xl font-bold mt-6 mb-3 text-gray-900`}
+        className={`${excali.className} mt-6 mb-3 text-3xl font-bold text-gray-900`}
       >
         {children}
       </h2>
     ),
     h3: ({ children }) => (
       <h3
-        className={`${excali.className} text-2xl font-bold mt-5 mb-2 text-gray-900`}
+        className={`${excali.className} mt-5 mb-2 text-2xl font-bold text-gray-900`}
       >
         {children}
       </h3>
@@ -29,12 +30,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       <p className="mb-4 leading-relaxed text-gray-700">{children}</p>
     ),
     ul: ({ children }) => (
-      <ul className="list-disc list-outside mb-4 space-y-2 text-gray-700 pl-6">
+      <ul className="mb-4 list-outside list-disc space-y-2 pl-6 text-gray-700">
         {children}
       </ul>
     ),
     ol: ({ children }) => (
-      <ol className="list-decimal list-outside mb-4 space-y-2 text-gray-700 pl-6">
+      <ol className="mb-4 list-outside list-decimal space-y-2 pl-6 text-gray-700">
         {children}
       </ol>
     ),
@@ -42,7 +43,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     a: ({ href, children }) => (
       <a
         href={href}
-        className="text-yellow-600 hover:text-yellow-700 underline font-medium"
+        className="font-medium text-yellow-600 underline hover:text-yellow-700"
         target={href?.startsWith('http') ? '_blank' : undefined}
         rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
       >
@@ -50,7 +51,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       </a>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 border-yellow-400 pl-4 italic my-4 text-gray-600">
+      <blockquote className="my-4 border-l-4 border-yellow-400 pl-4 text-gray-600 italic">
         {children}
       </blockquote>
     ),
@@ -70,19 +71,19 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       }
       // Inline code styling
       return (
-        <code className="bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono text-gray-800">
+        <code className="rounded bg-gray-100 px-1.5 py-0.5 font-mono text-sm text-gray-800">
           {children}
         </code>
       );
     },
     pre: ({ children }) => (
-      <pre className="bg-gray-100 text-gray-800 p-4 rounded-lg overflow-x-auto mb-4 border border-gray-200 font-mono text-sm">
+      <pre className="mb-4 overflow-x-auto rounded-lg border border-gray-200 bg-gray-100 p-4 font-mono text-sm text-gray-800">
         {children}
       </pre>
     ),
     hr: () => <hr className="my-8 border-gray-300" />,
     table: ({ children }) => (
-      <div className="overflow-x-auto my-6">
+      <div className="my-6 overflow-x-auto">
         <table className="min-w-full border-collapse border border-gray-300">
           {children}
         </table>
@@ -94,15 +95,16 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       <tr className="border-b border-gray-300">{children}</tr>
     ),
     th: ({ children }) => (
-      <th className="px-4 py-2 text-left font-bold text-gray-900 border-r border-gray-300 last:border-r-0">
+      <th className="border-r border-gray-300 px-4 py-2 text-left font-bold text-gray-900 last:border-r-0">
         {children}
       </th>
     ),
     td: ({ children }) => (
-      <td className="px-4 py-2 text-gray-700 border-r border-gray-300 last:border-r-0">
+      <td className="border-r border-gray-300 px-4 py-2 text-gray-700 last:border-r-0">
         {children}
       </td>
     ),
+    YouTubeEmbed,
     ...components,
   };
 }

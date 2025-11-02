@@ -12,6 +12,11 @@ interface BlogPostMetadata {
   title: string;
   date: string;
   description: string;
+  video?: {
+    url: string;
+    title: string;
+    thumbnail?: string;
+  };
 }
 
 // Calculate reading time (average reading speed: 200 words per minute)
@@ -109,8 +114,19 @@ export default async function BlogPost({
 
   const Content = post.content;
 
+  // Extract video ID from URL for structured data
+  function extractVideoId(url: string): string | null {
+    const shortsMatch = url.match(/shorts\/([a-zA-Z0-9_-]+)/);
+    if (shortsMatch) return shortsMatch[1];
+    const regularMatch = url.match(
+      /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/
+    );
+    if (regularMatch) return regularMatch[1];
+    return null;
+  }
+
   // Structured data for SEO
-  const blogPostData = {
+  const blogPostData: any = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.metadata.title,
@@ -121,6 +137,24 @@ export default async function BlogPost({
       name: 'Rand Guy',
     },
   };
+
+  // Add video structured data if video exists
+  if (post.metadata.video) {
+    const videoId = extractVideoId(post.metadata.video.url);
+    if (videoId) {
+      blogPostData.video = {
+        '@type': 'VideoObject',
+        name: post.metadata.video.title,
+        description: post.metadata.description,
+        thumbnailUrl:
+          post.metadata.video.thumbnail ||
+          `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+        uploadDate: post.metadata.date,
+        contentUrl: `https://www.youtube.com/watch?v=${videoId}`,
+        embedUrl: `https://www.youtube.com/embed/${videoId}`,
+      };
+    }
+  }
 
   const breadcrumbData = {
     '@context': 'https://schema.org',
