@@ -1,5 +1,6 @@
 import { BlogPostCard } from '@/components/BlogPostCard';
 import { Breadcrumb } from '@/components/Breadcrumb';
+import { TAGLINE } from '@/lib/constants';
 import { getAllPosts } from '@/lib/posts';
 
 import { excali } from '../../fonts';
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Rand Guy - Making Cents of SA Finance',
+        alt: `Rand Guy - ${TAGLINE}`,
       },
     ],
   },

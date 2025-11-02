@@ -3,6 +3,7 @@ import { join } from 'path';
 
 import { ImageResponse } from 'next/og';
 
+import { TAGLINE } from '@/lib/constants';
 import { PRIME_LENDING_RATE_ZA } from '@/lib/historical-data';
 import { ogStyles, ogConfig } from '@/lib/og-image-utils';
 
@@ -190,9 +191,7 @@ export default async function Image() {
         </div>
 
         {/* Footer */}
-        <div style={ogStyles.footer}>
-          randguy.com • Making Cents of SA Finance
-        </div>
+        <div style={ogStyles.footer}>randguy.com • {TAGLINE}</div>
       </div>
     ),
     {

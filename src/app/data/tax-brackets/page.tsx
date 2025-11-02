@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { excali } from '@/fonts';
 import { formatZAR } from '@/lib/calculator-utils';
+import { TAGLINE } from '@/lib/constants';
 import { taxBracketsHistory } from '@/lib/historical-data';
 
 import TaxYearSelector from './_components/TaxYearSelector';
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Rand Guy - Making Cents of SA Finance',
+        alt: `Rand Guy - ${TAGLINE}`,
       },
     ],
   },

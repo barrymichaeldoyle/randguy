@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Rand Guy Twitter Banner</title>
+    <title>Rand Guy YouTube Banner</title>
     <style>
       @font-face {
         font-family: 'Excalifont';
@@ -28,8 +28,8 @@
       }
 
       .banner {
-        width: 1500px;
-        height: 500px;
+        width: 1280px;
+        height: 720px;
         background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
         display: flex;
         flex-direction: column;
@@ -40,14 +40,14 @@
       }
 
       .banner-logo {
-        width: 120px;
-        height: 120px;
-        margin-bottom: 20px;
+        width: 200px;
+        height: 200px;
+        margin-bottom: 30px;
       }
 
       .banner-text {
         font-family: 'Excalifont', cursive;
-        font-size: 180px;
+        font-size: 320px;
         color: #1f2937;
         text-align: center;
         line-height: 1;
@@ -55,10 +55,10 @@
 
       .banner-tagline {
         font-family: 'Excalifont', cursive;
-        font-size: 48px;
+        font-size: 80px;
         color: #4b5563;
         text-align: center;
-        margin-top: 20px;
+        margin-top: 30px;
       }
 
       .controls {
@@ -68,6 +68,7 @@
           system-ui,
           -apple-system,
           sans-serif;
+        max-width: 1280px;
       }
 
       .controls button {
@@ -107,6 +108,13 @@
         font-size: 14px;
         margin-top: 10px;
       }
+
+      .controls-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+      }
     </style>
   </head>
   <body>
@@ -127,88 +135,90 @@
 
       <div class="controls">
         <p class="info">
-          Twitter Banner: 1500x500px | Click "Download as PNG" button below or
-          right-click and "Save Image As..."
+          YouTube Banner: 2560x1440px (shown at 50% scale: 1280x720px) | Click
+          "Download as PNG" button below or right-click and "Save Image As..."
         </p>
 
-        <div>
-          <label>
-            Main Text:
-            <input type="text" id="textInput" value="Rand Guy" />
-          </label>
+        <div class="controls-grid">
+          <div>
+            <label>
+              Main Text:
+              <input type="text" id="textInput" value="Rand Guy" />
+            </label>
 
-          <label>
-            Tagline:
-            <input
-              type="text"
-              id="taglineInput"
-              value="Simple tools. Smart choices. Better money."
-            />
-          </label>
-        </div>
+            <label>
+              Tagline:
+              <input
+                type="text"
+                id="taglineInput"
+                value="Simple tools. Smart choices. Better money."
+              />
+            </label>
+          </div>
 
-        <div>
-          <label>
-            Logo Size:
-            <input
-              type="number"
-              id="logoSizeBanner"
-              value="120"
-              min="60"
-              max="200"
-              step="10"
-            />
-          </label>
-        </div>
+          <div>
+            <label>
+              Logo Size:
+              <input
+                type="number"
+                id="logoSizeBanner"
+                value="200"
+                min="100"
+                max="400"
+                step="10"
+              />
+            </label>
+          </div>
 
-        <div>
-          <label>
-            Main Text Size:
-            <input
-              type="number"
-              id="fontSize"
-              value="180"
-              min="50"
-              max="300"
-              step="10"
-            />
-          </label>
+          <div>
+            <label>
+              Main Text Size:
+              <input
+                type="number"
+                id="fontSize"
+                value="320"
+                min="100"
+                max="600"
+                step="20"
+              />
+            </label>
 
-          <label>
-            Tagline Size:
-            <input
-              type="number"
-              id="taglineSize"
-              value="48"
-              min="20"
-              max="100"
-              step="5"
-            />
-          </label>
-        </div>
+            <label>
+              Tagline Size:
+              <input
+                type="number"
+                id="taglineSize"
+                value="80"
+                min="30"
+                max="200"
+                step="10"
+              />
+            </label>
+          </div>
 
-        <div>
-          <label>
-            Background Color 1:
-            <input type="color" id="bgColor1" value="#fef3c7" />
-          </label>
+          <div>
+            <label>
+              Background Color 1:
+              <input type="color" id="bgColor1" value="#fef3c7" />
+            </label>
 
-          <label>
-            Background Color 2:
-            <input type="color" id="bgColor2" value="#fde68a" />
-          </label>
-        </div>
+            <label>
+              Background Color 2:
+              <input type="color" id="bgColor2" value="#fde68a" />
+            </label>
+          </div>
 
-        <div>
-          <label>
-            Text Color:
-            <input type="color" id="textColor" value="#1f2937" />
-          </label>
+          <div>
+            <label>
+              Text Color:
+              <input type="color" id="textColor" value="#1f2937" />
+            </label>
 
-          <label>
-            Tagline Color:
-            <input type="color" id="taglineColor" value="#4b5563" />
-          </label>
+            <label>
+              Tagline Color:
+              <input type="color" id="taglineColor" value="#4b5563" />
+            </label>
+          </div>
         </div>
 
         <div style="margin-top: 15px">
@@ -252,9 +262,9 @@
         document.getElementById('textInput').value = 'Rand Guy';
         document.getElementById('taglineInput').value =
           'Simple tools. Smart choices. Better money.';
-        document.getElementById('fontSize').value = '180';
-        document.getElementById('taglineSize').value = '48';
-        document.getElementById('logoSizeBanner').value = '120';
+        document.getElementById('fontSize').value = '320';
+        document.getElementById('taglineSize').value = '80';
+        document.getElementById('logoSizeBanner').value = '200';
         document.getElementById('bgColor1').value = '#fef3c7';
         document.getElementById('bgColor2').value = '#fde68a';
         document.getElementById('textColor').value = '#1f2937';
@@ -272,16 +282,53 @@
           // Wait a bit for fonts and images to fully load
           await new Promise((resolve) => setTimeout(resolve, 500));
 
+          // Temporarily scale the banner to full size for export
+          const originalWidth = banner.style.width;
+          const originalHeight = banner.style.height;
+          banner.style.width = '2560px';
+          banner.style.height = '1440px';
+
+          // Scale up the logo and text proportionally
+          const logo = document.getElementById('bannerLogo');
+          const mainText = document.getElementById('mainText');
+          const tagline = document.getElementById('tagline');
+
+          const originalLogoSize = logo.style.width;
+          const originalMainTextSize = mainText.style.fontSize;
+          const originalTaglineSize = tagline.style.fontSize;
+
+          // Scale everything up by 2x (from 1280px to 2560px)
+          const scaleFactor = 2;
+          logo.style.width =
+            parseInt(originalLogoSize || '200') * scaleFactor + 'px';
+          logo.style.height =
+            parseInt(originalLogoSize || '200') * scaleFactor + 'px';
+          mainText.style.fontSize =
+            parseInt(originalMainTextSize || '320') * scaleFactor + 'px';
+          tagline.style.fontSize =
+            parseInt(originalTaglineSize || '80') * scaleFactor + 'px';
+
+          // Wait for resize
+          await new Promise((resolve) => setTimeout(resolve, 300));
+
           // Use html2canvas to convert the banner to a canvas
           const canvas = await html2canvas(banner, {
-            width: 1500,
-            height: 500,
-            scale: 2,
+            width: 2560,
+            height: 1440,
+            scale: 1,
             backgroundColor: '#fef3c7',
             useCORS: true,
             allowTaint: false,
             logging: false,
           });
+
+          // Restore original sizes
+          banner.style.width = originalWidth || '1280px';
+          banner.style.height = originalHeight || '720px';
+          logo.style.width = originalLogoSize || '200px';
+          logo.style.height = originalLogoSize || '200px';
+          mainText.style.fontSize = originalMainTextSize || '320px';
+          tagline.style.fontSize = originalTaglineSize || '80px';
 
           // Convert canvas to blob and download
           canvas.toBlob((blob) => {
@@ -292,7 +339,7 @@
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'rand-guy-twitter-banner.png';
+            link.download = 'rand-guy-youtube-banner.png';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

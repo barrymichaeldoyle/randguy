@@ -4,7 +4,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 import { Footer } from '@/components/layout/Footer';
 import { Header } from '@/components/layout/Header';
-import { BASE_URL } from '@/lib/constants';
+import { BASE_URL, TAGLINE } from '@/lib/constants';
 
 import { assistant, excali } from '../fonts';
 
@@ -17,30 +17,27 @@ export const metadata: Metadata = {
     default: 'Rand Guy | South African Personal Finance',
     template: '%s | Rand Guy',
   },
-  description:
-    'Making Cents of SA Finance. Practical personal finance advice for everyday South Africans.',
+  description: `${TAGLINE}. Practical personal finance advice for everyday South Africans.`,
   authors: [{ name: 'Rand Guy' }],
   openGraph: {
     type: 'website',
     locale: 'en_ZA',
     siteName: 'Rand Guy',
     title: 'Rand Guy | South African Personal Finance',
-    description:
-      'Making Cents of SA Finance. Practical personal finance advice for everyday South Africans.',
+    description: `${TAGLINE}. Practical personal finance advice for everyday South Africans.`,
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Rand Guy - Making Cents of SA Finance',
+        alt: `Rand Guy - ${TAGLINE}`,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Rand Guy | South African Personal Finance',
-    description:
-      'Making Cents of SA Finance. Free financial calculators & investment guides for South Africans.',
+    description: `${TAGLINE}. Practical personal finance advice for everyday South Africans.`,
     images: ['/og-image.png'],
   },
   icons: {

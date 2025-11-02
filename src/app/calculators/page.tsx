@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { Button } from '@/components/Button';
 import { excali } from '@/fonts';
-import { BASE_URL } from '@/lib/constants';
+import { BASE_URL, TAGLINE } from '@/lib/constants';
 import { CALCULATORS } from '@/lib/site-data';
 
 import type { Metadata } from 'next';
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Rand Guy - Making Cents of SA Finance',
+        alt: `Rand Guy - ${TAGLINE}`,
       },
     ],
   },
