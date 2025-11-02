@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 
 import { Button } from '@/components/Button';
+import { LINKS, TWITTER_HANDLE, YOUTUBE_HANDLE } from '@/lib/constants';
 
 import { excali } from '../../fonts';
 
@@ -115,7 +116,7 @@ export function Header() {
       </Link>
 
       {/* Desktop Navigation */}
-      <nav className="hidden items-center gap-2 sm:flex">
+      <nav className="hidden items-center gap-3 sm:flex">
         <Button href="/calculators" size="sm">
           Calculators
         </Button>
@@ -125,6 +126,44 @@ export function Header() {
         <Button href="/blog" size="sm">
           Blog
         </Button>
+
+        {/* Desktop Social Links */}
+        <div className="ml-2 flex items-center gap-2 border-l border-gray-300 pl-3">
+          <Link
+            href={LINKS.youtube}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-red-600 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+            aria-label={`Subscribe to ${YOUTUBE_HANDLE} on YouTube`}
+          >
+            <svg
+              className="h-5 w-5"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <title>YouTube icon</title>
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+            </svg>
+          </Link>
+          <Link
+            href={LINKS.twitter}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+            aria-label={`Follow ${TWITTER_HANDLE} on X (Twitter)`}
+          >
+            <svg
+              className="h-5 w-5"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <title>X icon</title>
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+            </svg>
+          </Link>
+        </div>
       </nav>
 
       {/* Mobile Menu Button */}
@@ -205,7 +244,7 @@ export function Header() {
           </div>
 
           {/* Menu Items */}
-          <div className="flex flex-col gap-2 p-4">
+          <div className="flex flex-1 flex-col gap-2 p-4">
             <Button href="/calculators" size="sm">
               Calculators
             </Button>
@@ -215,6 +254,46 @@ export function Header() {
             <Button href="/blog" size="sm">
               Blog
             </Button>
+          </div>
+
+          {/* Social Links */}
+          <div className="border-t border-gray-200 p-4">
+            <div className="flex flex-col gap-3">
+              <Link
+                href={LINKS.youtube}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-gray-100 hover:text-yellow-600 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+              >
+                <svg
+                  className="h-5 w-5 shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <title>YouTube icon</title>
+                  <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                </svg>
+                <span>Subscribe to {YOUTUBE_HANDLE}</span>
+              </Link>
+              <Link
+                href={LINKS.twitter}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors hover:bg-gray-100 hover:text-yellow-600 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+              >
+                <svg
+                  className="h-5 w-5 shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <title>X icon</title>
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+                <span>Follow {TWITTER_HANDLE}</span>
+              </Link>
+            </div>
           </div>
         </div>
       </nav>

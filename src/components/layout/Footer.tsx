@@ -1,6 +1,11 @@
 import Link from 'next/link';
 
-import { LINKS, TAGLINE, TWITTER_HANDLE } from '@/lib/constants';
+import {
+  LINKS,
+  TAGLINE,
+  TWITTER_HANDLE,
+  YOUTUBE_HANDLE,
+} from '@/lib/constants';
 
 import { excali } from '../../fonts';
 
@@ -69,7 +74,24 @@ export function Footer() {
         </div>
 
         <div className="border-t border-gray-200 pt-4 text-center sm:pt-6">
-          <div className="mb-3 sm:mb-4">
+          <div className="mb-3 flex flex-wrap items-center justify-center gap-4 sm:mb-4">
+            <Link
+              href={LINKS.youtube}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm outline-2 transition-colors hover:text-yellow-600 focus-visible:outline focus-visible:outline-blue-600 sm:text-base"
+            >
+              <svg
+                className="h-4 w-4 shrink-0 sm:h-5 sm:w-5"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <title>YouTube icon</title>
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+              </svg>
+              <span>Subscribe to {YOUTUBE_HANDLE}</span>
+            </Link>
             <Link
               href={LINKS.twitter}
               target="_blank"
