@@ -44,6 +44,7 @@ test.describe('Income Tax Calculator', () => {
 
   test('calculates correctly with valid data', async ({ page }) => {
     await page.goto(route);
+    await page.waitForLoadState('networkidle');
 
     await page.getByLabel('Monthly Gross Income (before tax)').fill('50000'); // monthly income
 
@@ -71,6 +72,7 @@ test.describe('Income Tax Calculator', () => {
     page,
   }) => {
     await page.goto(route);
+    await page.waitForLoadState('networkidle');
     await page.getByLabel('Monthly Gross Income (before tax)').fill('40000');
     await page.getByRole('button', { name: /Calculate Tax/i }).click();
     await expect(
@@ -153,6 +155,7 @@ test.describe('Income Tax Calculator', () => {
 
   test('reset button clears the form and results', async ({ page }) => {
     await page.goto(route);
+    await page.waitForLoadState('networkidle');
     await page.getByLabel('Monthly Gross Income (before tax)').fill('70000');
     await page.getByRole('button', { name: /Calculate Tax/i }).click();
     await expect(

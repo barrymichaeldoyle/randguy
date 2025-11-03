@@ -53,6 +53,7 @@ test.describe('Home Loan Calculator', () => {
 
   test('calculates correctly with valid data', async ({ page }) => {
     await page.goto(route);
+    await page.waitForLoadState('networkidle');
 
     // Fill inputs
     await page.getByLabel('Property Price').fill('1000000');
@@ -88,6 +89,7 @@ test.describe('Home Loan Calculator', () => {
     page,
   }) => {
     await page.goto(route);
+    await page.waitForLoadState('networkidle');
     await page.getByLabel('Property Price').fill('750000');
     await page.getByLabel('Deposit').fill('50000');
     await page.getByRole('button', { name: /Calculate Repayment/i }).click();
@@ -227,6 +229,7 @@ test.describe('Home Loan Calculator', () => {
 
   test('reset button clears the form and results', async ({ page }) => {
     await page.goto(route);
+    await page.waitForLoadState('networkidle');
     await page.getByLabel('Property Price').fill('600000');
     await page.getByRole('button', { name: /Calculate Repayment/i }).click();
     await expect(
