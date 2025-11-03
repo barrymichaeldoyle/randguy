@@ -1,12 +1,14 @@
 'use client';
 
-import { useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 
 import { Button } from '@/components/Button';
 import { FormField } from '@/components/FormField';
 import { NumericInput } from '@/components/NumericInput';
 import { excali } from '@/fonts';
 import { formatZAR } from '@/lib/calculator-utils';
+import { useURLParams } from '@/lib/use-url-params';
 
 import { useLTVStore } from './ltv-store';
 
@@ -89,6 +91,30 @@ export default function LTVCalculator() {
     resetForm,
   } = useLTVStore();
 
+  const searchParams = useSearchParams();
+
+  // URL params configuration
+  const { updateURLParams, clearURLParams } = useURLParams({
+    paramMap: {
+      propertyValue: 'property',
+      loanAmount: 'loan',
+      deposit: 'deposit',
+      inputMode: 'mode',
+    },
+    storeValues: {
+      propertyValue,
+      loanAmount,
+      deposit,
+      inputMode,
+    },
+    storeSetters: {
+      propertyValue: setPropertyValue,
+      loanAmount: setLoanAmount,
+      deposit: setDeposit,
+      inputMode: setInputMode,
+    },
+  });
+
   const resultsRef = useRef<HTMLDivElement>(null);
 
   const handleCalculate = () => {
@@ -124,6 +150,14 @@ export default function LTVCalculator() {
     setResults(calculatedResults);
     setIsDirty(false); // Mark as clean after successful calculation
 
+    // Update URL params with current form values
+    updateURLParams({
+      propertyValue,
+      loanAmount,
+      deposit,
+      inputMode,
+    });
+
     // Scroll to results on mobile
     setTimeout(() => {
       resultsRef.current?.scrollIntoView({
@@ -132,6 +166,81 @@ export default function LTVCalculator() {
       });
     }, 100);
   };
+
+  // Validate URL params and auto-calculate if valid on mount
+  // Only run once; useURLParams hook will keep store in sync on changes
+
+  useEffect(() => {
+    const hasRelevantParams = ['property', 'loan', 'deposit', 'mode'].some(
+      (key) => searchParams.get(key) !== null
+    );
+    if (!hasRelevantParams) return;
+
+    const rawProperty = searchParams.get('property');
+    const rawLoan = searchParams.get('loan');
+    const rawDeposit = searchParams.get('deposit');
+    const rawMode = searchParams.get('mode');
+
+    const decode = (v: string | null) =>
+      v === null ? '' : decodeURIComponent(v);
+    const parseNum = (v: string | null): number | null => {
+      if (v === null) return null;
+      const decoded = decodeURIComponent(v);
+      const cleaned = decoded.replace(/,/g, '');
+      const n = parseFloat(cleaned);
+      return Number.isFinite(n) ? n : null;
+    };
+
+    const propertyValueNum = parseNum(rawProperty);
+    const loanAmountNum = parseNum(rawLoan);
+    const depositNum = parseNum(rawDeposit);
+    const modeParam =
+      rawMode === 'loan' || rawMode === 'deposit' ? rawMode : 'deposit';
+
+    const isValidBase = propertyValueNum !== null && propertyValueNum > 0;
+    let isValid = false;
+    if (modeParam === 'deposit') {
+      const d = depositNum ?? 0;
+      isValid = isValidBase && d >= 0 && d <= (propertyValueNum as number);
+    } else {
+      const l = loanAmountNum ?? null;
+      isValid =
+        isValidBase &&
+        l !== null &&
+        l >= 0 &&
+        l <= (propertyValueNum as number);
+    }
+
+    if (!isValid) {
+      clearURLParams();
+      resetForm();
+      return;
+    }
+
+    // Sync store explicitly from URL
+    setPropertyValue(decode(rawProperty));
+    setInputMode(modeParam);
+    if (modeParam === 'deposit') {
+      setDeposit(decode(rawDeposit));
+      setLoanAmount('');
+    } else {
+      setLoanAmount(decode(rawLoan));
+      setDeposit('');
+    }
+
+    // Perform calculation from validated URL params
+    const effectiveLoanAmount =
+      modeParam === 'deposit'
+        ? (propertyValueNum as number) - (depositNum ?? 0)
+        : (loanAmountNum as number);
+
+    const calculatedResults = calculateLTV(
+      propertyValueNum as number,
+      effectiveLoanAmount
+    );
+    setResults(calculatedResults);
+    setIsDirty(false);
+  }, []);
 
   return (
     <div className="grid items-start gap-8 lg:grid-cols-[400px_1fr]">
@@ -220,7 +329,10 @@ export default function LTVCalculator() {
             </Button>
             <button
               type="button"
-              onClick={resetForm}
+              onClick={() => {
+                clearURLParams();
+                resetForm();
+              }}
               className="w-full rounded-lg px-4 py-2 text-sm text-gray-600 transition hover:bg-gray-100 hover:text-gray-900"
             >
               Reset Form
