@@ -46,7 +46,7 @@ if (!process.env.PLAYWRIGHT_SKIP_SERVER) {
   config.webServer = {
     command: 'pnpm dev',
     url: 'http://localhost:3000',
-    reuseExistingServer: !process.env.CI,
+    reuseExistingServer: false,
     timeout: 120_000,
     // Reduce output to speed up startup
     stdout: 'ignore',

@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { useRef, useEffect } from 'react';
 
 import { Button } from '@/components/Button';
@@ -8,6 +9,7 @@ import { NumericInput } from '@/components/NumericInput';
 import { Select } from '@/components/Select';
 import { excali } from '@/fonts';
 import { formatZAR } from '@/lib/calculator-utils';
+import { useURLParams } from '@/lib/use-url-params';
 
 import {
   useInterestStore,
@@ -121,6 +123,30 @@ export default function InterestCalculator() {
     resetForm,
   } = useInterestStore();
 
+  const searchParams = useSearchParams();
+
+  // URL params configuration
+  const { updateURLParams, clearURLParams } = useURLParams({
+    paramMap: {
+      principal: 'principal',
+      interestRate: 'rate',
+      inputPeriod: 'period',
+      interestType: 'type',
+    },
+    storeValues: {
+      principal,
+      interestRate,
+      inputPeriod,
+      interestType,
+    },
+    storeSetters: {
+      principal: setPrincipal,
+      interestRate: setInterestRate,
+      inputPeriod: setInputPeriod,
+      interestType: setInterestType,
+    },
+  });
+
   const previousPeriod = useRef<InterestPeriod>('annual');
   const rateByPeriod = useRef<Record<InterestPeriod, string>>({
     annual: '',
@@ -129,9 +155,17 @@ export default function InterestCalculator() {
     daily: '',
     hourly: '',
   });
+  const suppressPeriodConversion = useRef(false);
 
   // Convert rate when period changes
   useEffect(() => {
+    if (suppressPeriodConversion.current) {
+      // Skip conversion when initializing from URL
+      previousPeriod.current = inputPeriod;
+      suppressPeriodConversion.current = false;
+      return;
+    }
+
     if (previousPeriod.current !== inputPeriod) {
       // Check if we have a saved value for this period
       if (rateByPeriod.current[inputPeriod]) {
@@ -307,6 +341,14 @@ export default function InterestCalculator() {
     });
     setIsDirty(false);
 
+    // Update URL params with current form values
+    updateURLParams({
+      principal,
+      interestRate,
+      inputPeriod,
+      interestType,
+    });
+
     // Scroll to results on mobile
     setTimeout(() => {
       resultsRef.current?.scrollIntoView({
@@ -315,6 +357,175 @@ export default function InterestCalculator() {
       });
     }, 100);
   };
+
+  // Validate URL params and auto-calculate if valid on mount
+  useEffect(() => {
+    // Determine if URL contains any relevant params
+    const hasRelevantParams = ['principal', 'rate', 'period', 'type'].some(
+      (key) => searchParams.get(key) !== null
+    );
+
+    if (!hasRelevantParams) {
+      return;
+    }
+
+    // Read raw URL params
+    const rawPrincipal = searchParams.get('principal');
+    const rawRate = searchParams.get('rate');
+    const rawPeriod = searchParams.get('period');
+    const rawType = searchParams.get('type');
+
+    const decode = (v: string | null) =>
+      v === null ? '' : decodeURIComponent(v);
+    const parseNum = (v: string | null): number | null => {
+      if (v === null) return null;
+      const decoded = decodeURIComponent(v);
+      const cleaned = decoded.replace(/,/g, '');
+      const n = parseFloat(cleaned);
+      return Number.isFinite(n) ? n : null;
+    };
+
+    const principalValue = parseNum(rawPrincipal);
+    const rateValue = parseNum(rawRate);
+    const periodParam = (rawPeriod || 'annual') as InterestPeriod;
+    const typeParam = (rawType || 'compound-daily') as InterestType;
+
+    const allowedPeriods: InterestPeriod[] = [
+      'annual',
+      'monthly',
+      'weekly',
+      'daily',
+      'hourly',
+    ];
+    const allowedTypes: InterestType[] = [
+      'simple',
+      'compound-monthly',
+      'compound-quarterly',
+      'compound-semi-annually',
+      'compound-annually',
+      'compound-weekly',
+      'compound-daily',
+      'compound-hourly',
+      'compound-continuously',
+    ];
+
+    const isValid =
+      principalValue !== null &&
+      principalValue > 0 &&
+      rateValue !== null &&
+      rateValue > 0 &&
+      allowedPeriods.includes(periodParam) &&
+      allowedTypes.includes(typeParam);
+
+    if (!isValid) {
+      clearURLParams();
+      resetForm();
+      return;
+    }
+
+    // Sync store from URL
+    setPrincipal(decode(rawPrincipal));
+    setInterestRate(decode(rawRate));
+    suppressPeriodConversion.current = true;
+    setInputPeriod(periodParam);
+    setInterestType(typeParam);
+
+    // Perform calculation directly from validated URL params
+    const effectiveAnnualRateFromURL = convertToAnnualRate(
+      rateValue as number,
+      periodParam
+    );
+
+    let compoundingFreqFromURL: CompoundingFrequency = 'daily';
+    if (typeParam === 'compound-annually') compoundingFreqFromURL = 'annually';
+    else if (typeParam === 'compound-semi-annually')
+      compoundingFreqFromURL = 'semi-annually';
+    else if (typeParam === 'compound-quarterly')
+      compoundingFreqFromURL = 'quarterly';
+    else if (typeParam === 'compound-monthly')
+      compoundingFreqFromURL = 'monthly';
+    else if (typeParam === 'compound-weekly') compoundingFreqFromURL = 'weekly';
+    else if (typeParam === 'compound-daily') compoundingFreqFromURL = 'daily';
+    else if (typeParam === 'compound-hourly') compoundingFreqFromURL = 'hourly';
+    else if (typeParam === 'compound-continuously')
+      compoundingFreqFromURL = 'continuously';
+
+    let annualGainFromURL: number;
+    let monthlyGainFromURL: number;
+    let weeklyGainFromURL: number;
+    let dailyGainFromURL: number;
+    let hourlyGainFromURL: number;
+    let totalAfterOneYearFromURL: number;
+
+    if (typeParam === 'simple') {
+      annualGainFromURL =
+        ((principalValue as number) * effectiveAnnualRateFromURL) / 100;
+      monthlyGainFromURL = annualGainFromURL / 12;
+      weeklyGainFromURL = annualGainFromURL / 52;
+      dailyGainFromURL = annualGainFromURL / 365;
+      hourlyGainFromURL = dailyGainFromURL / 24;
+      totalAfterOneYearFromURL = (principalValue as number) + annualGainFromURL;
+    } else {
+      totalAfterOneYearFromURL = calculateCompoundInterest(
+        principalValue as number,
+        effectiveAnnualRateFromURL,
+        1,
+        compoundingFreqFromURL
+      );
+      annualGainFromURL = totalAfterOneYearFromURL - (principalValue as number);
+
+      const totalAfterMonth = calculateCompoundInterest(
+        principalValue as number,
+        effectiveAnnualRateFromURL,
+        1 / 12,
+        compoundingFreqFromURL
+      );
+      monthlyGainFromURL = totalAfterMonth - (principalValue as number);
+
+      const totalAfterWeek = calculateCompoundInterest(
+        principalValue as number,
+        effectiveAnnualRateFromURL,
+        1 / 52,
+        compoundingFreqFromURL
+      );
+      weeklyGainFromURL = totalAfterWeek - (principalValue as number);
+
+      const totalAfterDay = calculateCompoundInterest(
+        principalValue as number,
+        effectiveAnnualRateFromURL,
+        1 / 365,
+        compoundingFreqFromURL
+      );
+      dailyGainFromURL = totalAfterDay - (principalValue as number);
+
+      const totalAfterHour = calculateCompoundInterest(
+        principalValue as number,
+        effectiveAnnualRateFromURL,
+        1 / (365 * 24),
+        compoundingFreqFromURL
+      );
+      hourlyGainFromURL = totalAfterHour - (principalValue as number);
+    }
+
+    setResults({
+      annualGain: annualGainFromURL,
+      monthlyGain: monthlyGainFromURL,
+      weeklyGain: weeklyGainFromURL,
+      dailyGain: dailyGainFromURL,
+      hourlyGain: hourlyGainFromURL,
+      effectiveAnnualRate: effectiveAnnualRateFromURL,
+      totalAfterOneYear: totalAfterOneYearFromURL,
+      calculatedWith: {
+        principal: principalValue as number,
+        interestRate: rateValue as number,
+        inputPeriod: periodParam,
+        interestType: typeParam,
+        compoundingFrequency: compoundingFreqFromURL,
+      },
+    });
+    setIsDirty(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="grid items-start gap-8 lg:grid-cols-[400px_1fr]">
@@ -389,7 +600,10 @@ export default function InterestCalculator() {
             </Button>
             <button
               type="button"
-              onClick={resetForm}
+              onClick={() => {
+                clearURLParams();
+                resetForm();
+              }}
               className="w-full rounded-lg px-4 py-2 text-sm text-gray-600 transition hover:bg-gray-100 hover:text-gray-900"
             >
               Reset Form

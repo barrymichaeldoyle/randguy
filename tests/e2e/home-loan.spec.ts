@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-import type { Dialog, Page } from '@playwright/test';
+import { formatCurrencyInBrowser } from './utils';
+
+import type { Page } from '@playwright/test';
 
 const route = '/calculators/home-loan';
 
@@ -14,20 +16,6 @@ function calcMonthly(loanAmount: number, annualRate: number, years: number) {
   const r = annualRate / 12 / 100;
   const n = years * 12;
   return (loanAmount * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
-}
-
-async function formatCurrencyInBrowser(
-  page: Page,
-  value: number
-): Promise<string> {
-  return await page.evaluate((v) => {
-    return new Intl.NumberFormat('en-ZA', {
-      style: 'currency',
-      currency: 'ZAR',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(v as number);
-  }, value);
 }
 
 test.describe('Home Loan Calculator', () => {

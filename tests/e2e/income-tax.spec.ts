@@ -10,20 +10,6 @@ async function resetCalculatorState(page: Page) {
   await page.reload();
 }
 
-async function formatCurrencyInBrowser(
-  page: Page,
-  value: number
-): Promise<string> {
-  return await page.evaluate((v) => {
-    return new Intl.NumberFormat('en-ZA', {
-      style: 'currency',
-      currency: 'ZAR',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(v as number);
-  }, value);
-}
-
 test.describe('Income Tax Calculator', () => {
   test.beforeEach(async ({ page }) => {
     await resetCalculatorState(page);
