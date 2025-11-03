@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 
 import { Button } from '@/components/Button';
@@ -8,6 +9,7 @@ import { NumericInput } from '@/components/NumericInput';
 import { Select } from '@/components/Select';
 import { excali } from '@/fonts';
 import { formatZAR } from '@/lib/calculator-utils';
+import { useURLParams } from '@/lib/use-url-params';
 
 import { useTFSAStore, type DisplayUnit } from './tfsa-store';
 
@@ -36,6 +38,27 @@ export default function TFSACalculator() {
     setIsDirty,
     resetForm,
   } = useTFSAStore();
+
+  const searchParams = useSearchParams();
+
+  // URL params configuration
+  const { updateURLParams, clearURLParams } = useURLParams({
+    paramMap: {
+      currentContributions: 'current',
+      monthlyContribution: 'contribution',
+      displayUnit: 'unit',
+    },
+    storeValues: {
+      currentContributions,
+      monthlyContribution,
+      displayUnit,
+    },
+    storeSetters: {
+      currentContributions: setCurrentContributions,
+      monthlyContribution: setMonthlyContribution,
+      displayUnit: setDisplayUnit,
+    },
+  });
 
   const previousUnit = useRef<DisplayUnit>('years');
   const contributionByUnit = useRef<Record<DisplayUnit, string>>({
@@ -101,6 +124,7 @@ export default function TFSACalculator() {
       months: '',
       years: '',
     };
+    clearURLParams();
   };
 
   const resultsRef = useRef<HTMLDivElement>(null);
@@ -172,6 +196,13 @@ export default function TFSACalculator() {
     });
     setIsDirty(false);
 
+    // Update URL params with current form values
+    updateURLParams({
+      currentContributions,
+      monthlyContribution,
+      displayUnit,
+    });
+
     // Scroll to results on mobile
     setTimeout(() => {
       resultsRef.current?.scrollIntoView({
@@ -180,6 +211,79 @@ export default function TFSACalculator() {
       });
     }, 100);
   };
+
+  // Validate URL params and auto-calculate if valid on mount
+  useEffect(() => {
+    const hasRelevantParams = ['current', 'contribution', 'unit'].some(
+      (key) => searchParams.get(key) !== null
+    );
+    if (!hasRelevantParams) return;
+
+    const rawCurrent = searchParams.get('current');
+    const rawContribution = searchParams.get('contribution');
+    const rawUnit = searchParams.get('unit');
+
+    const decode = (v: string | null) =>
+      v === null ? '' : decodeURIComponent(v);
+    const parseNum = (v: string | null): number | null => {
+      if (v === null) return null;
+      const decoded = decodeURIComponent(v);
+      const cleaned = decoded.replace(/,/g, '');
+      const n = parseFloat(cleaned);
+      return Number.isFinite(n) ? n : null;
+    };
+
+    const currentNum = parseNum(rawCurrent) ?? 0;
+    const contributionNum = parseNum(rawContribution);
+    const unitParam =
+      rawUnit === 'months' || rawUnit === 'years'
+        ? (rawUnit as DisplayUnit)
+        : 'years';
+
+    // Enforce annual/monthly contribution limits from URL too
+    const maxPerUnit = unitParam === 'years' ? ANNUAL_LIMIT : ANNUAL_LIMIT / 12;
+    const isValid =
+      currentNum >= 0 &&
+      currentNum <= LIFETIME_LIMIT &&
+      contributionNum !== null &&
+      (contributionNum as number) > 0 &&
+      (contributionNum as number) <= maxPerUnit;
+
+    if (!isValid) {
+      clearURLParams();
+      handleResetForm();
+      return;
+    }
+
+    // Sync store from URL
+    setCurrentContributions(decode(rawCurrent));
+    setDisplayUnit(unitParam);
+    setMonthlyContribution(decode(rawContribution));
+
+    // Perform calculation directly from validated URL params
+    const monthly =
+      unitParam === 'years'
+        ? (contributionNum as number) / 12
+        : (contributionNum as number);
+    const remaining = LIFETIME_LIMIT - currentNum;
+    const monthsToMaxOut = Math.ceil(remaining / monthly);
+    const yearsToMaxOut = monthsToMaxOut / 12;
+    const projectedDate = new Date();
+    projectedDate.setMonth(projectedDate.getMonth() + monthsToMaxOut);
+    const currentProgress = (currentNum / LIFETIME_LIMIT) * 100;
+    const annualContribution = monthly * 12;
+
+    setResults({
+      remainingContributions: remaining,
+      monthsToMaxOut,
+      yearsToMaxOut,
+      projectedMaxOutDate: projectedDate,
+      currentProgress,
+      annualContribution,
+    });
+    setIsDirty(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="grid items-start gap-8 lg:grid-cols-[400px_1fr]">
