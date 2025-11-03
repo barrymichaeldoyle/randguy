@@ -136,8 +136,11 @@ export default function HomeLoanCalculatorPage() {
 
         <Suspense
           fallback={
-            <div className="py-8 text-center">Loading calculator...</div>
+            <div className="py-8 text-center">
+              Loading home loancalculator...
+            </div>
           }
+          name="home-loan-calculator"
         >
           <HomeLoanCalculator />
         </Suspense>

@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Button } from '@/components/Button';
 import { CalculatorInfo } from '@/components/CalculatorInfo';
@@ -117,8 +119,12 @@ export default function LTVCalculatorPage() {
             Calculate your LTV ratio and understand your equity position
           </p>
         </div>
-
-        <LTVCalculator />
+        <Suspense
+          fallback={<div>Loading loan-to-value Calculator...</div>}
+          name="ltv-calculator"
+        >
+          <LTVCalculator />
+        </Suspense>
 
         <CalculatorInfo
           title="About Loan-to-Value (LTV) Ratio"

@@ -124,8 +124,11 @@ export default function IncomeTaxCalculatorPage() {
 
         <Suspense
           fallback={
-            <div className="py-8 text-center">Loading calculator...</div>
+            <div className="py-8 text-center">
+              Loading income tax calculator...
+            </div>
           }
+          name="income-tax-calculator"
         >
           <IncomeTaxCalculator />
         </Suspense>
