@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Button } from '@/components/Button';
 import { CalculatorInfo } from '@/components/CalculatorInfo';
@@ -121,7 +123,12 @@ export default function InterestCalculatorPage() {
           </p>
         </div>
 
-        <InterestCalculator />
+        <Suspense
+          fallback={<div>Loading interest calculator...</div>}
+          name="interest-calculator"
+        >
+          <InterestCalculator />
+        </Suspense>
 
         <CalculatorInfo
           title="About Interest Calculations"
