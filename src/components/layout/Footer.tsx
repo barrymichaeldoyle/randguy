@@ -6,6 +6,7 @@ import {
   TWITTER_HANDLE,
   YOUTUBE_HANDLE,
 } from '@/lib/constants';
+import { CALCULATORS, DATASETS } from '@/lib/site-data';
 
 import { excali } from '../../fonts';
 
@@ -22,27 +23,18 @@ interface FooterGroup {
 const footerGroups: FooterGroup[] = [
   {
     title: 'Calculators',
-    links: [
-      { href: '/calculators/income-tax', label: 'Income Tax Calculator' },
-      { href: '/calculators/home-loan', label: 'Home Loan Calculator' },
-      { href: '/calculators/ltv', label: 'Loan-to-Value Calculator' },
-      { href: '/calculators/tfsa', label: 'TFSA Calculator' },
-      { href: '/calculators/interest', label: 'Interest Calculator' },
-    ],
+    links: CALCULATORS.map((item) => ({ href: item.href, label: item.title })),
   },
   {
     title: 'Historical Data',
-    links: [
-      { href: '/data/prime-rates', label: 'Prime Rates' },
-      { href: '/data/tax-brackets', label: 'Tax Brackets' },
-    ],
+    links: DATASETS.map((item) => ({ href: item.href, label: item.title })),
   },
   {
     title: 'Resources',
     links: [
-      { href: '/blog', label: 'Blog' },
+      { href: '/blog', label: 'All Blog Posts' },
       { href: '/calculators', label: 'All Calculators' },
-      { href: '/data', label: 'All Data' },
+      { href: '/data', label: 'All Historical Data' },
     ],
   },
 ];

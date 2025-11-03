@@ -10,6 +10,12 @@ import { LINKS, TWITTER_HANDLE, YOUTUBE_HANDLE } from '@/lib/constants';
 
 import { excali } from '../../fonts';
 
+const MENU_ITEMS = [
+  { href: '/blog', label: 'Blog' },
+  { href: '/calculators', label: 'Calculators' },
+  { href: '/data', label: 'Data' },
+];
+
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const pathname = usePathname();
@@ -117,15 +123,11 @@ export function Header() {
 
       {/* Desktop Navigation */}
       <nav className="hidden items-center gap-3 sm:flex">
-        <Button href="/calculators" size="sm">
-          Calculators
-        </Button>
-        <Button href="/data" size="sm">
-          Data
-        </Button>
-        <Button href="/blog" size="sm">
-          Blog
-        </Button>
+        {MENU_ITEMS.map((item) => (
+          <Button key={item.href} href={item.href} size="sm">
+            {item.label}
+          </Button>
+        ))}
 
         {/* Desktop Social Links */}
         <div className="ml-2 flex items-center gap-2 border-l border-gray-300 pl-3">
@@ -245,15 +247,11 @@ export function Header() {
 
           {/* Menu Items */}
           <div className="flex flex-1 flex-col gap-2 p-4">
-            <Button href="/calculators" size="sm">
-              Calculators
-            </Button>
-            <Button href="/data" size="sm">
-              Data
-            </Button>
-            <Button href="/blog" size="sm">
-              Blog
-            </Button>
+            {MENU_ITEMS.map((item) => (
+              <Button key={item.href} href={item.href} size="sm">
+                {item.label}
+              </Button>
+            ))}
           </div>
 
           {/* Social Links */}
