@@ -58,13 +58,13 @@
 
       .logo-preview {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
         justify-content: center;
       }
 
       .logo-image {
-        margin-bottom: 20px;
+        margin-right: 20px;
       }
 
       .logo-text {
@@ -164,7 +164,7 @@
             id="logoImage"
             crossorigin="anonymous"
           />
-          <div class="logo-text" id="logoText">Rand Guy</div>
+          <div class="logo-text" id="logoText">RandGuy.com</div>
         </div>
       </div>
 
@@ -173,7 +173,7 @@
 
         <div class="control-group">
           <label for="textInput">Logo Text:</label>
-          <input type="text" id="textInput" value="Rand Guy" />
+          <input type="text" id="textInput" value="RandGuy.com" />
         </div>
 
         <div class="control-group">
@@ -181,7 +181,7 @@
           <input
             type="number"
             id="logoSize"
-            value="200"
+            value="150"
             min="50"
             max="500"
             step="10"
@@ -201,7 +201,9 @@
         </div>
 
         <div class="control-group">
-          <label for="spacing">Spacing between logo and text (px):</label>
+          <label for="spacing"
+            >Horizontal spacing between logo and text (px):</label
+          >
           <input
             type="number"
             id="spacing"
@@ -237,12 +239,60 @@
     <script>
       let logoImg = null;
 
-      // Load the logo image
+      // Load the logo image - wait for it to actually load
       window.addEventListener('load', () => {
         const img = document.getElementById('logoImage');
         logoImg = new Image();
         logoImg.crossOrigin = 'anonymous';
-        logoImg.src = img.src;
+
+        // Try alternative paths if the default doesn't work
+        const alternativePaths = [
+          '../public/RandGuyLogo.png',
+          '/RandGuyLogo.png',
+          './RandGuyLogo.png',
+          'public/RandGuyLogo.png',
+        ];
+
+        let pathIndex = 0;
+
+        const tryLoadImage = (path) => {
+          logoImg.onload = () => {
+            console.log('Logo image loaded successfully from:', path);
+            // Update the visible image src too
+            if (img.src !== path) {
+              img.src = path;
+            }
+            // Update preview with default values once image is loaded
+            updatePreview();
+          };
+
+          logoImg.onerror = () => {
+            console.warn('Failed to load logo from:', path);
+            pathIndex++;
+            if (pathIndex < alternativePaths.length) {
+              tryLoadImage(alternativePaths[pathIndex]);
+            } else {
+              console.error('Could not load logo from any path');
+              alert(
+                'Could not load logo image.\n\n' +
+                  'Make sure you are running this through a web server.\n\n' +
+                  'From the project root, run:\n' +
+                  '  python -m http.server 8000\n' +
+                  'Then open: http://localhost:8000/generators/logo-generator.html'
+              );
+            }
+          };
+
+          logoImg.src = path;
+        };
+
+        // Start with the image's current src, then try alternatives if needed
+        tryLoadImage(img.src);
+
+        // Initialize preview with default values after image loading attempt
+        setTimeout(() => {
+          updatePreview();
+        }, 200);
       });
 
       function updatePreview() {
@@ -257,14 +307,15 @@
         logoText.textContent = text;
         logoImage.style.width = logoSize + 'px';
         logoImage.style.height = logoSize + 'px';
-        logoImage.style.marginBottom = spacing + 'px';
+        logoImage.style.marginRight = spacing + 'px';
+        logoImage.style.marginBottom = '0';
         logoText.style.fontSize = fontSize + 'px';
         logoText.style.color = textColor;
       }
 
       function resetSettings() {
-        document.getElementById('textInput').value = 'Rand Guy';
-        document.getElementById('logoSize').value = '200';
+        document.getElementById('textInput').value = 'RandGuy.com';
+        document.getElementById('logoSize').value = '150';
         document.getElementById('fontSize').value = '64';
         document.getElementById('spacing').value = '20';
         document.getElementById('textColor').value = '#1f2937';
@@ -296,10 +347,10 @@
           const textWidth = textMetrics.width;
           const textHeight = fontSize * 1.2; // Approximate height
 
-          // Calculate canvas dimensions
+          // Calculate canvas dimensions for horizontal layout
           const padding = 40;
-          const canvasWidth = Math.max(logoSize, textWidth) + padding * 2;
-          const canvasHeight = logoSize + spacing + textHeight + padding * 2;
+          const canvasWidth = logoSize + spacing + textWidth + padding * 2;
+          const canvasHeight = Math.max(logoSize, textHeight) + padding * 2;
 
           canvas.width = canvasWidth;
           canvas.height = canvasHeight;
@@ -307,32 +358,75 @@
           // Clear canvas (transparent background)
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-          // Wait for logo image to load
-          if (!logoImg.complete) {
+          // Wait for logo image to load - ensure it's fully loaded
+          if (!logoImg || !logoImg.complete || logoImg.naturalHeight === 0) {
+            // Create a new image if logoImg is not set or failed
+            if (!logoImg || logoImg.naturalHeight === 0) {
+              const visibleImg = document.getElementById('logoImage');
+              logoImg = new Image();
+              logoImg.crossOrigin = 'anonymous';
+              logoImg.src = visibleImg.src;
+            }
+
             await new Promise((resolve, reject) => {
-              logoImg.onload = resolve;
-              logoImg.onerror = reject;
+              if (logoImg.complete && logoImg.naturalHeight > 0) {
+                resolve();
+                return;
+              }
+              logoImg.onload = () => resolve();
+              logoImg.onerror = () =>
+                reject(new Error('Failed to load logo image'));
             });
           }
 
-          // Draw logo centered
-          const logoX = (canvasWidth - logoSize) / 2;
-          const logoY = padding;
+          // Verify the image is actually loaded
+          if (logoImg.naturalHeight === 0) {
+            throw new Error(
+              'Logo image failed to load. Please ensure the image path is correct.'
+            );
+          }
+
+          // Draw logo on the left, vertically centered
+          const logoX = padding;
+          const logoY = (canvasHeight - logoSize) / 2;
           ctx.drawImage(logoImg, logoX, logoY, logoSize, logoSize);
 
-          // Draw text centered
+          // Draw text to the right of logo, vertically centered
           ctx.font = `${fontSize}px Excalifont, cursive`;
           ctx.fillStyle = textColor;
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'top';
-          const textX = canvasWidth / 2;
-          const textY = logoY + logoSize + spacing;
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          const textX = logoX + logoSize + spacing;
+          const textY = canvasHeight / 2;
           ctx.fillText(text, textX, textY);
 
           // Convert to blob and download
           canvas.toBlob((blob) => {
             if (!blob) {
-              throw new Error('Failed to create image blob');
+              // Fallback: use toDataURL if toBlob returns null (tainted canvas)
+              try {
+                const dataUrl = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.href = dataUrl;
+                link.download = 'rand-guy-logo.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                button.disabled = false;
+                button.textContent = 'Download PNG';
+              } catch (dataUrlError) {
+                alert(
+                  'Error: Canvas is tainted (CORS issue).\n\n' +
+                    'Solution: Please serve this file through a local web server:\n' +
+                    '  • Python: python -m http.server 8000\n' +
+                    '  • Node.js: npx serve\n' +
+                    'Then open http://localhost:8000/generators/logo-generator.html'
+                );
+                button.disabled = false;
+                button.textContent = 'Download PNG';
+              }
+              return;
             }
 
             const url = URL.createObjectURL(blob);
