@@ -13,31 +13,43 @@ import {
   YAxis,
 } from 'recharts';
 
-type ChartDataPoint = {
-  year: number;
-  inflationRate: number;
-  cpiIndex: number;
-};
+import { CPI_DATA_ZA } from '@/lib/historical-data';
+import { useIsMounted } from '@/lib/use-is-mounted';
 
-type CPIChartClientProps = {
-  chartData: ChartDataPoint[];
-};
+// Prepare and sort chart data at module level
+const chartData = CPI_DATA_ZA.map((item) => ({
+  year: item.year,
+  inflationRate: item.inflationRate,
+  cpiIndex: item.cpiIndex,
+})).sort((a, b) => a.year - b.year);
 
-export default function CPIChartClient({ chartData }: CPIChartClientProps) {
+export function CPIChartClient() {
   const [hoveredPoint, setHoveredPoint] = useState<{
     year: number;
     inflationRate: number;
   } | null>(null);
+  const isMounted = useIsMounted();
 
-  // Sort data by year ascending for proper chart display
-  const sortedData = [...chartData].sort((a, b) => a.year - b.year);
+  if (!isMounted) {
+    return (
+      <div className="flex h-96 min-w-0 items-center justify-center">
+        <div className="text-gray-500">Loading chart...</div>
+      </div>
+    );
+  }
 
   return (
     <>
-      <div className="h-96">
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="h-96 min-w-0">
+        <ResponsiveContainer
+          width="100%"
+          height="100%"
+          minWidth={1}
+          minHeight={1}
+          aspect={undefined}
+        >
           <LineChart
-            data={sortedData}
+            data={chartData}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
             onMouseMove={(e: any) => {
               if (e.activePayload && e.activePayload.length > 0) {

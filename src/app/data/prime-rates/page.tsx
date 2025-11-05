@@ -3,13 +3,10 @@ import Link from 'next/link';
 import { Breadcrumb } from '@/components/Breadcrumb';
 import { Button } from '@/components/Button';
 import { excali } from '@/fonts';
-import {
-  PRIME_LENDING_RATE_ZA,
-  REPO_RATE_SPREAD,
-  REPO_RATE_ZA,
-} from '@/lib/historical-data';
+import { BASE_URL } from '@/lib/constants';
+import { PRIME_LENDING_RATE_ZA, REPO_RATE_SPREAD } from '@/lib/historical-data';
 
-import PrimeRatesChartClient from './_components/PrimeRatesChartClient';
+import { PrimeRatesChartClient } from './_components/PrimeRatesChartClient';
 
 import type { Metadata } from 'next';
 
@@ -52,243 +49,362 @@ const stats = {
 };
 
 export default function PrimeRatesPage() {
-  // Prepare chart data - done server-side
-  const sortedPrime = [...PRIME_LENDING_RATE_ZA].sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-  );
-  const sortedRepo = [...REPO_RATE_ZA].sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-  );
+  // Structured data for Dataset schema
+  const datasetSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Dataset',
+    name: 'South African Prime Lending & Repo Rates',
+    description:
+      'Historical prime lending rate and SARB repo rate data for South Africa from 2002 to present. Track interest rate changes and their impact on loans and credit.',
+    url: `${BASE_URL}/data/prime-rates`,
+    keywords: [
+      'prime rate',
+      'repo rate',
+      'interest rates',
+      'South Africa',
+      'SARB',
+      'South African Reserve Bank',
+      'lending rates',
+      'monetary policy',
+    ],
+    creator: {
+      '@type': 'Organization',
+      name: 'South African Reserve Bank',
+      url: 'https://www.resbank.co.za',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Rand Guy',
+      url: BASE_URL,
+    },
+    datePublished: '2024-01-01',
+    inLanguage: 'en-ZA',
+    temporalCoverage: '2002-01-01/2024-12-31',
+    spatialCoverage: {
+      '@type': 'Country',
+      name: 'South Africa',
+    },
+    distribution: [
+      {
+        '@type': 'DataDownload',
+        encodingFormat: 'text/html',
+        contentUrl: `${BASE_URL}/data/prime-rates`,
+      },
+    ],
+  };
 
-  const chartData = sortedPrime.map((item, index) => ({
-    date: new Date(item.date).getTime(),
-    primeRate: item.rate,
-    repoRate: sortedRepo[index].rate,
-    fullDate: new Date(item.date).toLocaleDateString('en-ZA', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    }),
-  }));
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: BASE_URL,
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Historical Data',
+        item: `${BASE_URL}/data`,
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: 'Prime Lending & Repo Rates',
+        item: `${BASE_URL}/data/prime-rates`,
+      },
+    ],
+  };
 
   return (
-    <div className="w-full max-w-6xl px-4 pt-8 pb-8 md:px-8 md:pt-12">
-      <Breadcrumb
-        items={[
-          { name: 'Home', href: '/' },
-          { name: 'Historical Data', href: '/data' },
-          { name: 'Prime Lending & Repo Rates' },
-        ]}
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(datasetSchema) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <div className="w-full max-w-6xl px-4 pt-8 pb-8 md:px-8 md:pt-12">
+        <Breadcrumb
+          items={[
+            { name: 'Home', href: '/' },
+            { name: 'Historical Data', href: '/data' },
+            { name: 'Prime Lending & Repo Rates' },
+          ]}
+        />
 
-      <div className="mb-8">
-        <h1 className={`${excali.className} mb-4 text-4xl`}>
-          Historical Prime & Repo Rates
-        </h1>
-        <p className="mb-2 text-lg text-gray-700">
-          Track how South Africa&apos;s prime lending rate and SARB repo rate
-          have changed since 2002. The prime rate affects home loans, personal
-          loans, and other credit products.
-        </p>
-        <p className="mb-6 text-sm text-gray-600">
-          The repo rate is the SARB&apos;s policy rate. Prime rate is typically
-          repo rate + {REPO_RATE_SPREAD}%.
-        </p>
+        <div className="mb-8">
+          <h1 className={`${excali.className} mb-4 text-4xl`}>
+            Historical Prime & Repo Rates
+          </h1>
+          <p className="mb-2 text-lg text-gray-700">
+            Track how South Africa&apos;s prime lending rate and SARB repo rate
+            have changed since 2002. The prime rate affects home loans, personal
+            loans, and other credit products.
+          </p>
+          <p className="mb-6 text-sm text-gray-600">
+            The repo rate is the SARB&apos;s policy rate. Prime rate is
+            typically repo rate + {REPO_RATE_SPREAD}%.
+          </p>
 
-        {/* Statistics Cards */}
-        <div className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
-          <div className="rounded-lg border-2 border-gray-300 bg-white p-4">
-            <div className="mb-1 text-sm text-gray-600">Current Prime Rate</div>
-            <div className="text-3xl font-bold text-gray-900">
-              {stats.current}%
+          {/* Upcoming announcement note */}
+          <div className="mb-6 rounded-md border border-yellow-300 bg-yellow-50 p-4">
+            <p className="text-sm text-yellow-900">
+              Next announcement is on Thursday afternoon (±15:30), 27 November
+              2025.
+            </p>
+          </div>
+
+          {/* Statistics Cards */}
+          <div className="mb-8 grid grid-cols-2 gap-4 md:grid-cols-4">
+            <div className="rounded-lg border-2 border-gray-300 bg-white p-4">
+              <div className="mb-1 text-sm text-gray-600">
+                Current Prime Rate
+              </div>
+              <div className="text-3xl font-bold text-gray-900">
+                {stats.current}%
+              </div>
+            </div>
+            <div className="rounded-lg border-2 border-blue-300 bg-blue-50 p-4">
+              <div className="mb-1 text-sm text-blue-900">
+                Average Prime (Since 2002)
+              </div>
+              <div className="text-3xl font-bold text-blue-900">
+                {stats.average.toFixed(2)}%
+              </div>
+            </div>
+            <div className="rounded-lg border border-red-200 bg-red-50 p-4">
+              <div className="mb-1 text-sm text-gray-600">
+                Highest Prime Rate
+              </div>
+              <div className="text-3xl font-bold text-gray-900">
+                {stats.max}%
+              </div>
+            </div>
+            <div className="rounded-lg border border-green-200 bg-green-50 p-4">
+              <div className="mb-1 text-sm text-gray-600">
+                Lowest Prime Rate
+              </div>
+              <div className="text-3xl font-bold text-gray-900">
+                {stats.min}%
+              </div>
             </div>
           </div>
-          <div className="rounded-lg border-2 border-blue-300 bg-blue-50 p-4">
-            <div className="mb-1 text-sm text-blue-900">
-              Average Prime (Since 2002)
-            </div>
-            <div className="text-3xl font-bold text-blue-900">
-              {stats.average.toFixed(2)}%
-            </div>
-          </div>
-          <div className="rounded-lg border border-red-200 bg-red-50 p-4">
-            <div className="mb-1 text-sm text-gray-600">Highest Prime Rate</div>
-            <div className="text-3xl font-bold text-gray-900">{stats.max}%</div>
-          </div>
-          <div className="rounded-lg border border-green-200 bg-green-50 p-4">
-            <div className="mb-1 text-sm text-gray-600">Lowest Prime Rate</div>
-            <div className="text-3xl font-bold text-gray-900">{stats.min}%</div>
-          </div>
         </div>
-      </div>
 
-      {/* Chart */}
-      <div className="mb-8 rounded-lg border border-gray-200 bg-white p-6">
-        <h2 className={`${excali.className} mb-6 text-2xl`}>
-          Prime & Repo Rates Over Time
-        </h2>
-        <PrimeRatesChartClient chartData={chartData} />
-      </div>
-
-      {/* Information Section */}
-      <div className="grid gap-6 md:grid-cols-2">
-        <div className="rounded-lg border border-blue-200 bg-blue-50 p-6">
-          <h3 className={`${excali.className} mb-3 text-xl`}>
-            What is the Prime Rate?
-          </h3>
-          <p className="text-sm text-gray-700">
-            The prime lending rate is the interest rate that banks charge their
-            most creditworthy customers. Most variable-rate loans (like home
-            loans) are calculated as prime plus a margin. For example, if prime
-            is {stats.current}% and your loan is &quot;prime + 2%&quot;,
-            you&apos;d pay {(stats.current + 2).toFixed(2)}%.
+        {/* Chart */}
+        <section className="mb-8 rounded-lg border border-gray-200 bg-white p-6">
+          <h2 className={`${excali.className} mb-6 text-2xl`}>
+            Prime & Repo Rates Over Time
+          </h2>
+          <p className="mb-4 text-sm text-gray-600">
+            Interactive chart showing prime lending rate (yellow) and SARB repo
+            rate (blue) from 2002 to present. These step-like charts show how
+            rates change when the SARB Monetary Policy Committee makes
+            announcements, typically every two months.
           </p>
+          <div role="img" aria-label="Prime and repo rates over time chart">
+            <PrimeRatesChartClient />
+          </div>
+        </section>
+
+        {/* Information Section */}
+        <div className="grid gap-6 md:grid-cols-2">
+          <div className="rounded-lg border border-blue-200 bg-blue-50 p-6">
+            <h3 className={`${excali.className} mb-3 text-xl`}>
+              What is the Prime Rate?
+            </h3>
+            <p className="text-sm text-gray-700">
+              The prime lending rate is the interest rate that banks charge
+              their most creditworthy customers. Most variable-rate loans (like
+              home loans) are calculated as prime plus a margin. For example, if
+              prime is {stats.current}% and your loan is &quot;prime + 2%&quot;,
+              you&apos;d pay {(stats.current + 2).toFixed(2)}%.
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-purple-200 bg-purple-50 p-6">
+            <h3 className={`${excali.className} mb-3 text-xl`}>
+              Why Does it Change?
+            </h3>
+            <p className="text-sm text-gray-700">
+              The prime rate typically changes when the South African Reserve
+              Bank (SARB) adjusts the repo rate. Banks usually increase their
+              prime rate by the same amount. The SARB changes rates to control
+              inflation and manage economic growth.
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-teal-200 bg-teal-50 p-6">
+            <h3 className={`${excali.className} mb-3 text-xl`}>
+              Inflation and Rate Decisions
+            </h3>
+            <p className="text-sm text-gray-700">
+              Inflation (CPI) is a major driver of interest rate decisions. To
+              understand the backdrop for rate moves, see the{' '}
+              <Link href="/data/cpi">CPI & inflation data</Link> for South
+              Africa.
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-green-200 bg-green-50 p-6">
+            <h3 className={`${excali.className} mb-3 text-xl`}>
+              Historical Highlights
+            </h3>
+            <ul className="space-y-2 text-sm text-gray-700">
+              <li>
+                <strong>2008:</strong> Rate peaked at 15.5% during the global
+                financial crisis
+              </li>
+              <li>
+                <strong>2020:</strong> Dropped to 7% during COVID-19 pandemic
+              </li>
+              <li>
+                <strong>2022-2023:</strong> Rapid increases to combat inflation
+              </li>
+            </ul>
+          </div>
+
+          <div className="rounded-lg border border-orange-200 bg-orange-50 p-6">
+            <h3 className={`${excali.className} mb-3 text-xl`}>
+              Impact on Your Finances
+            </h3>
+            <p className="text-sm text-gray-700">
+              A 1% change in prime rate on a R1 million bond can increase or
+              decrease your monthly repayment by approximately R650-R700. Use
+              our{' '}
+              <Link
+                href="/calculators/home-loan"
+                className="font-semibold text-yellow-600 hover:underline"
+              >
+                Home Loan Calculator
+              </Link>{' '}
+              to see how different rates affect your repayments.
+            </p>
+          </div>
+
+          <div className="rounded-lg border border-teal-200 bg-teal-50 p-6 md:col-span-2">
+            <h3 className={`${excali.className} mb-3 text-xl`}>
+              When are SARB decisions announced?
+            </h3>
+            <p className="mb-2 text-sm text-gray-700">
+              The SARB Monetary Policy Committee usually announces its decision
+              on a Thursday afternoon near the end of every second month:
+            </p>
+            <ul className="list-disc space-y-1 pl-6 text-sm text-gray-700">
+              <li>January</li>
+              <li>March</li>
+              <li>May</li>
+              <li>July</li>
+              <li>September</li>
+              <li>November</li>
+            </ul>
+          </div>
         </div>
 
-        <div className="rounded-lg border border-purple-200 bg-purple-50 p-6">
-          <h3 className={`${excali.className} mb-3 text-xl`}>
-            Why Does it Change?
-          </h3>
-          <p className="text-sm text-gray-700">
-            The prime rate typically changes when the South African Reserve Bank
-            (SARB) adjusts the repo rate. Banks usually increase their prime
-            rate by the same amount. The SARB changes rates to control inflation
-            and manage economic growth.
+        {/* Call to Action */}
+        <div className="mt-8 rounded-lg border border-yellow-200 bg-gradient-to-r from-yellow-50 to-orange-50 p-8 text-center">
+          <h2 className={`${excali.className} mb-3 text-2xl`}>
+            See How Rates Affect Your Finances
+          </h2>
+          <p className="mx-auto mb-6 max-w-2xl text-gray-700">
+            Use our calculators to see how changes in prime and repo rates
+            impact your monthly repayments and overall costs.
           </p>
+          <div className="flex flex-wrap justify-center gap-4">
+            <Button href="/calculators/home-loan" variant="primary">
+              Home Loan Calculator →
+            </Button>
+            <Button href="/calculators" variant="secondary">
+              View All Calculators
+            </Button>
+          </div>
         </div>
 
-        <div className="rounded-lg border border-green-200 bg-green-50 p-6">
-          <h3 className={`${excali.className} mb-3 text-xl`}>
-            Historical Highlights
-          </h3>
-          <ul className="space-y-2 text-sm text-gray-700">
-            <li>
-              <strong>2008:</strong> Rate peaked at 15.5% during the global
-              financial crisis
-            </li>
-            <li>
-              <strong>2020:</strong> Dropped to 7% during COVID-19 pandemic
-            </li>
-            <li>
-              <strong>2022-2023:</strong> Rapid increases to combat inflation
-            </li>
-          </ul>
-        </div>
+        {/* Data Table */}
+        <div className="mt-8 rounded-lg border border-gray-200 bg-white p-6">
+          <h2 className={`${excali.className} mb-4 text-2xl`}>
+            Historical Data Table
+          </h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="px-4 py-2 text-left">Date</th>
+                  <th className="px-4 py-2 text-right">Prime Rate</th>
+                  <th className="px-4 py-2 text-right">Change</th>
+                  <th className="px-4 py-2 text-right">Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+                {PRIME_LENDING_RATE_ZA.map((item, index) => {
+                  // Data is in reverse chronological order (newest first)
+                  // So the "previous" rate is actually the next item in the array
+                  const prevRate =
+                    index < PRIME_LENDING_RATE_ZA.length - 1
+                      ? PRIME_LENDING_RATE_ZA[index + 1].rate
+                      : item.rate;
+                  const change = item.rate - prevRate;
 
-        <div className="rounded-lg border border-orange-200 bg-orange-50 p-6">
-          <h3 className={`${excali.className} mb-3 text-xl`}>
-            Impact on Your Finances
-          </h3>
-          <p className="text-sm text-gray-700">
-            A 1% change in prime rate on a R1 million bond can increase or
-            decrease your monthly repayment by approximately R650-R700. Use our{' '}
-            <Link
-              href="/calculators/home-loan"
-              className="font-semibold text-yellow-600 hover:underline"
-            >
-              Home Loan Calculator
-            </Link>{' '}
-            to see how different rates affect your repayments.
-          </p>
-        </div>
-      </div>
+                  // Calculate duration until next rate change
+                  let durationText = '-';
+                  if (index > 0) {
+                    const currentDate = new Date(item.date);
+                    const nextDate = new Date(
+                      PRIME_LENDING_RATE_ZA[index - 1].date
+                    );
+                    const diffMs = nextDate.getTime() - currentDate.getTime();
+                    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+                    const diffMonths = Math.floor(diffDays / 30.44); // Average days per month
+                    const years = Math.floor(diffMonths / 12);
+                    const months = diffMonths % 12;
 
-      {/* Call to Action */}
-      <div className="mt-8 rounded-lg border border-yellow-200 bg-gradient-to-r from-yellow-50 to-orange-50 p-8 text-center">
-        <h2 className={`${excali.className} mb-3 text-2xl`}>
-          See How Rates Affect Your Finances
-        </h2>
-        <p className="mx-auto mb-6 max-w-2xl text-gray-700">
-          Use our calculators to see how changes in prime and repo rates impact
-          your monthly repayments and overall costs.
-        </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button href="/calculators/home-loan" variant="primary">
-            Home Loan Calculator →
-          </Button>
-          <Button href="/calculators" variant="secondary">
-            View All Calculators
-          </Button>
-        </div>
-      </div>
-
-      {/* Data Table */}
-      <div className="mt-8 rounded-lg border border-gray-200 bg-white p-6">
-        <h2 className={`${excali.className} mb-4 text-2xl`}>
-          Historical Data Table
-        </h2>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="px-4 py-2 text-left">Date</th>
-                <th className="px-4 py-2 text-right">Prime Rate</th>
-                <th className="px-4 py-2 text-right">Change</th>
-                <th className="px-4 py-2 text-right">Duration</th>
-              </tr>
-            </thead>
-            <tbody>
-              {PRIME_LENDING_RATE_ZA.map((item, index) => {
-                // Data is in reverse chronological order (newest first)
-                // So the "previous" rate is actually the next item in the array
-                const prevRate =
-                  index < PRIME_LENDING_RATE_ZA.length - 1
-                    ? PRIME_LENDING_RATE_ZA[index + 1].rate
-                    : item.rate;
-                const change = item.rate - prevRate;
-
-                // Calculate duration until next rate change
-                let durationText = '-';
-                if (index > 0) {
-                  const currentDate = new Date(item.date);
-                  const nextDate = new Date(
-                    PRIME_LENDING_RATE_ZA[index - 1].date
-                  );
-                  const diffMs = nextDate.getTime() - currentDate.getTime();
-                  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-                  const diffMonths = Math.floor(diffDays / 30.44); // Average days per month
-                  const years = Math.floor(diffMonths / 12);
-                  const months = diffMonths % 12;
-
-                  if (years > 0 && months > 0) {
-                    durationText = `${years}y ${months}m`;
-                  } else if (years > 0) {
-                    durationText = `${years}y`;
-                  } else if (months > 0) {
-                    durationText = `${months}m`;
+                    if (years > 0 && months > 0) {
+                      durationText = `${years}y ${months}m`;
+                    } else if (years > 0) {
+                      durationText = `${years}y`;
+                    } else if (months > 0) {
+                      durationText = `${months}m`;
+                    } else {
+                      durationText = `${diffDays}d`;
+                    }
                   } else {
-                    durationText = `${diffDays}d`;
+                    // For the most recent rate (index 0), show "Current"
+                    durationText = 'Current';
                   }
-                } else {
-                  // For the most recent rate (index 0), show "Current"
-                  durationText = 'Current';
-                }
 
-                return (
-                  <tr key={item.date} className="border-b border-gray-100">
-                    <td className="px-4 py-2">{item.date}</td>
-                    <td className="px-4 py-2 text-right font-semibold">
-                      {item.rate}%
-                    </td>
-                    <td className="px-4 py-2 text-right">
-                      {change === 0 ? (
-                        <span className="text-gray-400">-</span>
-                      ) : change > 0 ? (
-                        <span className="text-red-600">+{change}%</span>
-                      ) : (
-                        <span className="text-green-700">{change}%</span>
-                      )}
-                    </td>
-                    <td className="px-4 py-2 text-right text-gray-600">
-                      {durationText}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                  return (
+                    <tr key={item.date} className="border-b border-gray-100">
+                      <td className="px-4 py-2">
+                        <time dateTime={item.date}>{item.date}</time>
+                      </td>
+                      <td className="px-4 py-2 text-right font-semibold">
+                        {item.rate}%
+                      </td>
+                      <td className="px-4 py-2 text-right">
+                        {change === 0 ? (
+                          <span className="text-gray-400">-</span>
+                        ) : change > 0 ? (
+                          <span className="text-red-600">+{change}%</span>
+                        ) : (
+                          <span className="text-green-700">{change}%</span>
+                        )}
+                      </td>
+                      <td className="px-4 py-2 text-right text-gray-600">
+                        {durationText}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

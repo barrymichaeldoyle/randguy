@@ -1,6 +1,8 @@
+import Image from 'next/image';
+
 import { BlogPostCard } from '@/components/BlogPostCard';
 import { Breadcrumb } from '@/components/Breadcrumb';
-import { TAGLINE } from '@/lib/constants';
+import { TAGLINE, TWITTER_HANDLE } from '@/lib/constants';
 import { getAllPosts } from '@/lib/posts';
 
 import { excali } from '../../fonts';
@@ -10,11 +12,11 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Blog | Rand Guy',
   description:
-    'Read about personal finance, investing, TFSAs, and building wealth in South Africa. Practical advice for everyday South Africans.',
+    'South African personal finance blog: investing, tax, TFSAs, ETFs, and money tips to build wealth in SA.',
   openGraph: {
     title: 'Blog | Rand Guy',
     description:
-      'Read about personal finance, investing, TFSAs, and building wealth in South Africa. Practical advice for everyday South Africans.',
+      'South African personal finance blog: investing, tax, TFSAs, ETFs, and money tips to build wealth in SA.',
     type: 'website',
     images: [
       {
@@ -29,8 +31,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Blog | Rand Guy',
     description:
-      'Read about personal finance, investing, TFSAs, and building wealth in South Africa. Practical advice for everyday South Africans.',
+      'South African personal finance blog: investing, tax, TFSAs, ETFs, and money tips to build wealth in SA.',
     images: ['/og-image.png'],
+    site: TWITTER_HANDLE,
+    creator: TWITTER_HANDLE,
   },
 };
 
@@ -39,9 +43,17 @@ export default async function BlogPage() {
 
   return (
     <main className="flex flex-1 flex-col items-center">
-      <div className="mb-8 w-full bg-gray-50 px-8 py-8">
+      <div className="mb-8 w-full px-8 py-8">
         <div className="mx-auto max-w-3xl">
           <Breadcrumb items={[{ name: 'Home', href: '/' }, { name: 'Blog' }]} />
+
+          <Image
+            src="/RandGuyLogo.png"
+            alt="Rand Guy logo"
+            width={80}
+            height={80}
+            className="mx-auto mt-6 mb-4"
+          />
 
           <h1 className={`${excali.className} mt-8 mb-4 text-center text-5xl`}>
             Rand Guy&apos;s Blog

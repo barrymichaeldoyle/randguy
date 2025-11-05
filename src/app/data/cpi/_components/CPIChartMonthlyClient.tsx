@@ -2,41 +2,36 @@
 
 import { useState } from 'react';
 import {
-  LineChart,
+  CartesianGrid,
+  Legend,
   Line,
+  LineChart,
+  ReferenceArea,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
 } from 'recharts';
 
-import { PRIME_LENDING_RATE_ZA, REPO_RATE_ZA } from '@/lib/historical-data';
+import { CPI_MONTHLY_ZA } from '@/lib/historical-data';
 import { useIsMounted } from '@/lib/use-is-mounted';
 
-// Prepare and sort chart data at module level
-const sortedPrime = [...PRIME_LENDING_RATE_ZA].sort(
-  (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-);
-const sortedRepo = [...REPO_RATE_ZA].sort(
-  (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-);
+// Prepare and sort monthly chart data at module level
+const monthlyChartData = CPI_MONTHLY_ZA.map((item) => {
+  const d = new Date(item.date);
+  return {
+    date: d.getTime(),
+    inflationRate: item.inflationRate,
+    fullLabel: d.toLocaleDateString('en-ZA', {
+      year: 'numeric',
+      month: 'short',
+    }),
+  };
+}).sort((a, b) => a.date - b.date);
 
-const chartData = sortedPrime.map((item, index) => ({
-  date: new Date(item.date).getTime(),
-  primeRate: item.rate,
-  repoRate: sortedRepo[index].rate,
-  fullDate: new Date(item.date).toLocaleDateString('en-ZA', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  }),
-}));
-
-export function PrimeRatesChartClient() {
+export function CPIChartMonthlyClient() {
   const [hoveredPoint, setHoveredPoint] = useState<{
-    date: string;
+    label: string;
     rate: number;
   } | null>(null);
   const isMounted = useIsMounted();
@@ -57,15 +52,16 @@ export function PrimeRatesChartClient() {
           height="100%"
           minWidth={1}
           minHeight={1}
+          aspect={undefined}
         >
           <LineChart
-            data={chartData}
+            data={monthlyChartData}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
             onMouseMove={(e: any) => {
               if (e.activePayload && e.activePayload.length > 0) {
                 setHoveredPoint({
-                  date: e.activePayload[0].payload.fullDate,
-                  rate: e.activePayload[0].payload.primeRate,
+                  label: e.activePayload[0].payload.fullLabel,
+                  rate: e.activePayload[0].payload.inflationRate,
                 });
               }
             }}
@@ -75,14 +71,18 @@ export function PrimeRatesChartClient() {
             <XAxis
               dataKey="date"
               type="number"
-              domain={['dataMin', 'dataMax']}
+              domain={[
+                monthlyChartData[0]?.date ?? 'dataMin',
+                monthlyChartData[monthlyChartData.length - 1]?.date ??
+                  'dataMax',
+              ]}
               stroke="#6b7280"
               style={{ fontSize: '12px' }}
               tickFormatter={(timestamp) => {
-                const date = new Date(timestamp);
-                return date.toLocaleDateString('en-ZA', {
-                  year: 'numeric',
+                const d = new Date(timestamp);
+                return d.toLocaleDateString('en-ZA', {
                   month: 'short',
+                  year: '2-digit',
                 });
               }}
               scale="time"
@@ -91,11 +91,12 @@ export function PrimeRatesChartClient() {
               stroke="#6b7280"
               style={{ fontSize: '12px' }}
               label={{
-                value: 'Rate (%)',
+                value: 'Inflation Rate (%)',
                 angle: -90,
                 position: 'insideLeft',
+                style: { textAnchor: 'middle' },
               }}
-              domain={[0, 20]}
+              domain={[0, 'auto']}
             />
             <Tooltip
               contentStyle={{
@@ -103,32 +104,38 @@ export function PrimeRatesChartClient() {
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
               }}
-              formatter={(value: number, name: string) => [`${value}%`, name]}
+              formatter={(value: number) => [`${value}%`, 'Inflation Rate']}
               labelFormatter={(timestamp: number) => {
-                const point = chartData.find((d) => d.date === timestamp);
-                return point
-                  ? point.fullDate
-                  : new Date(timestamp).toLocaleDateString('en-ZA');
+                const d = new Date(timestamp);
+                return d.toLocaleDateString('en-ZA', {
+                  month: 'short',
+                  year: 'numeric',
+                });
               }}
             />
             <Legend />
-            <Line
-              type="stepAfter"
-              dataKey="primeRate"
-              name="Prime Rate"
-              stroke="#eab308"
-              strokeWidth={2}
-              dot={{ fill: '#eab308', r: 4 }}
-              activeDot={{ r: 6 }}
+            {/* SARB Target Range - 3% to 6% shaded area */}
+            <ReferenceArea
+              y1={3}
+              y2={6}
+              fill="#22c55e"
+              fillOpacity={0.15}
+              label={{
+                value: 'SARB Target Range',
+                position: 'insideTopRight',
+                fill: '#16a34a',
+                fontSize: 12,
+                fontWeight: 600,
+              }}
             />
             <Line
-              type="stepAfter"
-              dataKey="repoRate"
-              name="Repo Rate"
-              stroke="#3b82f6"
-              strokeWidth={2}
-              dot={{ fill: '#3b82f6', r: 4 }}
-              activeDot={{ r: 6 }}
+              type="monotone"
+              dataKey="inflationRate"
+              name="Inflation Rate"
+              stroke="#eab308"
+              strokeWidth={3}
+              dot={{ fill: '#eab308', r: 3 }}
+              activeDot={{ r: 5 }}
             />
           </LineChart>
         </ResponsiveContainer>
@@ -137,7 +144,7 @@ export function PrimeRatesChartClient() {
         <div className="mt-4 rounded-lg bg-gray-50 p-4">
           <div className="text-sm text-gray-600">Highlighted Point:</div>
           <div className="text-lg font-semibold">
-            {hoveredPoint.date}: {hoveredPoint.rate}%
+            {hoveredPoint.label}: {hoveredPoint.rate}%
           </div>
         </div>
       )}

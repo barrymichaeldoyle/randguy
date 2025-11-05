@@ -7,8 +7,20 @@ export interface PrimeRateData {
 /**
  * The last date for which we checked for the prime lending rate.
  * Useful for displaying the last updated date in the UI.
+ *
+ * Freeze display until the next announcement: keep showing 2025-10-31
+ * up to and including 2025-11-26, then use the current date.
  */
-export const PRIME_LENDING_RATE_LAST_UPDATED = '2025-10-31';
+const PRIME_LENDING_RATE_FREEZE_UNTIL = '2025-11-26';
+
+// Compare using YYYY-MM-DD strings in South Africa timezone (GMT+2)
+const todayYmd = new Date().toLocaleDateString('en-CA', {
+  timeZone: 'Africa/Johannesburg',
+});
+export const PRIME_LENDING_RATE_LAST_UPDATED =
+  todayYmd <= PRIME_LENDING_RATE_FREEZE_UNTIL
+    ? todayYmd
+    : PRIME_LENDING_RATE_FREEZE_UNTIL;
 
 // The repo rate (SARB policy rate) is typically 3.5% below the prime lending rate (since 2000). This has been consistent since then.
 export const REPO_RATE_SPREAD = 3.5;
@@ -379,4 +391,37 @@ export const CPI_DATA_ZA: CPIData[] = [
   { year: 2002, inflationRate: 9.2, cpiIndex: 41.2 },
   { year: 2001, inflationRate: 5.7, cpiIndex: 37.7 },
   { year: 2000, inflationRate: 5.4, cpiIndex: 35.7 },
+];
+
+// Monthly CPI inflation rates (year-on-year) for South Africa
+// Coverage: Jan 2024 to Sep 2025
+export interface CPIMonthlyData {
+  date: `${number}${number}${number}${number}-${number}${number}-${number}${number}`; // YYYY-MM-01
+  inflationRate: number; // Percentage (y/y)
+}
+
+export const CPI_MONTHLY_ZA: CPIMonthlyData[] = [
+  // 2024
+  { date: '2024-01-01', inflationRate: 5.3 },
+  { date: '2024-02-01', inflationRate: 5.6 },
+  { date: '2024-03-01', inflationRate: 5.3 },
+  { date: '2024-04-01', inflationRate: 5.2 },
+  { date: '2024-05-01', inflationRate: 5.2 },
+  { date: '2024-06-01', inflationRate: 5.1 },
+  { date: '2024-07-01', inflationRate: 4.6 },
+  { date: '2024-08-01', inflationRate: 4.4 },
+  { date: '2024-09-01', inflationRate: 3.8 },
+  { date: '2024-10-01', inflationRate: 2.8 },
+  { date: '2024-11-01', inflationRate: 2.9 },
+  { date: '2024-12-01', inflationRate: 3.0 },
+  // 2025
+  { date: '2025-01-01', inflationRate: 3.2 },
+  { date: '2025-02-01', inflationRate: 3.2 },
+  { date: '2025-03-01', inflationRate: 2.7 },
+  { date: '2025-04-01', inflationRate: 2.8 },
+  { date: '2025-05-01', inflationRate: 2.8 },
+  { date: '2025-06-01', inflationRate: 3.0 },
+  { date: '2025-07-01', inflationRate: 3.5 },
+  { date: '2025-08-01', inflationRate: 3.3 },
+  { date: '2025-09-01', inflationRate: 3.4 },
 ];

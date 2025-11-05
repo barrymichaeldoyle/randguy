@@ -52,17 +52,17 @@ export const DATASETS = [
     icon: '📈',
   },
   {
-    title: 'Tax Brackets History',
-    description:
-      'See how SARS income tax brackets and rates have evolved over time. Compare historical tax thresholds and understand how tax policy has changed.',
-    href: '/data/tax-brackets',
-    icon: '📊',
-  },
-  {
     title: 'Consumer Price Index (CPI)',
     description:
       'Track South African inflation trends through historical CPI data. Understand how the cost of living has changed over time and its impact on your purchasing power.',
     href: '/data/cpi',
     icon: '📉',
+  },
+  {
+    title: 'Tax Brackets History',
+    description:
+      'See how SARS income tax brackets and rates have evolved over time. Compare historical tax thresholds and understand how tax policy has changed.',
+    href: '/data/tax-brackets',
+    icon: '📊',
   },
 ] as const;

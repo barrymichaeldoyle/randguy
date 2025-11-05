@@ -113,6 +113,7 @@
           src="../public/RandGuyLogo.png"
           alt="Rand Guy Logo"
           class="og-logo"
+          crossorigin="anonymous"
         />
         <div class="og-title">Rand Guy</div>
         <div class="og-tagline">Simple tools. Smart choices. Better money.</div>
@@ -144,7 +145,7 @@
         </div>
 
         <div style="margin-top: 15px">
-          <button onclick="downloadOGImage()">Download as PNG</button>
+          <button id="downloadBtn">Download as PNG</button>
         </div>
       </div>
     </div>
@@ -158,39 +159,22 @@
         logo.style.height = logoSize + 'px';
       }
 
-      // Convert image to data URL to avoid CORS issues
-      function imageToDataURL(img) {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
-        return canvas.toDataURL('image/png');
-      }
-
-      async function downloadOGImage() {
-        const button = event.target;
+      async function downloadOGImage(e) {
+        const button =
+          (e && e.currentTarget) || document.getElementById('downloadBtn');
         button.disabled = true;
         button.textContent = 'Generating...';
 
         try {
-          // Convert logo to data URL to avoid CORS
-          const logoImg = document.querySelector('.og-logo');
-          const originalSrc = logoImg.src;
-
-          // Wait for image to load
-          if (!logoImg.complete) {
-            await new Promise((resolve) => {
-              logoImg.onload = resolve;
-            });
+          // Warn if opened via file:// which commonly causes CORS tainting
+          if (location.protocol === 'file:') {
+            console.warn(
+              'Running from file:// may cause CORS issues. Use a local server (e.g. `npx serve generators`) for best results.'
+            );
           }
 
-          // Convert to data URL
-          const dataURL = imageToDataURL(logoImg);
-          logoImg.src = dataURL;
-
-          // Wait for fonts and re-render
-          await new Promise((resolve) => setTimeout(resolve, 300));
+          // Small delay to ensure fonts are ready
+          await new Promise((resolve) => setTimeout(resolve, 200));
 
           const ogImage = document.getElementById('ogImage');
           const canvas = await html2canvas(ogImage, {
@@ -199,10 +183,9 @@
             scale: 2,
             backgroundColor: '#fef3c7',
             logging: false,
+            useCORS: true,
+            allowTaint: false,
           });
-
-          // Restore original src
-          logoImg.src = originalSrc;
 
           // Convert canvas to blob and download
           canvas.toBlob((blob) => {
@@ -235,10 +218,13 @@
         }
       }
 
-      // Update on input change
+      // Wire up events
       document
         .getElementById('logoSize')
         .addEventListener('input', updateLogoSize);
+      document
+        .getElementById('downloadBtn')
+        .addEventListener('click', downloadOGImage);
     </script>
   </body>
 </html>

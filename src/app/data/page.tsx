@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { Button } from '@/components/Button';
 import { excali } from '@/fonts';
-import { BASE_URL, TAGLINE } from '@/lib/constants';
+import { BASE_URL, TAGLINE, TWITTER_HANDLE } from '@/lib/constants';
 import { DATASETS } from '@/lib/site-data';
 
 import type { Metadata } from 'next';
@@ -11,14 +11,14 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Historical Financial Data for South Africa',
   description:
-    'Explore historical financial data for South Africa. View prime lending & repo rates, tax brackets, and other important financial trends over time.',
+    'Historical SA data: prime & repo rates, CPI inflation, tax brackets and more — interactive charts and tables.',
   alternates: {
     canonical: '/data',
   },
   openGraph: {
     title: 'Historical Financial Data for South Africa',
     description:
-      'Explore historical financial data for South Africa. View prime lending & repo rates, tax brackets, and other important financial trends.',
+      'Historical SA data: prime & repo rates, CPI inflation, tax brackets and more — interactive charts and tables.',
     type: 'website',
     url: '/data',
     images: [
@@ -34,8 +34,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Historical Financial Data for South Africa',
     description:
-      'Explore historical financial data for South Africa. View prime lending & repo rates, tax brackets, and other important financial trends.',
+      'Historical SA data: prime & repo rates, CPI inflation, tax brackets and more — interactive charts and tables.',
     images: ['/og-image.png'],
+    site: TWITTER_HANDLE,
+    creator: TWITTER_HANDLE,
   },
 };
 

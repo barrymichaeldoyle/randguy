@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { Button } from '@/components/Button';
 import { excali } from '@/fonts';
-import { BASE_URL, TAGLINE } from '@/lib/constants';
+import { BASE_URL, TAGLINE, TWITTER_HANDLE } from '@/lib/constants';
 import { CALCULATORS } from '@/lib/site-data';
 
 import type { Metadata } from 'next';
@@ -11,14 +11,14 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Free Financial Calculators for South Africans',
   description:
-    'Free online financial calculators for South Africans. Calculate income tax, SARS deductions, UIF, and more. Simple tools to help you make informed financial decisions.',
+    'Free South African financial calculators: income tax, bond repayments, TFSA growth, interest and more — fast, accurate, and mobile friendly.',
   alternates: {
     canonical: '/calculators',
   },
   openGraph: {
     title: 'Free Financial Calculators for South Africans',
     description:
-      'Free online financial calculators for South Africans. Calculate income tax, SARS deductions, UIF, and more.',
+      'Free South African financial calculators for income tax, bond repayments, TFSA growth, interest and more.',
     type: 'website',
     url: '/calculators',
     images: [
@@ -34,8 +34,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Free Financial Calculators for South Africans',
     description:
-      'Free online financial calculators for South Africans. Calculate income tax, SARS deductions, UIF, and more.',
+      'Free South African financial calculators: income tax, bond repayments, TFSA growth, interest and more — fast, accurate, and mobile friendly.',
     images: ['/og-image.png'],
+    site: TWITTER_HANDLE,
+    creator: TWITTER_HANDLE,
   },
 };
 
