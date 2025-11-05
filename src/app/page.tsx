@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { BlogPostCard } from '@/components/BlogPostCard';
 import { Button } from '@/components/Button';
 import { excali } from '@/fonts';
-import { BASE_URL, TAGLINE, TWITTER_HANDLE } from '@/lib/constants';
+import { BASE_URL, LINKS, TAGLINE, TWITTER_HANDLE } from '@/lib/constants';
 import { getAllPosts } from '@/lib/posts';
 
 import type { Metadata } from 'next';
@@ -69,7 +69,7 @@ export default async function Home() {
     description: 'South African Personal Finance & Investment Guide',
     url: BASE_URL,
     logo: `${BASE_URL}/RandGuyLogo.png`,
-    sameAs: [],
+    sameAs: [LINKS.youtube, LINKS.twitter],
   };
 
   const blogPostsSchema = {

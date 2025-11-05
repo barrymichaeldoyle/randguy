@@ -125,13 +125,25 @@ export default async function BlogPost({
     return null;
   }
 
+  // Format date to ISO 8601 with timezone (SAST = UTC+2)
+  // Convert date string (YYYY-MM-DD) to full ISO 8601 datetime
+  function formatISODateTime(dateString: string): string {
+    const date = new Date(dateString);
+    // Set to SAST timezone (UTC+2) - use noon to avoid timezone conversion issues
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    // Return in ISO 8601 format with timezone offset for SAST (UTC+2)
+    return `${year}-${month}-${day}T12:00:00+02:00`;
+  }
+
   // Structured data for SEO
   const blogPostData: any = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.metadata.title,
     description: post.metadata.description,
-    datePublished: post.metadata.date,
+    datePublished: formatISODateTime(post.metadata.date),
     author: {
       '@type': 'Person',
       name: 'Rand Guy',
@@ -149,7 +161,7 @@ export default async function BlogPost({
         thumbnailUrl:
           post.metadata.video.thumbnail ||
           `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
-        uploadDate: post.metadata.date,
+        uploadDate: formatISODateTime(post.metadata.date),
         contentUrl: `https://www.youtube.com/watch?v=${videoId}`,
         embedUrl: `https://www.youtube.com/embed/${videoId}`,
       };
@@ -207,7 +219,7 @@ export default async function BlogPost({
             {post.metadata.title}
           </h1>
           <div className="flex items-center gap-3 text-gray-600">
-            <time>
+            <time dateTime={post.metadata.date}>
               {new Date(post.metadata.date).toLocaleDateString('en-ZA', {
                 year: 'numeric',
                 month: 'long',

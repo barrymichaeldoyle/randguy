@@ -41,11 +41,23 @@ const avgRate = rates.reduce((a, b) => a + b, 0) / rates.length;
 const maxRate = Math.max(...rates);
 const minRate = Math.min(...rates);
 
+// Find dates for max and min rates
+const maxRateItem = PRIME_LENDING_RATE_ZA.find((d) => d.rate === maxRate);
+const minRateItem = PRIME_LENDING_RATE_ZA.find((d) => d.rate === minRate);
+const maxRateDate = maxRateItem?.date
+  ? new Date(maxRateItem.date).getFullYear()
+  : null;
+const minRateDate = minRateItem?.date
+  ? new Date(minRateItem.date).getFullYear()
+  : null;
+
 const stats = {
   current: currentRate,
   average: avgRate,
   max: maxRate,
   min: minRate,
+  maxDate: maxRateDate,
+  minDate: minRateDate,
 };
 
 export default function PrimeRatesPage() {
@@ -184,6 +196,14 @@ export default function PrimeRatesPage() {
               <div className="text-3xl font-bold text-gray-900">
                 {stats.max}%
               </div>
+              {stats.maxDate && (
+                <time
+                  className="text-xs text-gray-500"
+                  dateTime={stats.maxDate.toString()}
+                >
+                  {stats.maxDate}
+                </time>
+              )}
             </div>
             <div className="rounded-lg border border-green-200 bg-green-50 p-4">
               <div className="mb-1 text-sm text-gray-600">
@@ -192,6 +212,14 @@ export default function PrimeRatesPage() {
               <div className="text-3xl font-bold text-gray-900">
                 {stats.min}%
               </div>
+              {stats.minDate && (
+                <time
+                  className="text-xs text-gray-500"
+                  dateTime={stats.minDate.toString()}
+                >
+                  {stats.minDate}
+                </time>
+              )}
             </div>
           </div>
         </div>
@@ -231,15 +259,27 @@ export default function PrimeRatesPage() {
             <h3 className={`${excali.className} mb-3 text-xl`}>
               Why Does it Change?
             </h3>
-            <p className="text-sm text-gray-700">
+            <p className="mb-3 text-sm text-gray-700">
               The prime rate typically changes when the South African Reserve
               Bank (SARB) adjusts the repo rate. Banks usually increase their
               prime rate by the same amount. The SARB changes rates to control
               inflation and manage economic growth.
             </p>
+            <div className="mt-3 border-t border-purple-200 pt-3">
+              <p className="mb-2 text-xs font-semibold text-purple-900">
+                When are SARB decisions announced?
+              </p>
+              <p className="mb-2 text-xs text-gray-700">
+                The SARB Monetary Policy Committee announces its decision on a
+                Thursday afternoon near the end of every second month:
+              </p>
+              <ul className="text-xs text-gray-700">
+                <li>January, March, May, July, September, November</li>
+              </ul>
+            </div>
           </div>
 
-          <div className="rounded-lg border border-teal-200 bg-teal-50 p-6">
+          <div className="rounded-lg border border-green-200 bg-green-50 p-6">
             <h3 className={`${excali.className} mb-3 text-xl`}>
               Inflation and Rate Decisions
             </h3>
@@ -249,24 +289,6 @@ export default function PrimeRatesPage() {
               <Link href="/data/cpi">CPI & inflation data</Link> for South
               Africa.
             </p>
-          </div>
-
-          <div className="rounded-lg border border-green-200 bg-green-50 p-6">
-            <h3 className={`${excali.className} mb-3 text-xl`}>
-              Historical Highlights
-            </h3>
-            <ul className="space-y-2 text-sm text-gray-700">
-              <li>
-                <strong>2008:</strong> Rate peaked at 15.5% during the global
-                financial crisis
-              </li>
-              <li>
-                <strong>2020:</strong> Dropped to 7% during COVID-19 pandemic
-              </li>
-              <li>
-                <strong>2022-2023:</strong> Rapid increases to combat inflation
-              </li>
-            </ul>
           </div>
 
           <div className="rounded-lg border border-orange-200 bg-orange-50 p-6">
@@ -289,19 +311,19 @@ export default function PrimeRatesPage() {
 
           <div className="rounded-lg border border-teal-200 bg-teal-50 p-6 md:col-span-2">
             <h3 className={`${excali.className} mb-3 text-xl`}>
-              When are SARB decisions announced?
+              Historical Highlights
             </h3>
-            <p className="mb-2 text-sm text-gray-700">
-              The SARB Monetary Policy Committee usually announces its decision
-              on a Thursday afternoon near the end of every second month:
-            </p>
-            <ul className="list-disc space-y-1 pl-6 text-sm text-gray-700">
-              <li>January</li>
-              <li>March</li>
-              <li>May</li>
-              <li>July</li>
-              <li>September</li>
-              <li>November</li>
+            <ul className="space-y-2 text-sm text-gray-700">
+              <li>
+                <strong>2008:</strong> Rate peaked at 15.5% during the global
+                financial crisis
+              </li>
+              <li>
+                <strong>2020:</strong> Dropped to 7% during COVID-19 pandemic
+              </li>
+              <li>
+                <strong>2022-2023:</strong> Rapid increases to combat inflation
+              </li>
             </ul>
           </div>
         </div>
