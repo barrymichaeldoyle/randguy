@@ -77,7 +77,6 @@ Consider these enhancements:
 
 1. ✅ **Automate the listing** - Use `fs` to read all MDX files dynamically
 2. **Add tags/categories** - Group posts by topic
-3. **Add author info** - If you have multiple authors
-4. **Generate RSS feed** - Using the `feed` package
-5. ✅ **Add reading time** - Calculate from word count
-6. **Add social sharing** - Twitter, LinkedIn buttons
+3. ✅ **Generate RSS feed** - Using the `feed` package
+4. ✅ **Add reading time** - Calculate from word count
+5. **Add social sharing** - Twitter, LinkedIn buttons

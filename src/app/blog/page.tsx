@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 import { BlogPostCard } from '@/components/BlogPostCard';
 import { Breadcrumb } from '@/components/Breadcrumb';
-import { TAGLINE, TWITTER_HANDLE } from '@/lib/constants';
+import { BASE_URL, TAGLINE, TWITTER_HANDLE } from '@/lib/constants';
 import { getAllPosts } from '@/lib/posts';
 
 import { excali } from '../../fonts';
@@ -13,6 +13,11 @@ export const metadata: Metadata = {
   title: 'Blog | Rand Guy',
   description:
     'South African personal finance blog: investing, tax, TFSAs, ETFs, and money tips to build wealth in SA.',
+  alternates: {
+    types: {
+      'application/rss+xml': `${BASE_URL}/feed.xml`,
+    },
+  },
   openGraph: {
     title: 'Blog | Rand Guy',
     description:
@@ -61,6 +66,11 @@ export default async function BlogPage() {
           <p className="text-center text-lg text-gray-600">
             A random South African guy talking about personal finance.
           </p>
+          <div className="mt-4 text-center">
+            <a href="/feed.xml" aria-label="Subscribe to RSS feed">
+              📡 Subscribe via RSS
+            </a>
+          </div>
         </div>
       </div>
 
