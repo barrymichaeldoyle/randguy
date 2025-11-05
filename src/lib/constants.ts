@@ -11,3 +11,5 @@ export const LINKS = {
 } as const;
 
 export const TAGLINE = 'Simple tools. Smart choices. Better money.';
+
+export const contactEmail = 'me@randguy.com';

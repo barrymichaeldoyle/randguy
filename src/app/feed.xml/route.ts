@@ -1,4 +1,4 @@
-import { BASE_URL } from '@/lib/constants';
+import { BASE_URL, contactEmail } from '@/lib/constants';
 import { getAllPosts } from '@/lib/posts';
 
 export async function GET() {
@@ -24,8 +24,8 @@ export async function GET() {
     <language>en-ZA</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${BASE_URL}/feed.xml" rel="self" type="application/rss+xml"/>
-    <webMaster>${BASE_URL}</webMaster>
-    <managingEditor>${BASE_URL}</managingEditor>
+    <webMaster>${contactEmail}</webMaster>
+    <managingEditor>${contactEmail}</managingEditor>
     <generator>Next.js</generator>
     ${posts
       .map(
