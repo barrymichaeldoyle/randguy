@@ -5,7 +5,7 @@ import type { NextRequest } from 'next/server';
 // Canonical domain - change this if you prefer www
 const CANONICAL_HOST = 'randguy.com';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const url = request.nextUrl.clone();
   let hostname = request.headers.get('host') || '';
 

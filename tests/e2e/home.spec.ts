@@ -5,7 +5,7 @@ test.describe('Home page', () => {
     await page.goto('/');
     await expect(page).toHaveTitle(/Rand Guy/i);
     const heading = page.getByRole('heading', {
-      name: /South African Personal Finance Made Simple/i,
+      name: /South African Personal Finance & Investment Guide/i,
     });
     await expect(heading).toBeVisible();
   });
