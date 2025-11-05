@@ -21,6 +21,11 @@ export async function GET() {
     <title>Rand Guy Blog</title>
     <link>${BASE_URL}/blog</link>
     <description>South African personal finance blog: investing, tax, TFSAs, ETFs, and money tips to build wealth in SA.</description>
+    <image>
+      <url>${BASE_URL}/RandGuyLogo.png</url>
+      <title>Rand Guy</title>
+      <link>${BASE_URL}/blog</link>
+    </image>
     <language>en-ZA</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${BASE_URL}/feed.xml" rel="self" type="application/rss+xml"/>
