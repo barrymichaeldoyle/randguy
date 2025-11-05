@@ -14,9 +14,9 @@ Every post must export metadata:
 
 ```jsx
 export const metadata = {
-  title: "Your Post Title",
-  date: "2025-10-12",
-  description: "A brief description for SEO and the blog listing page.",
+  title: 'Your Post Title',
+  date: '2025-10-12',
+  description: 'A brief description for SEO and the blog listing page.',
 };
 ```
 
@@ -48,10 +48,10 @@ Edit `/src/app/blog/page.tsx` and add your post to the `posts` array:
 ```typescript
 const posts: BlogPost[] = [
   {
-    slug: "my-new-post", // Must match the filename (without .mdx)
-    title: "Your Post Title",
-    date: "2025-10-12",
-    description: "Brief description here.",
+    slug: 'my-new-post', // Must match the filename (without .mdx)
+    title: 'Your Post Title',
+    date: '2025-10-12',
+    description: 'Brief description here.',
   },
   // ... other posts
 ];
@@ -75,9 +75,9 @@ Run `pnpm dev` and navigate to:
 
 Consider these enhancements:
 
-1. **Automate the listing** - Use `fs` to read all MDX files dynamically
+1. ✅ **Automate the listing** - Use `fs` to read all MDX files dynamically
 2. **Add tags/categories** - Group posts by topic
 3. **Add author info** - If you have multiple authors
 4. **Generate RSS feed** - Using the `feed` package
-5. **Add reading time** - Calculate from word count
+5. ✅ **Add reading time** - Calculate from word count
 6. **Add social sharing** - Twitter, LinkedIn buttons
