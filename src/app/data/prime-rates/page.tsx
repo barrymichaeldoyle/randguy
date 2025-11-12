@@ -6,6 +6,7 @@ import { excali } from '@/fonts';
 import { BASE_URL } from '@/lib/constants';
 import { PRIME_LENDING_RATE_ZA, REPO_RATE_SPREAD } from '@/lib/historical-data';
 
+import { PrimeRates2024ChartClient } from './_components/PrimeRates2024ChartClient';
 import { PrimeRatesChartClient } from './_components/PrimeRatesChartClient';
 
 import type { Metadata } from 'next';
@@ -237,6 +238,21 @@ export default function PrimeRatesPage() {
           </p>
           <div role="img" aria-label="Prime and repo rates over time chart">
             <PrimeRatesChartClient />
+          </div>
+        </section>
+
+        {/* 2024+ Chart */}
+        <section className="mb-8 rounded-lg border border-gray-200 bg-white p-6">
+          <h2 className={`${excali.className} mb-6 text-2xl`}>
+            Prime Rate Since 2024
+          </h2>
+          <p className="mb-4 text-sm text-gray-600">
+            A closer look at prime and repo rates since the beginning of 2024.
+            This period has seen significant rate changes as the SARB responded
+            to inflation trends and economic conditions.
+          </p>
+          <div role="img" aria-label="Prime and repo rates since 2024 chart">
+            <PrimeRates2024ChartClient />
           </div>
         </section>
 

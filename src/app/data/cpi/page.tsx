@@ -212,7 +212,7 @@ export default function CPIPage() {
           {/* Purchasing Power Card */}
           <div className="mb-8 rounded-lg border-2 border-yellow-300 bg-yellow-50 p-6">
             <h2 className={`${excali.className} mb-3 text-2xl`}>
-              Purchasing Power
+              Purchasing Power (Year 2000 vs Today)
             </h2>
             <p className="mb-4 text-gray-700">
               Due to inflation, R100 in the year 2000 has the same purchasing

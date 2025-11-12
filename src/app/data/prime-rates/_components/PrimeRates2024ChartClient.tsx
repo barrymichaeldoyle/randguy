@@ -15,13 +15,24 @@ import {
 import { PRIME_LENDING_RATE_ZA, REPO_RATE_ZA } from '@/lib/historical-data';
 import { useIsMounted } from '@/lib/use-is-mounted';
 
+// Filter data from 2024-01-01 onwards
+const dataFrom2024 = PRIME_LENDING_RATE_ZA.filter(
+  (item) => item.date >= '2024-01-01'
+);
+
 // Prepare and sort chart data at module level
-const sortedPrime = [...PRIME_LENDING_RATE_ZA].sort(
+const sortedPrime = [...dataFrom2024].sort(
   (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
 );
-const sortedRepo = [...REPO_RATE_ZA].sort(
-  (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-);
+
+// Get corresponding repo rates for the filtered dates
+const sortedRepo = sortedPrime.map((primeItem) => {
+  const repoItem = REPO_RATE_ZA.find((r) => r.date === primeItem.date);
+  return {
+    date: primeItem.date,
+    rate: repoItem ? repoItem.rate : primeItem.rate - 3.5,
+  };
+});
 
 const chartData = sortedPrime.map((item, index) => ({
   date: new Date(item.date).getTime(),
@@ -34,7 +45,7 @@ const chartData = sortedPrime.map((item, index) => ({
   }),
 }));
 
-export function PrimeRatesChartClient() {
+export function PrimeRates2024ChartClient() {
   const [hoveredPoint, setHoveredPoint] = useState<{
     date: string;
     rate: number;
@@ -95,7 +106,7 @@ export function PrimeRatesChartClient() {
                 angle: -90,
                 position: 'insideLeft',
               }}
-              domain={[0, 20]}
+              domain={['dataMin - 0.5', 'dataMax + 0.5']}
             />
             <Tooltip
               contentStyle={{

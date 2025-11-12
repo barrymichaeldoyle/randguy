@@ -130,9 +130,9 @@ export function CPIChartClient() {
               type="monotone"
               dataKey="inflationRate"
               name="Inflation Rate"
-              stroke="#eab308"
+              stroke="#d97706"
               strokeWidth={3}
-              dot={{ fill: '#eab308', r: 4 }}
+              dot={{ fill: '#d97706', r: 4 }}
               activeDot={{ r: 6 }}
             />
             <Line

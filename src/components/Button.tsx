@@ -4,7 +4,6 @@ import { excali } from '@/fonts';
 
 import type { ReactNode } from 'react';
 
-
 type ButtonProps = {
   children: ReactNode;
   variant?: 'primary' | 'secondary' | 'text';
@@ -12,6 +11,7 @@ type ButtonProps = {
   className?: string;
   disabled?: boolean;
 } & (
+  | { type: 'submit' | 'reset' | 'button'; onClick?: never; href?: never }
   | { href: string; onClick?: never; type?: never }
   | { href?: never; onClick: () => void; type?: 'button' | 'submit' | 'reset' }
 );

@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 
 import { Button } from '@/components/Button';
+import { HeaderSearch } from '@/components/search/HeaderSearch';
 import { LINKS, TWITTER_HANDLE, YOUTUBE_HANDLE } from '@/lib/constants';
 
 import { excali } from '../../fonts';
@@ -102,7 +103,7 @@ export function Header() {
 
   return (
     <header
-      className="sticky top-0 z-50 flex items-center justify-between border-b border-gray-200 bg-white px-4 py-2"
+      className="sticky top-0 z-50 flex items-center border-b border-gray-200 bg-white px-4 py-2"
       role="banner"
     >
       <Link href="/" className="group flex items-center gap-2">
@@ -121,77 +122,81 @@ export function Header() {
         </h1>
       </Link>
 
-      {/* Desktop Navigation */}
-      <nav className="hidden items-center gap-3 sm:flex">
-        {MENU_ITEMS.map((item) => (
-          <Button key={item.href} href={item.href} size="sm">
-            {item.label}
-          </Button>
-        ))}
+      <div className="ml-auto flex items-center gap-2">
+        {/* Desktop Navigation */}
+        <nav className="hidden items-center gap-3 sm:flex">
+          {MENU_ITEMS.map((item) => (
+            <Button key={item.href} href={item.href} size="sm">
+              {item.label}
+            </Button>
+          ))}
 
-        {/* Desktop Social Links */}
-        <div className="ml-2 flex items-center gap-2 border-l border-gray-300 pl-3">
-          <Link
-            href={LINKS.youtube}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-red-600 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
-            aria-label={`Subscribe to ${YOUTUBE_HANDLE} on YouTube`}
-          >
-            <svg
-              className="h-5 w-5"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
+          {/* Desktop Social Links */}
+          <div className="ml-2 flex items-center gap-2 border-l border-gray-300 pl-3">
+            <Link
+              href={LINKS.youtube}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-red-600 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+              aria-label={`Subscribe to ${YOUTUBE_HANDLE} on YouTube`}
             >
-              <title>YouTube icon</title>
-              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-            </svg>
-          </Link>
-          <Link
-            href={LINKS.twitter}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
-            aria-label={`Follow ${TWITTER_HANDLE} on X (Twitter)`}
-          >
-            <svg
-              className="h-5 w-5"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
+              <svg
+                className="h-5 w-5"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <title>YouTube icon</title>
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+              </svg>
+            </Link>
+            <Link
+              href={LINKS.twitter}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-lg p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900 focus:ring-2 focus:ring-yellow-400 focus:outline-none"
+              aria-label={`Follow ${TWITTER_HANDLE} on X (Twitter)`}
             >
-              <title>X icon</title>
-              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-            </svg>
-          </Link>
-        </div>
-      </nav>
+              <svg
+                className="h-5 w-5"
+                fill="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <title>X icon</title>
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>
+            </Link>
+          </div>
+        </nav>
 
-      {/* Mobile Menu Button */}
-      <button
-        ref={menuButtonRef}
-        onClick={() => setIsMenuOpen(true)}
-        className="rounded-lg p-2 transition-colors hover:bg-gray-100 focus:ring-2 focus:ring-yellow-400 focus:outline-none sm:hidden"
-        aria-label="Open menu"
-        aria-expanded={isMenuOpen}
-        aria-controls="mobile-menu"
-      >
-        <svg
-          className="h-6 w-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
+        <HeaderSearch onOpen={() => setIsMenuOpen(false)} />
+
+        {/* Mobile Menu Button */}
+        <button
+          ref={menuButtonRef}
+          onClick={() => setIsMenuOpen(true)}
+          className="rounded-lg p-2 transition-colors hover:bg-gray-100 focus:ring-2 focus:ring-yellow-400 focus:outline-none sm:hidden"
+          aria-label="Open menu"
+          aria-expanded={isMenuOpen}
+          aria-controls="mobile-menu"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 6h16M4 12h16M4 18h16"
-          />
-        </svg>
-      </button>
+          <svg
+            className="h-6 w-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+      </div>
 
       {/* Mobile Menu Overlay */}
       {isMenuOpen && (
