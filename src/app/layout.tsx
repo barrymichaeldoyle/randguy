@@ -7,8 +7,9 @@ import { Header } from '@/components/layout/Header';
 import { BASE_URL, TAGLINE } from '@/lib/constants';
 
 import { assistant, excali } from '../fonts';
+import { ServiceWorkerRegistration } from './sw-register';
 
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import type { PropsWithChildren } from 'react';
 
 export const metadata: Metadata = {
@@ -48,6 +49,19 @@ export const metadata: Metadata = {
     ],
     apple: '/apple-touch-icon.png',
   },
+  manifest: '/site.webmanifest',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Rand Guy',
+  },
+  other: {
+    'mobile-web-app-capable': 'yes',
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: '#facc15',
 };
 
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
@@ -61,6 +75,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
           {children}
         </main>
         <Footer />
+        <ServiceWorkerRegistration />
         <Analytics mode="auto" />
         <SpeedInsights />
       </body>

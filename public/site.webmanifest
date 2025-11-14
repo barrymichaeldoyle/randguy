@@ -1,19 +1,88 @@
 {
-  "name": "Rand Guy",
+  "name": "Rand Guy | South African Personal Finance",
   "short_name": "Rand Guy",
+  "description": "Simple tools. Smart choices. Better money. Financial calculators and guides for South Africans.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#facc15",
+  "background_color": "#ffffff",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
       "src": "/android-chrome-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "theme_color": "#facc15",
-  "background_color": "#ffffff",
-  "display": "standalone"
+  "shortcuts": [
+    {
+      "name": "Income Tax Calculator",
+      "short_name": "Tax Calc",
+      "description": "Calculate your South African income tax",
+      "url": "/calculators/income-tax",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Home Loan Calculator",
+      "short_name": "Home Loan",
+      "description": "Calculate home loan repayments",
+      "url": "/calculators/home-loan",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Loan-to-Value Calculator",
+      "short_name": "LTV",
+      "description": "Calculate your LTV ratio and equity position",
+      "url": "/calculators/ltv",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "TFSA Calculator",
+      "short_name": "TFSA",
+      "description": "Calculate TFSA contribution timeline",
+      "url": "/calculators/tfsa",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Interest Calculator",
+      "short_name": "Interest",
+      "description": "Calculate interest across different time periods",
+      "url": "/calculators/interest",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "categories": ["finance", "utilities", "productivity"]
 }

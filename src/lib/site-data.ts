@@ -18,6 +18,14 @@ export const CALCULATORS = [
     buttonText: 'Calculate Repayments →',
   },
   {
+    title: 'Interest Calculator',
+    description:
+      'Calculate interest gains across different time periods. Convert between annual, monthly, weekly, daily, and hourly interest rates for investments and loans.',
+    href: '/calculators/interest',
+    icon: '💹',
+    buttonText: 'Calculate Interest →',
+  },
+  {
     title: 'Loan-to-Value (LTV) Calculator',
     description:
       'Calculate your LTV ratio to understand your equity position and loan terms. Essential tool for property buyers to assess their financing situation.',
@@ -32,14 +40,6 @@ export const CALCULATORS = [
     href: '/calculators/tfsa',
     icon: '🎯',
     buttonText: 'Plan My TFSA →',
-  },
-  {
-    title: 'Interest Calculator',
-    description:
-      'Calculate interest gains across different time periods. Convert between annual, monthly, weekly, daily, and hourly interest rates for investments and loans.',
-    href: '/calculators/interest',
-    icon: '💹',
-    buttonText: 'Calculate Interest →',
   },
 ] as const;
 
