@@ -35,6 +35,7 @@ const footerGroups: FooterGroup[] = [
       { href: '/blog', label: 'All Blog Posts' },
       { href: '/calculators', label: 'All Calculators' },
       { href: '/data', label: 'All Historical Data' },
+      { href: '/referrals', label: 'Referrals' },
     ],
   },
 ];
