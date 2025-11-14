@@ -1,8 +1,8 @@
-import Fuse from 'fuse.js';
+import Fuse, { type FuseResultMatch, type IFuseOptions } from 'fuse.js';
 
 import type { SearchRecord } from '@/lib/search';
 
-export const fuseOptions: Fuse.IFuseOptions<SearchRecord> = {
+export const fuseOptions: IFuseOptions<SearchRecord> = {
   keys: [
     { name: 'title', weight: 0.6 },
     { name: 'description', weight: 0.3 },
@@ -16,7 +16,7 @@ export const fuseOptions: Fuse.IFuseOptions<SearchRecord> = {
 
 export interface SearchResult {
   record: SearchRecord;
-  matches: Fuse.FuseResultMatch[];
+  matches: FuseResultMatch[];
   score: number;
 }
 
@@ -36,11 +36,14 @@ export function performSearch(
   }
 
   const fuse = new Fuse(records, fuseOptions);
-  const results = fuse.search(trimmed, { limit });
+  const results = fuse.search(
+    trimmed,
+    typeof limit === 'number' ? { limit } : undefined
+  );
 
   return results.map((result) => ({
     record: result.item,
-    matches: result.matches ?? [],
+    matches: result.matches ? [...result.matches] : [],
     score: result.score ?? 0,
   }));
 }
@@ -56,4 +59,3 @@ export function groupResults(results: SearchResult[]) {
     return acc;
   }, {});
 }
-
