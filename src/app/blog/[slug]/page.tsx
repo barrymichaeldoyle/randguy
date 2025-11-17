@@ -161,7 +161,6 @@ export default async function BlogPost({
         thumbnailUrl:
           post.metadata.video.thumbnail ||
           `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
-        uploadDate: formatISODateTime(post.metadata.date),
         contentUrl: `https://www.youtube.com/watch?v=${videoId}`,
         embedUrl: `https://www.youtube.com/embed/${videoId}`,
       };
