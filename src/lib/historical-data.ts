@@ -11,7 +11,7 @@ export interface PrimeRateData {
  * Freeze display until the next announcement: keep showing 2025-10-31
  * up to and including 2025-11-26, then use the current date.
  */
-const PRIME_LENDING_RATE_FREEZE_UNTIL = '2025-11-26';
+const PRIME_LENDING_RATE_FREEZE_UNTIL = '2025-01-15';
 
 // Compare using YYYY-MM-DD strings in South Africa timezone (GMT+2)
 const todayYmd = new Date().toLocaleDateString('en-CA', {
@@ -29,6 +29,7 @@ export const PRIME_LENDING_RATE_ZA: {
   date: `${number}${number}${number}${number}-${number}${number}-${number}${number}`;
   rate: number;
 }[] = [
+  { date: '2025-11-20', rate: 10.25 },
   { date: '2025-08-01', rate: 10.5 },
   { date: '2025-05-30', rate: 10.75 },
   { date: '2025-01-31', rate: 11.0 },
