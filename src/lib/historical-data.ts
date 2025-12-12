@@ -425,4 +425,5 @@ export const CPI_MONTHLY_ZA: CPIMonthlyData[] = [
   { date: '2025-07-01', inflationRate: 3.5 },
   { date: '2025-08-01', inflationRate: 3.3 },
   { date: '2025-09-01', inflationRate: 3.4 },
+  { date: '2025-10-01', inflationRate: 3.6 },
 ];
